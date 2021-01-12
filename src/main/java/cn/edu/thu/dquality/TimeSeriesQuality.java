@@ -78,42 +78,43 @@ public class TimeSeriesQuality {
         double interval[] = Util.variation(time);
         Median median = new Median();
         double base = median.evaluate(interval);
-        double gap = 0;//当前数据点与上一个点未被删除的数据点之间的时间间隔
         //寻找时间戳异常
-        for (int i = 0; i < interval.length; i++) {
-            double times = gap + interval[i] / base;
-            if (times > 9) {//停机时段排除
-                gap = 0;
-                continue;
-            }
+        ArrayList<Double> window = new ArrayList<>();
+        int i;
+        for (i = 0; i < Math.min(time.length, WINDOWSIZE); i++) {//填充初始数据
+            window.add(time[i]);
+        }
+        while (window.size() > 1) {
+            double times = (window.get(1) - window.get(0)) / base;
             if (times <= 0.5) {//处理为过密点并删除
-                gap += times;
+                window.remove(1);
                 redundancyCnt++;
-                continue;
-            }
-            if (times >= 2.0) {
+            } else if (times >= 2.0 && times <= 9.0) {//排除停机
+                //时间间隔过大，可能是数据缺失，也可能是延迟
                 int temp = 0;//在后续窗口中找到的连续过密点个数
-                gap = 0;
-                for (int j = i + 1; j < Math.min(interval.length, i + WINDOWSIZE); j++) {
-                    double times2 = gap + interval[j] / base;
+                for (int j = 2; j < window.size(); j++) {
+                    double times2 = (window.get(j) - window.get(j - 1)) / base;
                     if (times2 >= 2.0) {//发现另一个缺失点，停止搜索
                         break;
                     }
                     if (times2 <= 0.5) {//发现过密点，可能是延迟导致的
-                        gap += times2;
                         temp++;
+                        window.remove(j);//将延迟点移回到前面
+                        j--;
                         if (temp == (int) Math.round(times - 1)) {
-                            break;//找到了足够数量的过密点
+                            break;//找到了足够数量的延迟点来填补
                         }
-                    } else {
-                        gap = 0;
                     }
                 }
                 lateCnt += temp;
-                redundancyCnt -= temp;
                 missCnt += (Math.round(times - 1) - temp);
             }
-            gap = 0;
+            window.remove(0);//从窗口中移除已经处理的数据点
+            while (window.size() < WINDOWSIZE && i < time.length) {
+                //向窗口中填充数据点直到窗口被填满
+                window.add(time[i]);
+                i++;
+            }
         }
     }
 
@@ -172,7 +173,10 @@ public class TimeSeriesQuality {
         TimeSeriesQuality tsq = new TimeSeriesQuality("temp.csv");
         tsq.timeDetect();
         tsq.valueDetect();
+        System.out.println(tsq.getCompleteness());
         System.out.println(tsq.getConsistency());
+        System.out.println(tsq.getTimeliness());
+        System.out.println(tsq.getValidity());
     }
 
 }

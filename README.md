@@ -1,32 +1,20 @@
 # TsClean-IoTDB-UDF
 ## 概述
-本项目基于IoTDB的UDF，实现了TsClean数据质量系统的一系列重要函数，包括时序数据的特征计算、数值填补、数值修复等。
+本项目基于IoTDB的UDF，实现了TsClean数据质量系统的一系列重要函数，包括时序数据的质量指标计算、数值填补、数值修复等。
 
 ## 使用方式
 + 将本项目及其依赖打包成jar包
 + 将jar包复制到IoTDB文件夹的ext\udf目录下
-+ 使用下面的SQL语句注册UDF
++ 在IoTDB中使用下面的SQL语句注册UDF
 
 ```sql
-create function completeness as “cn.edu.thu.dquality.CompletenessUDF”
-create function consistency as “cn.edu.thu.dquality.ConsistencyUDF”
-create function timeliness as “cn.edu.thu.dquality.TimelinessUDF”
-create function validity as “cn.edu.thu.dquality.ValidityUDF”
+create function completeness as “cn.edu.thu.dquality.udf.CompletenessUDF”
+create function consistency as “cn.edu.thu.dquality.udf.ConsistencyUDF”
+create function timeliness as “cn.edu.thu.dquality.udf.TimelinessUDF”
+create function validity as “cn.edu.thu.dquality.udf.ValidityUDF”
 ```
 
-### 项目打包
-
-
 ## 函数介绍
-
-<!-- ### 数据特征函数
-### interval
-
-### variation
-
-### speed
-
-### speedchange -->
 
 ### 时序数据质量指标函数
 对于时序数据的质量，我们制定了完整性、一致性、时效性、有效性四个指标来进行衡量。计算各个指标的UDF如下表：

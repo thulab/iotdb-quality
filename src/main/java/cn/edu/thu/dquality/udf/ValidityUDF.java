@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.dquality;
+package cn.edu.thu.dquality.udf;
 
+import cn.edu.thu.dquality.NoNumberException;
+import cn.edu.thu.dquality.TimeSeriesQuality;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,11 +22,12 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  *
  * @author Wang Haoyu
  */
-public class CompletenessUDF implements UDTF {
+public class ValidityUDF implements UDTF {
 
     @Override
     public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-        udtfc.setAccessStrategy(new SlidingSizeWindowAccessStrategy(udfp.getIntOrDefault("window", Integer.MAX_VALUE)))
+        udtfc.
+                setAccessStrategy(new SlidingSizeWindowAccessStrategy(udfp.getIntOrDefault("window", Integer.MAX_VALUE)))
                 .setOutputDataType(TSDataType.DOUBLE);
     }
 
@@ -33,10 +36,10 @@ public class CompletenessUDF implements UDTF {
         try {
             if (rowWindow.windowSize() > TimeSeriesQuality.WINDOWSIZE) {
                 TimeSeriesQuality tsq = new TimeSeriesQuality(rowWindow.getRowIterator());
-                tsq.timeDetect();
-                collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getCompleteness());
+                tsq.valueDetect();
+                collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getValidity());
             }
-        } catch (IOException ex) {
+        } catch (IOException | NoNumberException ex) {
             Logger.getLogger(CompletenessUDF.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

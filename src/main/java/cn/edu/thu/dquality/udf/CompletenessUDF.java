@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.dquality;
+package cn.edu.thu.dquality.udf;
 
+import cn.edu.thu.dquality.TimeSeriesQuality;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,30 +18,27 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
- * 计算采集间隔的IOTDB UDF函数
  *
  * @author Wang Haoyu
  */
-public class IntervalUDF implements UDTF {
+public class CompletenessUDF implements UDTF {
 
     @Override
-    public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) {
-        configurations
-                .setAccessStrategy(new SlidingSizeWindowAccessStrategy(2, 1))
+    public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
+        udtfc.setAccessStrategy(new SlidingSizeWindowAccessStrategy(udfp.getIntOrDefault("window", Integer.MAX_VALUE)))
                 .setOutputDataType(TSDataType.DOUBLE);
     }
 
     @Override
-    public void transform(RowWindow rowWindow, PointCollector collector) {
-        if (rowWindow.windowSize() == 2) {
-            try {
-                long t0 = rowWindow.getRow(0).getTime();
-                long t1 = rowWindow.getRow(1).getTime();
-                double u = t1 - t0;
-                collector.putDouble(rowWindow.getRow(0).getTime(), u);
-            } catch (IOException ex) {
-                Logger.getLogger(IntervalUDF.class.getName()).log(Level.SEVERE, null, ex);
+    public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
+        try {
+            if (rowWindow.windowSize() > TimeSeriesQuality.WINDOWSIZE) {
+                TimeSeriesQuality tsq = new TimeSeriesQuality(rowWindow.getRowIterator());
+                tsq.timeDetect();
+                collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getCompleteness());
             }
+        } catch (IOException ex) {
+            Logger.getLogger(CompletenessUDF.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
