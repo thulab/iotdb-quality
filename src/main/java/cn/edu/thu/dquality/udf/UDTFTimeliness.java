@@ -19,10 +19,11 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
+ * 用于计算时间序列的时效性的UDTF
  *
  * @author Wang Haoyu
  */
-public class TimelinessUDF implements UDTF {
+public class UDTFTimeliness implements UDTF {
 
     @Override
     public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
@@ -40,7 +41,7 @@ public class TimelinessUDF implements UDTF {
                 collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getTimeliness());
             }
         } catch (IOException | NoNumberException ex) {
-            Logger.getLogger(CompletenessUDF.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UDTFCompleteness.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

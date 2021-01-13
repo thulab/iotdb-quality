@@ -15,12 +15,19 @@ import org.apache.iotdb.db.query.udf.api.access.Row;
  */
 public class Util {
 
-    public static double getValueAsDouble(Row row) throws NoNumberException {
+    /**
+     * 从Row中取出第一个值，并转化为Double类型
+     *
+     * @param row
+     * @return Row中的第一个值
+     * @throws NoNumberException Row的第一个值是非数值类型
+     */
+    public static Double getValueAsDouble(Row row) throws NoNumberException {
         double ans = 0;
+        if (row.isNull(0)) {
+            return null;
+        }
         switch (row.getDataType(0)) {
-            case BOOLEAN:
-            case TEXT:
-                throw new NoNumberException();
             case INT32:
                 ans = row.getInt(0);
                 break;
@@ -33,10 +40,20 @@ public class Util {
             case DOUBLE:
                 ans = row.getDouble(0);
                 break;
+            default:
+                throw new NoNumberException();
         }
         return ans;
     }
 
+    /**
+     * 将{@code ArrayList<Double>}转化为长度相同的{@code double[]}。
+     * <p>
+     * 用户需要保证{@code ArrayList<Double>}中没有空值{@code  null}
+     *
+     * @param list 待转化的{@code ArrayList<Double>}
+     * @return 转化后的{@code double[]}
+     */
     public static double[] toArray(ArrayList<Double> list) {
         int len = list.size();
         double ans[] = new double[len];
@@ -62,6 +79,12 @@ public class Util {
         return median.evaluate(d);
     }
 
+    /**
+     * 计算序列的取值变化
+     *
+     * @param origin 原始序列
+     * @return 取值变化序列
+     */
     public static double[] variation(double origin[]) {
         int n = origin.length;
         double var[] = new double[n - 1];
@@ -71,6 +94,13 @@ public class Util {
         return var;
     }
 
+    /**
+     * 计算时间序列的速度
+     *
+     * @param origin 值序列
+     * @param time 时间戳序列
+     * @return 速度序列
+     */
     public static double[] speed(double origin[], double time[]) {
         int n = origin.length;
         double speed[] = new double[n - 1];

@@ -19,10 +19,11 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
+ * 用于计算时间序列的有效性的UDTF
  *
  * @author Wang Haoyu
  */
-public class ConsistencyUDF implements UDTF {
+public class UDTFValidity implements UDTF {
 
     @Override
     public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
@@ -36,11 +37,11 @@ public class ConsistencyUDF implements UDTF {
         try {
             if (rowWindow.windowSize() > TimeSeriesQuality.WINDOWSIZE) {
                 TimeSeriesQuality tsq = new TimeSeriesQuality(rowWindow.getRowIterator());
-                tsq.timeDetect();
-                collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getConsistency());
+                tsq.valueDetect();
+                collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getValidity());
             }
         } catch (IOException | NoNumberException ex) {
-            Logger.getLogger(CompletenessUDF.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UDTFCompleteness.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

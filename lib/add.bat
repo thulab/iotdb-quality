@@ -1,2 +1,0 @@
-mvn install:install-file -Dfile=iotdb-server-0.12.0-SNAPSHOT.jar -DgroupId=org.apache.iotdb -DartifactId=iotdb-server -Dversion=0.12.0-SNAPSHOT -Dpackaging=jar;
-mvn install:install-file -Dfile=tsfile-0.12.0-SNAPSHOT.jar -DgroupId=org.apache.iotdb -DartifactId=tsfile -Dversion=0.12.0-SNAPSHOT -Dpackaging=jar;

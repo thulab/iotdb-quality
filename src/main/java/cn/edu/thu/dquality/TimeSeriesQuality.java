@@ -17,6 +17,7 @@ import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 
 /**
+ * 计算时序数据质量指标的类
  *
  * @author Wang Haoyu
  */
@@ -26,21 +27,24 @@ public class TimeSeriesQuality {
     private int cnt = 0;//数据点总数
     private int missCnt = 0;//缺失点个数
     private int specialCnt = 0;//特殊值点个数
+    private int nullCnt = 0;//空值点个数
     private int lateCnt = 0;//延迟点个数
     private int redundancyCnt = 0;//过密点个数
     private int valueCnt = 0;//违背取值范围约束的数据点个数
     private int variationCnt = 0;//违背取值变化约束的数据点个数
     private int speedCnt = 0;//违背速度约束的数据点个数
     private int speedchangeCnt = 0;//违背速度变化约束的数据点个数
-    private final double[] time, origin;
+    private final double[] time, origin;//除去特殊值的时间序列
 
     public TimeSeriesQuality(RowIterator dataIterator) throws IOException, NoNumberException {
         ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
         while (dataIterator.hasNextRow()) {
             Row row = dataIterator.next();
             cnt++;
-            double v = Util.getValueAsDouble(row);
-            if (Double.isFinite(v)) {
+            Double v = Util.getValueAsDouble(row);
+            if (v == null) {//对空值的处理
+                nullCnt++;
+            } else if (Double.isFinite(v)) {
                 double t = Long.valueOf(row.getTime()).doubleValue();
                 timeList.add(t);
                 originList.add(v);
@@ -73,7 +77,11 @@ public class TimeSeriesQuality {
         origin = Util.toArray(originList);
     }
 
-    public void timeDetect() throws IOException, NoNumberException {
+    /**
+     * 对时间序列的时间戳进行异常侦测，为计算完整性、一致性、时效性做准备
+     *
+     */
+    public void timeDetect() {
         //计算时间间隔特征
         double interval[] = Util.variation(time);
         Median median = new Median();
@@ -118,7 +126,11 @@ public class TimeSeriesQuality {
         }
     }
 
-    public void valueDetect() throws IOException, NoNumberException {
+    /**
+     * 对时间序列的值进行异常侦测，为计算有效性做准备
+     *
+     */
+    public void valueDetect() {
         int k = 3;
         //原始数据异常检测
         valueCnt = findOutliers(origin, k);
@@ -153,18 +165,38 @@ public class TimeSeriesQuality {
         return num;
     }
 
+    /**
+     * 返回时间序列的完整性
+     *
+     * @return 完整性
+     */
     public double getCompleteness() {
-        return 1 - (missCnt + specialCnt) * 1.0 / (cnt + missCnt);
+        return 1 - (missCnt + specialCnt + nullCnt) * 1.0 / (cnt + missCnt);
     }
 
+    /**
+     * 返回时间序列的一致性
+     *
+     * @return 一致性
+     */
     public double getConsistency() {
         return 1 - redundancyCnt * 1.0 / cnt;
     }
 
+    /**
+     * 返回时间序列的时效性
+     *
+     * @return 时效性
+     */
     public double getTimeliness() {
         return 1 - lateCnt * 1.0 / cnt;
     }
 
+    /**
+     * 返回时间序列的有效性
+     *
+     * @return 有效性
+     */
     public double getValidity() {
         return 1 - (valueCnt + variationCnt + speedCnt + speedchangeCnt) * 0.25 / cnt;
     }

@@ -1,38 +1,68 @@
 # TsClean-IoTDB-UDF
-## 概述
-本项目基于IoTDB的UDF，实现了TsClean数据质量系统的一系列重要函数，包括时序数据的质量指标计算、数值填补、数值修复等。
+Language: English | [中文](README_zh.md)
+## Introduction
+This project is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean, a data quality system of time series, including data quality indicator  calculation, value filling, value repairing, etc.
 
-## 使用方式
-+ 将本项目及其依赖打包成jar包
-+ 将jar包复制到IoTDB文件夹的ext\udf目录下
-+ 在IoTDB中使用下面的SQL语句注册UDF
+## Quick Start
+1. Package this project into a JAR with all of its dependencies.
+2. Copy the JAR package to `ext\udf` under the directory of IoTDB server.
+3. Register the UDFs with the following SQL statements in IoTDB: 
 
 ```sql
-create function completeness as “cn.edu.thu.dquality.udf.CompletenessUDF”
-create function consistency as “cn.edu.thu.dquality.udf.ConsistencyUDF”
-create function timeliness as “cn.edu.thu.dquality.udf.TimelinessUDF”
-create function validity as “cn.edu.thu.dquality.udf.ValidityUDF”
+create function completeness as “cn.edu.thu.dquality.udf.UDTFCompleteness”
+create function consistency as “cn.edu.thu.dquality.udf.UDTFConsistency”
+create function timeliness as “cn.edu.thu.dquality.udf.UDTFTimeliness”
+create function validity as “cn.edu.thu.dquality.udf.UDTFValidity”
+create function previousfill as “cn.edu.thu.dquality.udf.UDTFPreviousFill”
 ```
 
-## 函数介绍
+### How to package the project
+Enverionment Requirements:
++ Java >= 1.8 (Now 1.8, 11 and 13 have been verified. Please make sure that the paths of environment variables have been set correctly).
++ Maven >= 3.1 
 
-### 时序数据质量指标函数
-对于时序数据的质量，我们制定了完整性、一致性、时效性、有效性四个指标来进行衡量。计算各个指标的UDF如下表：
+Detailed Instructions：
+1. Modify the following dependencies in pom.xml. Please note that you must select the same dependency version as the target IoTDB server version for development.
+```xml
+<dependency>
+    <groupId>org.apache.iotdb</groupId>
+    <artifactId>iotdb-server</artifactId>
+    <version>0.12.0-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
+<dependency>
+    <groupId>org.apache.iotdb</groupId>
+    <artifactId>tsfile</artifactId>
+    <version>0.12.0-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
+```
+2. Package with the following command in the root directory of this project. 
+```
+mvn clean package -DskipTests
+```
+3. After exection, the JAR package with all dependencies is in target/udf-tsclean-0.1.0-jar-with-dependencies.jar.
 
-|    函数名    |          输入序列类型          |                                                       属性参数                                                       | 输出序列类型 |                                                       功能描述                                                       |
-| :----------: | :----------------------------: | :------------------------------------------------------------------------------------------------------------------: | :----------: | :------------------------------------------------------------------------------------------------------------------: |
-| COMPLETENESS | INT32 / INT64 / FLOAT / DOUBLE | `window`：每一个窗口包含的数据点数目，最后一个窗口的数据点数目可能会不足。缺省情况下，全部输入数据都属于同一个窗口。 |    DOUBLE    | 将输入序列划分为若干个连续且不重叠的窗口，分别计算每一个窗口的完整性，并输出窗口第一个数据点的时间戳和窗口的完整性。 |
-| CONSISTENCY  | INT32 / INT64 / FLOAT / DOUBLE | `window`：每一个窗口包含的数据点数目，最后一个窗口的数据点数目可能会不足。缺省情况下，全部输入数据都属于同一个窗口。 |    DOUBLE    | 将输入序列划分为若干个连续且不重叠的窗口，分别计算每一个窗口的一致性，并输出窗口第一个数据点的时间戳和窗口的一致性。 |
-|  TIMELINESS  | INT32 / INT64 / FLOAT / DOUBLE | `window`：每一个窗口包含的数据点数目，最后一个窗口的数据点数目可能会不足。缺省情况下，全部输入数据都属于同一个窗口。 |    DOUBLE    | 将输入序列划分为若干个连续且不重叠的窗口，分别计算每一个窗口的时效性，并输出窗口第一个数据点的时间戳和窗口的时效性。 |
-|   VALIDITY   | INT32 / INT64 / FLOAT / DOUBLE | `window`：每一个窗口包含的数据点数目，最后一个窗口的数据点数目可能会不足。缺省情况下，全部输入数据都属于同一个窗口。 |    DOUBLE    | 将输入序列划分为若干个连续且不重叠的窗口，分别计算每一个窗口的有效性，并输出窗口第一个数据点的时间戳和窗口的有效性。 |
+## Introductions of Functions
+
+### Functions about data quality indicators
+
+For time series, we develop 4 data quality indicators: completeness, consistency, timeliness and validity. The UDFs to calculate these indicators are as follows:
+
+|     Name     |      Type of Input Series      |                                                                                  Parameters                                                                                  | Type of Output Series |                                                                                 Description                                                                                 |
+| :----------: | :----------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| COMPLETENESS | INT32 / INT64 / FLOAT / DOUBLE | `window`: The number of data points in each window. The number of data points in the last window may be less than it. By default, all input data belongs to the same window. |        DOUBLE         | The input series are divided into several continuous and non overlapping windows. The timestamp of the first data point and the completeness of each window will be output. |
+| CONSISTENCY  | INT32 / INT64 / FLOAT / DOUBLE | `window`: The number of data points in each window. The number of data points in the last window may be less than it. By default, all input data belongs to the same window. |        DOUBLE         | The input series are divided into several continuous and non overlapping windows. The timestamp of the first data point and the consistency of each window will be output.  |
+|  TIMELINESS  | INT32 / INT64 / FLOAT / DOUBLE | `window`: The number of data points in each window. The number of data points in the last window may be less than it. By default, all input data belongs to the same window. |        DOUBLE         |  The input series are divided into several continuous and non overlapping windows. The timestamp of the first data point and the timeliness of each window will be output.  |
+|   VALIDITY   | INT32 / INT64 / FLOAT / DOUBLE | `window`: The number of data points in each window. The number of data points in the last window may be less than it. By default, all input data belongs to the same window. |        DOUBLE         |   The input series are divided into several continuous and non overlapping windows. The timestamp of the first data point and the validity of each window will be output.   |
 
 
-例如：
+Example:
 ```sql
 select s1,completeness(s1),consistency(s1),timeliness(s1),validity(s1) from root.test.d1 where time <= 2020-01-01 00:00:30
 ```
 
-结果：
+Result:
 ```
 +-----------------------------+---------------+-----------------------------+----------------------------+---------------------------+-------------------------+
 |                         Time|root.test.d1.s1|completeness(root.test.d1.s1)|consistency(root.test.d1.s1)|timeliness(root.test.d1.s1)|validity(root.test.d1.s1)|
@@ -57,57 +87,85 @@ Total line number = 15
 It costs 0.212s
 ```
 
-
-## 函数实现
-### 数据质量指标
-对于时序数据的质量，我们制定了如下四个指标来进行衡量，每一个指标都包含了一个或多个异常：
+### Functions about value filling
+We develop some value filling functions for time series. Their UDFs are as follows:
 
 
-|    完整性    | 一致性 | 时效性 |      有效性      |
-| :----------: | :----: | :----: | :--------------: |
-| 数据丢失异常 | 过密点 | 延迟点 |     取值范围     |
-|   空值异常   |        |        |   取值分布范围   |
-|  特殊值异常  |        |        |   取值变化范围   |
-|              |        |        | 取值变化速度范围 |
+|     Name     | Type of Input Series |                                                                                        Parameters                                                                                        |     Type of Output Series     |                                                            Description                                                             |
+| :----------: | :------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------: | :--------------------------------------------------------------------------------------------------------------------------------: |
+| PREVIOUSFILL |     FLOAT/DOUBLE     | `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity. | Same type as the input series | The `NaN` points in the input series will be filled with the value of the previous non-`NaN` point. The new series will be output. |
 
-**完整性**采用如下的公式计算：
+Example:
+```sql
+select s2,previousfill(s2,"beforeRange"="1000") from root.test.d1 where time <= 2020-01-01 00:00:30
+```
+
+Result:
+```
++-----------------------------+---------------+---------------------------------------------------+
+|                         Time|root.test.d1.s2|previousfill(root.test.d1.s2, "beforeRange"="1000")|
++-----------------------------+---------------+---------------------------------------------------+
+|2020-01-01T00:00:00.000+08:00|            NaN|                                                NaN|
+|2020-01-01T00:00:01.000+08:00|          120.0|                                              120.0|
+|2020-01-01T00:00:02.000+08:00|          120.0|                                              120.0|
+|2020-01-01T00:00:04.000+08:00|            NaN|                                                NaN|
+|2020-01-01T00:00:05.000+08:00|          130.0|                                              130.0|
+|2020-01-01T00:00:06.000+08:00|            NaN|                                              130.0|
+|2020-01-01T00:00:07.000+08:00|          140.0|                                              140.0|
++-----------------------------+---------------+---------------------------------------------------+
+Total line number = 7
+It costs 0.016s
+```
+
+
+## Implementations of Functions
+### Data quality indicators
+
+For data quality of time series, we develop the following 4 indicators. Each indicator includes one or more exceptions:
+
+
+|      Completeness       |     Consistency      |   Timeliness   |        Validity        |
+| :---------------------: | :------------------: | :------------: | :--------------------: |
+|   Data miss exception   | Redundancy exception | Late exception |    Value exception     |
+|     Null exception      |                      |                |  Variation exception   |
+| Special value exception |                      |                |    Speed exception     |
+|                         |                      |                | Speed change exception |
+
+**Completeness** is calculated as follows:
 $$
 Completeness=1-\frac{N_{null}+N_{special}+N_{miss}}{N+N_{miss}}
 $$
-其中，$N$是时间序列总的数据点数目，$N_{null}$是时间序列中值为空的数据点数目，$N_{special}$是时间序列中值为特殊值的数据点数目，$N_{miss}$是时间序列中丢失的数据点数目。
+where $N$ is the total number of data points in time series, $N_{null}$ is the number of points with null value, $N_{special}$ is the number of points with specail value and $N_{miss}$ is the number of missing points. 
 
 
-
-
-**一致性**采用如下的公式计算：
+**Consistency** is calculated as follows:
 $$
 Consistency=1-\frac{N_{redundancy}}{N}
 $$
-其中，$N$是时间序列总的数据点数目，$N_{redundancy}$是时间序列中过密的数据点数目。
+where $N$ is the total number of data points in time series and $N_{redundancy}$ is the number of redundant points.
 
-**时效性**采用如下的公式计算：
+**Timeliness** is calculated as follows:
 $$
 Timeliness=1-\frac{N_{late}}{N}
 $$
-其中，$N$是时间序列总的数据点数目，$N_{late}$是时间序列中延迟的数据点数目。
+where $N$ is the total number of data points in time series and $N_{late}$ is the number of late points.
 
-
-**有效性**采用如下的公式计算：
+**Validity** is calculated as follows:
 $$
 Validity=1-\frac{N_{value}+N_{variation}+N_{speed}+N_{speedchange}}{4N}
 $$
-其中，$N$是时间序列总的数据点数目，$N_{value}$是违反取值范围约束的数据点数目，$N_{variation}$是违反取值变化约束的数据点数目，$N_{speed}$是违反速度约束的数据点数目，$N_{speedchange}$是违反速度变化约束的数据点数目（同一个数据点可能违反多项约束）。
+where $N$ is the total number of data points in time series, $N_{value}$ is the number of points breaking value constraint, $N_{variation}$ is the number of points breaking variation constraint, $N_{speed}$ is the number of points breaking speed constraint and $N_{speedchange}$ is the number of points breaking speed change constraint. Significantly, a single data point may break multiple constraints.
 
-基于原始数据value和它的时间戳time，可以计算它的变化variation、速度speed以及速度变化speedchange：
+Base on the original values ($value$) and their timestamps ($time$), the variaiton ($variation$), speed ($speed$) and speed change ($speedchange$) can be calculated as follows:
+
 $$
 variation_{i}=value_{i+1}-value_{i}\\
 speed_{i}=\frac{value_{i+1}-value_{i}}{time_{i+1}-time_{i}}\\
 speedchange_{i}=speed_{i+1}-speed_{i}
 $$
 
-
-当一个数据x与其中位数的偏差超过了三倍绝对中位差时，称作违背约束，即
+For series $x$, when the difference between $x_i$ and the median of $x$ is more than 3 times of the median absolute deviation (MAD) of $x$, the constraint is broken, i.e. 
 $$
-|x-mid(x)|> 3* mad(x)
+|x_i-mid(x)|> 3* mad(x)
 $$
 

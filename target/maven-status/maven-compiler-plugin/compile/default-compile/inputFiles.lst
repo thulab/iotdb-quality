@@ -1,11 +1,8 @@
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\TimelinessUDF.java
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\SpeedChangeUDF.java
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\ValidityUDF.java
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\ConsistencyUDF.java
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\IntervalUDF.java
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\VariationUDF.java
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\SpeedUDF.java
+D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFCompleteness.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\Util.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\NoNumberException.java
-D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\CompletenessUDF.java
+D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFPreviousFill.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\TimeSeriesQuality.java
+D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFConsistency.java
+D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFValidity.java
+D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFTimeliness.java
