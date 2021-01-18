@@ -4,5 +4,6 @@ D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\NoNumberException.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFPreviousFill.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\TimeSeriesQuality.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFConsistency.java
+D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFLinearFill.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFValidity.java
 D:\科研_THU\TsCleanUDF\src\main\java\cn\edu\thu\dquality\udf\UDTFTimeliness.java

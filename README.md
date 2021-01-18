@@ -1,4 +1,7 @@
-# TsClean-IoTDB-UDF
+<script type="text/javascript"
+src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+# TsClean-IoTDB
 Language: English | [中文](README_zh.md)
 ## Introduction
 This project is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean, a data quality system of time series, including data quality indicator  calculation, value filling, value repairing, etc.
@@ -14,6 +17,7 @@ create function consistency as “cn.edu.thu.dquality.udf.UDTFConsistency”
 create function timeliness as “cn.edu.thu.dquality.udf.UDTFTimeliness”
 create function validity as “cn.edu.thu.dquality.udf.UDTFValidity”
 create function previousfill as “cn.edu.thu.dquality.udf.UDTFPreviousFill”
+create function linearfill as “cn.edu.thu.dquality.udf.UDTFLinearFill”
 ```
 
 ### How to package the project
@@ -91,30 +95,31 @@ It costs 0.212s
 We develop some value filling functions for time series. Their UDFs are as follows:
 
 
-|     Name     | Type of Input Series |                                                                                        Parameters                                                                                        |     Type of Output Series     |                                                            Description                                                             |
-| :----------: | :------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------: | :--------------------------------------------------------------------------------------------------------------------------------: |
-| PREVIOUSFILL |     FLOAT/DOUBLE     | `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity. | Same type as the input series | The `NaN` points in the input series will be filled with the value of the previous non-`NaN` point. The new series will be output. |
+|     Name     | Type of Input Series |                                                                                                                                                                                    Parameters                                                                                                                                                                                    |     Type of Output Series     |                                                                             Description                                                                             |
+| :----------: | :------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| PREVIOUSFILL |     FLOAT/DOUBLE     |                                                                                             `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity.                                                                                             | Same type as the input series |                 The `NaN` points in the input series will be filled with the value of the previous non-`NaN` point. The new series will be output.                  |
+|  LINEARFILL  |     FLOAT/DOUBLE     | `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity.<br> `afterRange`: The valid range of filling method. Filling works when the time difference between next non-`NaN` point and this point is not more than it. By default, it's infinity. | Same type as the input series | The `NaN` points in the input series will be filled with the value of the previous and next non-`NaN` point by linear interpolation. The new series will be output. |
 
 Example:
 ```sql
-select s2,previousfill(s2,"beforeRange"="1000") from root.test.d1 where time <= 2020-01-01 00:00:30
+select s2,previousfill(s2,"beforeRange"="1000"),linearfill(s2,"beforeRange"="1000","afterRange"="1000") from root.test.d1 where time <= 2020-01-01 00:00:30
 ```
 
 Result:
 ```
-+-----------------------------+---------------+---------------------------------------------------+
-|                         Time|root.test.d1.s2|previousfill(root.test.d1.s2, "beforeRange"="1000")|
-+-----------------------------+---------------+---------------------------------------------------+
-|2020-01-01T00:00:00.000+08:00|            NaN|                                                NaN|
-|2020-01-01T00:00:01.000+08:00|          120.0|                                              120.0|
-|2020-01-01T00:00:02.000+08:00|          120.0|                                              120.0|
-|2020-01-01T00:00:04.000+08:00|            NaN|                                                NaN|
-|2020-01-01T00:00:05.000+08:00|          130.0|                                              130.0|
-|2020-01-01T00:00:06.000+08:00|            NaN|                                              130.0|
-|2020-01-01T00:00:07.000+08:00|          140.0|                                              140.0|
-+-----------------------------+---------------+---------------------------------------------------+
++-----------------------------+---------------+---------------------------------------------------+----------------------------------------------------------------------+
+|                         Time|root.test.d1.s2|previousfill(root.test.d1.s2, "beforeRange"="1000")|linearfill(root.test.d1.s2, "beforeRange"="1000", "afterRange"="1000")|
++-----------------------------+---------------+---------------------------------------------------+----------------------------------------------------------------------+
+|2020-01-01T00:00:00.000+08:00|            NaN|                                                NaN|                                                                   NaN|
+|2020-01-01T00:00:01.000+08:00|          120.0|                                              120.0|                                                                 120.0|
+|2020-01-01T00:00:02.000+08:00|          120.0|                                              120.0|                                                                 120.0|
+|2020-01-01T00:00:04.000+08:00|            NaN|                                                NaN|                                                                   NaN|
+|2020-01-01T00:00:05.000+08:00|          130.0|                                              130.0|                                                                 130.0|
+|2020-01-01T00:00:06.000+08:00|            NaN|                                              130.0|                                                                 135.0|
+|2020-01-01T00:00:07.000+08:00|          140.0|                                              140.0|                                                                 140.0|
++-----------------------------+---------------+---------------------------------------------------+----------------------------------------------------------------------+
 Total line number = 7
-It costs 0.016s
+It costs 0.421s
 ```
 
 
