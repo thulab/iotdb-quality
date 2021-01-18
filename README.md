@@ -1,6 +1,3 @@
-<script type="text/javascript"
-src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
 # TsClean-IoTDB
 Language: English | [中文](README_zh.md)
 ## Introduction
@@ -137,40 +134,40 @@ For data quality of time series, we develop the following 4 indicators. Each ind
 |                         |                      |                | Speed change exception |
 
 **Completeness** is calculated as follows:
-$$
-Completeness=1-\frac{N_{null}+N_{special}+N_{miss}}{N+N_{miss}}
-$$
-where $N$ is the total number of data points in time series, $N_{null}$ is the number of points with null value, $N_{special}$ is the number of points with specail value and $N_{miss}$ is the number of missing points. 
+
+![](http://latex.codecogs.com/svg.latex?Completeness=1-\frac{N_{null}+N_{special}+N_{miss}}{N+N_{miss}})
+
+where N is the total number of data points in time series, N<sub>null</sub> is the number of points with null value, N<sub>special</sub> is the number of points with specail value and N<sub>miss</sub> is the number of missing points. 
 
 
 **Consistency** is calculated as follows:
-$$
-Consistency=1-\frac{N_{redundancy}}{N}
-$$
-where $N$ is the total number of data points in time series and $N_{redundancy}$ is the number of redundant points.
+
+![](http://latex.codecogs.com/svg.latex?Consistency=1-\frac{N_{redundancy}}{N})
+
+
+where N is the total number of data points in time series and N<sub>redundancy</sub> is the number of redundant points.
 
 **Timeliness** is calculated as follows:
-$$
-Timeliness=1-\frac{N_{late}}{N}
-$$
-where $N$ is the total number of data points in time series and $N_{late}$ is the number of late points.
+
+![](http://latex.codecogs.com/svg.latex?Timeliness=1-\frac{N_{late}}{N})
+
+where N is the total number of data points in time series and N<sub>late</sub> is the number of late points.
 
 **Validity** is calculated as follows:
-$$
-Validity=1-\frac{N_{value}+N_{variation}+N_{speed}+N_{speedchange}}{4N}
-$$
-where $N$ is the total number of data points in time series, $N_{value}$ is the number of points breaking value constraint, $N_{variation}$ is the number of points breaking variation constraint, $N_{speed}$ is the number of points breaking speed constraint and $N_{speedchange}$ is the number of points breaking speed change constraint. Significantly, a single data point may break multiple constraints.
 
-Base on the original values ($value$) and their timestamps ($time$), the variaiton ($variation$), speed ($speed$) and speed change ($speedchange$) can be calculated as follows:
+![](http://latex.codecogs.com/svg.latex?Validity=1-\frac{N_{value}+N_{variation}+N_{speed}+N_{speedchange}}{4N})
 
-$$
-variation_{i}=value_{i+1}-value_{i}\\
-speed_{i}=\frac{value_{i+1}-value_{i}}{time_{i+1}-time_{i}}\\
-speedchange_{i}=speed_{i+1}-speed_{i}
-$$
+where N is the total number of data points in time series, N<sub>value</sub> is the number of points breaking value constraint, N<sub>variation</sub> is the number of points breaking variation constraint, N<sub>speed</sub> is the number of points breaking speed constraint and N<sub>speedchange</sub> is the number of points breaking speed change constraint. Significantly, a single data point may break multiple constraints.
 
-For series $x$, when the difference between $x_i$ and the median of $x$ is more than 3 times of the median absolute deviation (MAD) of $x$, the constraint is broken, i.e. 
-$$
-|x_i-mid(x)|> 3* mad(x)
-$$
+Base on the original values and their timestamps, the variaiton, speed and speed change can be calculated as follows:
 
+![](http://latex.codecogs.com/svg.latex?variation_{i}=value_{i+1}-value_{i})
+
+![](http://latex.codecogs.com/svg.latex?speed_{i}=\frac{value_{i+1}-value_{i}}{time_{i+1}-time_{i}})
+
+![](http://latex.codecogs.com/svg.latex?speedchange_{i}=speed_{i+1}-speed_{i})
+
+
+For series x, when the difference between x<sub>i</sub> and the median of x is more than 3 times of the median absolute deviation (MAD) of x, the constraint is broken, i.e. 
+
+![](http://latex.codecogs.com/svg.latex?|x_i-mid(x)|>3*mad(x))

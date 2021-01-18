@@ -131,43 +131,41 @@ It costs 0.421s
 |              |        |        | 速度变化范围 |
 
 **完整性**采用如下的公式计算：
-$$
-Completeness=1-\frac{N_{null}+N_{special}+N_{miss}}{N+N_{miss}}
-$$
-其中，$N$是时间序列总的数据点数目，$N_{null}$是时间序列中值为空的数据点数目，$N_{special}$是时间序列中值为特殊值的数据点数目，$N_{miss}$是时间序列中丢失的数据点数目。
+
+![](http://latex.codecogs.com/svg.latex?Completeness=1-\frac{N_{null}+N_{special}+N_{miss}}{N+N_{miss}})
 
 
+其中，N是时间序列总的数据点数目，N<sub>null</sub>是时间序列中值为空的数据点数目，N<sub>special</sub>是时间序列中值为特殊值的数据点数目，N<sub>miss</sub>是时间序列中丢失的数据点数目。
 
 
 **一致性**采用如下的公式计算：
-$$
-Consistency=1-\frac{N_{redundancy}}{N}
-$$
-其中，$N$是时间序列总的数据点数目，$N_{redundancy}$是时间序列中过密的数据点数目。
+
+![](http://latex.codecogs.com/svg.latex?Consistency=1-\frac{N_{redundancy}}{N})
+
+其中，N是时间序列总的数据点数目，N<sub>redundancy</sub>是时间序列中过密的数据点数目。
 
 **时效性**采用如下的公式计算：
-$$
-Timeliness=1-\frac{N_{late}}{N}
-$$
-其中，$N$是时间序列总的数据点数目，$N_{late}$是时间序列中延迟的数据点数目。
+
+![](http://latex.codecogs.com/svg.latex?Timeliness=1-\frac{N_{late}}{N})
+
+其中，N是时间序列总的数据点数目，N<sub>late</sub>是时间序列中延迟的数据点数目。
 
 
 **有效性**采用如下的公式计算：
-$$
-Validity=1-\frac{N_{value}+N_{variation}+N_{speed}+N_{speedchange}}{4N}
-$$
-其中，$N$是时间序列总的数据点数目，$N_{value}$是违反取值范围约束的数据点数目，$N_{variation}$是违反取值变化约束的数据点数目，$N_{speed}$是违反速度约束的数据点数目，$N_{speedchange}$是违反速度变化约束的数据点数目（同一个数据点可能违反多项约束）。
 
-基于原始数据$value$和它的时间戳$time$，可以计算它的变化$variation$、速度$speed$以及速度变化$speedchange$：
-$$
-variation_{i}=value_{i+1}-value_{i}\\
-speed_{i}=\frac{value_{i+1}-value_{i}}{time_{i+1}-time_{i}}\\
-speedchange_{i}=speed_{i+1}-speed_{i}
-$$
+![](http://latex.codecogs.com/svg.latex?Validity=1-\frac{N_{value}+N_{variation}+N_{speed}+N_{speedchange}}{4N})
+
+其中，N是时间序列总的数据点数目，N<sub>value</sub>是违反取值范围约束的数据点数目，N<sub>variation</sub>是违反取值变化约束的数据点数目，N<sub>speed</sub>是违反速度约束的数据点数目，N<sub>speedchange</sub>是违反速度变化约束的数据点数目（同一个数据点可能违反多项约束）。
+
+基于原始数据value和它的时间戳time，可以计算它的变化variation、速度speed以及速度变化speedchange：
+
+![](http://latex.codecogs.com/svg.latex?variation_{i}=value_{i+1}-value_{i})
+
+![](http://latex.codecogs.com/svg.latex?speed_{i}=\frac{value_{i+1}-value_{i}}{time_{i+1}-time_{i}})
+
+![](http://latex.codecogs.com/svg.latex?speedchange_{i}=speed_{i+1}-speed_{i})
 
 
-对序列$x$，当$x_i$与其中位数的偏差超过了三倍绝对中位差时，称作违背约束，即
-$$
-|x_i-mid(x)|> 3* mad(x)
-$$
+对序列x，当x<sub>i</sub>与其中位数的偏差超过了三倍绝对中位差时，称作违背约束，即
 
+![](http://latex.codecogs.com/svg.latex?|x_i-mid(x)|>3*mad(x))
