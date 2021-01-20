@@ -16,6 +16,7 @@ create function timeliness as “cn.edu.thu.dquality.udf.UDTFTimeliness”
 create function validity as “cn.edu.thu.dquality.udf.UDTFValidity”
 create function previousfill as “cn.edu.thu.dquality.udf.UDTFPreviousFill”
 create function linearfill as “cn.edu.thu.dquality.udf.UDTFLinearFill”
+create function screenrepair as “cn.edu.thu.dquality.udf.UDTFScreenRepair”
 ```
 
 ### 项目打包
@@ -90,10 +91,10 @@ It costs 0.212s
 
 ### 时序数据数值填补函数
 对于时序数据，我们设计了一系列数值填补方法。各方法的UDF如下表：
-|    函数名    | 输入序列类型 |                                                          属性参数                                                           |       输出序列类型       |                                         功能描述                                         |
-| :----------: | :----------: | :-------------------------------------------------------------------------------------------------------------------------: | :----------------------: | :--------------------------------------------------------------------------------------: |
-| PREVIOUSFILL | FLOAT/DOUBLE | `beforeRange`：只有当前一个非`NaN`数据点与当前数据点的时间差不超过该值时才会进行填补，否则仍为`NaN`。在缺省情况下为无穷大。 | 与输入序列的实际类型一致 |          将输入序列中的`NaN`填补为前一个非`NaN`数据点的值，输出填补后的新序列。          |
-|  LINEARFILL  | FLOAT/DOUBLE | `beforeRange`：只有当前一个非`NaN`数据点与当前数据点的时间差不超过该值时才会进行填补，否则仍为`NaN`。在缺省情况下为无穷大。<br> `afterRange`：只有当后一个非`NaN`数据点与当前数据点的时间差不超过该值时才会进行填补，否则仍为`NaN`。在缺省情况下为无穷大。  | 与输入序列的实际类型一致 | 将输入序列中的`NaN`填补为前一个和后一个非`NaN`数据点线性插值的结果，输出填补后的新序列。 |
+|    函数名    | 输入序列类型 |                                                                                                                          属性参数                                                                                                                          |       输出序列类型       |                                         功能描述                                         |
+| :----------: | :----------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------: | :--------------------------------------------------------------------------------------: |
+| PREVIOUSFILL | FLOAT/DOUBLE |                                                                `beforeRange`：只有当前一个非`NaN`数据点与当前数据点的时间差不超过该值时才会进行填补，否则仍为`NaN`。在缺省情况下为无穷大。                                                                 | 与输入序列的实际类型一致 |          将输入序列中的`NaN`填补为前一个非`NaN`数据点的值，输出填补后的新序列。          |
+|  LINEARFILL  | FLOAT/DOUBLE | `beforeRange`：只有当前一个非`NaN`数据点与当前数据点的时间差不超过该值时才会进行填补，否则仍为`NaN`。在缺省情况下为无穷大。<br> `afterRange`：只有当后一个非`NaN`数据点与当前数据点的时间差不超过该值时才会进行填补，否则仍为`NaN`。在缺省情况下为无穷大。 | 与输入序列的实际类型一致 | 将输入序列中的`NaN`填补为前一个和后一个非`NaN`数据点线性插值的结果，输出填补后的新序列。 |
 
 例如：
 ```sql
@@ -116,8 +117,41 @@ select s2,previousfill(s2,"beforeRange"="1000"),linearfill(s2,"beforeRange"="100
 Total line number = 7
 It costs 0.421s
 ```
+### 时序数据数值修复函数
+时序数据中可能存在一些数值异常点，我们设计了数值修复方法对这些异常点进行修复。各方法的UDF如下表：
+|    函数名    |       输入序列类型       |                                                                             属性参数                                                                              |       输出序列类型       |                                                    功能描述                                                     |
+| :----------: | :----------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------: | :-------------------------------------------------------------------------------------------------------------: |
+| SCREENREPAIR | INT32/INT64/FLOAT/DOUBLE | `minSpeed`：当速度小于该值时会被视作数值异常点加以修复。在缺省情况下为中位数减去三倍绝对中位差。<br> `maxSpeed`：当速度大于该值时会被视作数值异常点加以修复。在缺省情况下为中位数加上三倍绝对中位差。 | 与输入序列的实际类型一致 | 采用基于速度阈值的Screen方法对时间序列的数值进行修复，输出修复后的序列（`NaN`在修复之前会先进行线性插值填补）。 |
 
+例如：
+```sql
+select s1,screenrepair(s1) from root.test.d1 where time <= 2020-01-01 00:00:30
+```
 
+结果：
+```
++-----------------------------+---------------+-----------------------------+
+|                         Time|root.test.d1.s1|screenrepair(root.test.d1.s1)|
++-----------------------------+---------------+-----------------------------+
+|2020-01-01T00:00:02.000+08:00|          100.0|                        100.0|
+|2020-01-01T00:00:03.000+08:00|          101.0|                        101.0|
+|2020-01-01T00:00:04.000+08:00|          102.0|                        102.0|
+|2020-01-01T00:00:06.000+08:00|          104.0|                        104.0|
+|2020-01-01T00:00:08.000+08:00|          126.0|                        106.0|
+|2020-01-01T00:00:10.000+08:00|          108.0|                        108.0|
+|2020-01-01T00:00:14.000+08:00|          112.0|                        112.0|
+|2020-01-01T00:00:15.000+08:00|          113.0|                        113.0|
+|2020-01-01T00:00:16.000+08:00|          114.0|                        114.0|
+|2020-01-01T00:00:18.000+08:00|          116.0|                        116.0|
+|2020-01-01T00:00:20.000+08:00|          118.0|                        118.0|
+|2020-01-01T00:00:22.000+08:00|          120.0|                        120.0|
+|2020-01-01T00:00:26.000+08:00|          124.0|                        124.0|
+|2020-01-01T00:00:28.000+08:00|          126.0|                        126.0|
+|2020-01-01T00:00:30.000+08:00|            NaN|                        128.0|
++-----------------------------+---------------+-----------------------------+
+Total line number = 15
+It costs 0.698s
+```
 ## 函数实现
 ### 数据质量指标
 对于时序数据的质量，我们制定了如下四个指标来进行衡量，每一个指标都包含了一个或多个异常：
@@ -132,7 +166,7 @@ It costs 0.421s
 
 **完整性**采用如下的公式计算：
 
-![](http://latex.codecogs.com/svg.latex?Completeness=1-\frac{N_{null}+N_{special}+N_{miss}}{N+N_{miss}})
+Completeness = 1 - (N<sub>null</sub> + N<sub>special</sub> + N<sub>miss</sub>) / (N + N<sub>miss</sub>)
 
 
 其中，N是时间序列总的数据点数目，N<sub>null</sub>是时间序列中值为空的数据点数目，N<sub>special</sub>是时间序列中值为特殊值的数据点数目，N<sub>miss</sub>是时间序列中丢失的数据点数目。
@@ -140,32 +174,47 @@ It costs 0.421s
 
 **一致性**采用如下的公式计算：
 
-![](http://latex.codecogs.com/svg.latex?Consistency=1-\frac{N_{redundancy}}{N})
+
+Consistency = 1 - N<sub>redundancy</sub> / N
 
 其中，N是时间序列总的数据点数目，N<sub>redundancy</sub>是时间序列中过密的数据点数目。
 
 **时效性**采用如下的公式计算：
 
-![](http://latex.codecogs.com/svg.latex?Timeliness=1-\frac{N_{late}}{N})
+Timeliness = 1 - N<sub>late</sub> / N
 
 其中，N是时间序列总的数据点数目，N<sub>late</sub>是时间序列中延迟的数据点数目。
 
 
 **有效性**采用如下的公式计算：
 
-![](http://latex.codecogs.com/svg.latex?Validity=1-\frac{N_{value}+N_{variation}+N_{speed}+N_{speedchange}}{4N})
+Validity = 1 - (N<sub>value</sub> + N<sub>variation</sub> + N<sub>speed</sub> + N<sub>speedchange</sub>) / (4 * N)
 
 其中，N是时间序列总的数据点数目，N<sub>value</sub>是违反取值范围约束的数据点数目，N<sub>variation</sub>是违反取值变化约束的数据点数目，N<sub>speed</sub>是违反速度约束的数据点数目，N<sub>speedchange</sub>是违反速度变化约束的数据点数目（同一个数据点可能违反多项约束）。
 
 基于原始数据value和它的时间戳time，可以计算它的变化variation、速度speed以及速度变化speedchange：
 
-![](http://latex.codecogs.com/svg.latex?variation_{i}=value_{i+1}-value_{i})
+variation<sub>i</sub> = value<sub>i+1</sub> - value<sub>i</sub>
 
-![](http://latex.codecogs.com/svg.latex?speed_{i}=\frac{value_{i+1}-value_{i}}{time_{i+1}-time_{i}})
+speed<sub>i</sub> = (value<sub>i+1</sub> - value<sub>i</sub>) / (time<sub>i+1</sub> - time<sub>i</sub>)
 
-![](http://latex.codecogs.com/svg.latex?speedchange_{i}=speed_{i+1}-speed_{i})
+speedchange<sub>i</sub> = speed<sub>i+1</sub> - speed<sub>i</sub>
 
 
 对序列x，当x<sub>i</sub>与其中位数的偏差超过了三倍绝对中位差时，称作违背约束，即
 
-![](http://latex.codecogs.com/svg.latex?|x_i-mid(x)|>3*mad(x))
+| x<sub>i</sub> - mid(x) | > 3 * mad(x)
+
+### 数据填补方法
+
+如果待填补的数据点的时间戳是t，前一个非`NaN`的数据点是(t<sub>1</sub>,v<sub>1</sub>)，后一个非`NaN`的数据点是(t<sub>2</sub>,v<sub>2</sub>)。那么，采用**previous**方法进行填补的结果为：
+
+v = v<sub>1</sub>
+
+采用**linear**方法进行填补的结果为：
+
+v = v<sub>1</sub> + (t - t<sub>1</sub>) * (v<sub>2</sub> - v<sub>1</sub>) / (t<sub>2</sub> - t<sub>1</sub>)
+
+### 数据修复方法
+
+**Screen**方法是一种基于速度阈值的修复方法。它的核心思想是，在修改尽可能少的数据点的前提下，使整个时间序列的速度都不超过阈值。具体算法参见[SIGMOD'15-Screen](https://dl.acm.org/doi/10.1145/2723372.2723730)。

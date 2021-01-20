@@ -52,8 +52,8 @@ public class TimeSeriesQuality {
                 specialCnt++;
             }
         }
-        time = Util.toArray(timeList);
-        origin = Util.toArray(originList);
+        time = Util.toDoubleArray(timeList);
+        origin = Util.toDoubleArray(originList);
     }
 
     public TimeSeriesQuality(String filename) throws FileNotFoundException, ParseException {
@@ -73,8 +73,8 @@ public class TimeSeriesQuality {
                 specialCnt++;
             }
         }
-        time = Util.toArray(timeList);
-        origin = Util.toArray(originList);
+        time = Util.toDoubleArray(timeList);
+        origin = Util.toDoubleArray(originList);
     }
 
     /**

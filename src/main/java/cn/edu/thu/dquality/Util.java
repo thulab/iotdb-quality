@@ -54,9 +54,26 @@ public class Util {
      * @param list 待转化的{@code ArrayList<Double>}
      * @return 转化后的{@code double[]}
      */
-    public static double[] toArray(ArrayList<Double> list) {
+    public static double[] toDoubleArray(ArrayList<Double> list) {
         int len = list.size();
         double ans[] = new double[len];
+        for (int i = 0; i < len; i++) {
+            ans[i] = list.get(i);
+        }
+        return ans;
+    }
+
+    /**
+     * 将{@code ArrayList<Long>}转化为长度相同的{@code long[]}。
+     * <p>
+     * 用户需要保证{@code ArrayList<Long>}中没有空值{@code  null}
+     *
+     * @param list 待转化的{@code ArrayList<Long>}
+     * @return 转化后的{@code long[]}
+     */
+    public static long[] toLongArray(ArrayList<Long> list) {
+        int len = list.size();
+        long ans[] = new long[len];
         for (int i = 0; i < len; i++) {
             ans[i] = list.get(i);
         }
@@ -95,6 +112,21 @@ public class Util {
     }
 
     /**
+     * 计算序列的取值变化
+     *
+     * @param origin 原始序列
+     * @return 取值变化序列
+     */
+    public static double[] variation(long origin[]) {
+        int n = origin.length;
+        double var[] = new double[n - 1];
+        for (int i = 0; i < n - 1; i++) {
+            var[i] = origin[i + 1] - origin[i];
+        }
+        return var;
+    }
+
+    /**
      * 计算时间序列的速度
      *
      * @param origin 值序列
@@ -102,6 +134,22 @@ public class Util {
      * @return 速度序列
      */
     public static double[] speed(double origin[], double time[]) {
+        int n = origin.length;
+        double speed[] = new double[n - 1];
+        for (int i = 0; i < n - 1; i++) {
+            speed[i] = (origin[i + 1] - origin[i]) / (time[i + 1] - time[i]);
+        }
+        return speed;
+    }
+
+    /**
+     * 计算时间序列的速度
+     *
+     * @param origin 值序列
+     * @param time 时间戳序列
+     * @return 速度序列
+     */
+    public static double[] speed(double origin[], long time[]) {
         int n = origin.length;
         double speed[] = new double[n - 1];
         for (int i = 0; i < n - 1; i++) {
