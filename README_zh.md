@@ -25,7 +25,8 @@ create function screenrepair as “cn.edu.thu.dquality.udf.UDTFScreenRepair”
 + Maven >= 3.1 
 
 具体流程：
-1. 修改pom.xml文件中如下的项目依赖，使其与目标IoTDB服务器版本一致（IoTDB-0.12.0版本以上支持UDF功能）；  
++ 修改pom.xml文件中如下的项目依赖，使其与目标IoTDB服务器版本一致（IoTDB-0.12.0版本以上支持UDF功能）；  
+
 ```xml
 <dependency>
     <groupId>org.apache.iotdb</groupId>
@@ -40,11 +41,12 @@ create function screenrepair as “cn.edu.thu.dquality.udf.UDTFScreenRepair”
     <scope>provided</scope>
 </dependency>
 ```
-2. 在项目根目录下，使用下面的命令进行打包：  
++ 在项目根目录下，使用下面的命令进行打包：  
+
 ```
 mvn clean package -DskipTests
 ```
-3. 执行完成后，包含依赖的jar包位于target/udf-tsclean-0.1.0-jar-with-dependencies.jar。
++ 执行完成后，包含依赖的jar包位于target/udf-tsclean-0.1.0-jar-with-dependencies.jar。
 
 ## 函数介绍
 

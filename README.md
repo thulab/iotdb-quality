@@ -24,7 +24,7 @@ Enverionment Requirements:
 + Maven >= 3.1 
 
 Detailed Instructions：
-1. Modify the following dependencies in pom.xml. Please note that you must select the same dependency version as the target IoTDB server version for development.
++ Modify the following dependencies in pom.xml. Please note that you must select the same dependency version as the target IoTDB server version for development.
 
 ```xml
 <dependency>
@@ -41,13 +41,13 @@ Detailed Instructions：
 </dependency>
 ```
 
-2. Package with the following command in the root directory of this project. 
++ Package with the following command in the root directory of this project. 
 
 ```
 mvn clean package -DskipTests
 ```
 
-3. After exection, the JAR package with all dependencies is in target/udf-tsclean-0.1.0-jar-with-dependencies.jar.
++ After exection, the JAR package with all dependencies is in target/udf-tsclean-0.1.0-jar-with-dependencies.jar.
 
 ## Introductions of Functions
 
