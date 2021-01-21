@@ -210,7 +210,7 @@ speedchange<sub>i</sub> = speed<sub>i+1</sub> - speed<sub>i</sub>
 
 For series x, when the difference between x<sub>i</sub> and the median of x is more than 3 times of the median absolute deviation (MAD) of x, the constraint is broken, i.e. 
 
-\| x<sub>i</sub> - mid(x) \| > 3 * mad(x)
+abs(x<sub>i</sub> - mid(x)) > 3 * mad(x)
 
 
 ### Data filling methods
