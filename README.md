@@ -4,7 +4,7 @@ Language: English | [中文](README_zh.md)
 This project is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean, a data quality system of time series, including data quality indicator  calculation, value filling, value repairing, etc.
 
 ## Quick Start
-1. Package this project into a JAR with all of its dependencies.
+1. Package this project into a JAR with all of its dependencies or directly [download it](target/udf-tsclean-0.1.0-jar-with-dependencies.jar).
 2. Copy the JAR package to `ext\udf` under the directory of IoTDB server.
 3. Register the UDFs with the following SQL statements in IoTDB: 
 
@@ -25,6 +25,7 @@ Enverionment Requirements:
 
 Detailed Instructions：
 1. Modify the following dependencies in pom.xml. Please note that you must select the same dependency version as the target IoTDB server version for development.
+
 ```xml
 <dependency>
     <groupId>org.apache.iotdb</groupId>
@@ -39,10 +40,13 @@ Detailed Instructions：
     <scope>provided</scope>
 </dependency>
 ```
+
 2. Package with the following command in the root directory of this project. 
+
 ```
 mvn clean package -DskipTests
 ```
+
 3. After exection, the JAR package with all dependencies is in target/udf-tsclean-0.1.0-jar-with-dependencies.jar.
 
 ## Introductions of Functions
