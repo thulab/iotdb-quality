@@ -5,7 +5,7 @@
 本项目基于[Apache IoTDB](https://github.com/apache/iotdb)的用户自定义函数(UDF)，实现了TsClean数据质量系统的一系列重要函数，包括时序数据的质量指标计算、数值填补、数值修复等。
 
 ## 快速开始
-1. 将本项目及其依赖打包成jar包
+1. 将本项目及其依赖打包成jar包或直接[下载](target/udf-tsclean-0.1.0-jar-with-dependencies.jar)
 2. 将jar包复制到IoTDB程序目录的ext\udf目录下
 3. 在IoTDB中使用下面的SQL语句注册UDF
 
@@ -26,6 +26,7 @@ create function screenrepair as “cn.edu.thu.dquality.udf.UDTFScreenRepair”
 
 具体流程：
 1. 修改pom.xml文件中如下的项目依赖，使其与目标IoTDB服务器版本一致（IoTDB-0.12.0版本以上支持UDF功能）；
+
 ```xml
 <dependency>
     <groupId>org.apache.iotdb</groupId>
@@ -41,6 +42,7 @@ create function screenrepair as “cn.edu.thu.dquality.udf.UDTFScreenRepair”
 </dependency>
 ```
 2. 在项目根目录下，使用下面的命令进行打包：
+
 ```
 mvn clean package -DskipTests
 ```
@@ -203,7 +205,7 @@ speedchange<sub>i</sub> = speed<sub>i+1</sub> - speed<sub>i</sub>
 
 对序列x，当x<sub>i</sub>与其中位数的偏差超过了三倍绝对中位差时，称作违背约束，即
 
-| x<sub>i</sub> - mid(x) | > 3 * mad(x)
+\| x<sub>i</sub> - mid(x) \| > 3 * mad(x)
 
 ### 数据填补方法
 
