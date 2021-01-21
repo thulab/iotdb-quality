@@ -5,7 +5,7 @@
 本项目基于[Apache IoTDB](https://github.com/apache/iotdb)的用户自定义函数(UDF)，实现了TsClean数据质量系统的一系列重要函数，包括时序数据的质量指标计算、数值填补、数值修复等。
 
 ## 快速开始
-1. 将本项目及其依赖打包成jar包或直接[下载](target/udf-tsclean-0.1.0-jar-with-dependencies.jar)
+1. 将本项目及其依赖打包成jar包或直接[下载](proguard-target/udf-tsclean-0.1.0-jar-with-dependencies.jar)
 2. 将jar包复制到IoTDB程序目录的ext\udf目录下
 3. 在IoTDB中使用下面的SQL语句注册UDF
 

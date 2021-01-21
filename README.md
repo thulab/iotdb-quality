@@ -4,7 +4,7 @@ Language: English | [中文](README_zh.md)
 This project is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean, a data quality system of time series, including data quality indicator  calculation, value filling, value repairing, etc.
 
 ## Quick Start
-1. Package this project into a JAR with all of its dependencies or directly [download it](target/udf-tsclean-0.1.0-jar-with-dependencies.jar).
+1. Package this project into a JAR with all of its dependencies or directly [download it](proguard-target/udf-tsclean-0.1.0-jar-with-dependencies.jar).
 2. Copy the JAR package to `ext\udf` under the directory of IoTDB server.
 3. Register the UDFs with the following SQL statements in IoTDB: 
 
