@@ -81,7 +81,9 @@ public class Util {
     }
 
     /**
-     * 计算序列的绝对中位差MAD
+     * 计算序列的绝对中位差MAD。为了达到渐进正态性，乘上比例因子1.4826。
+     * <br>
+     * 备注: 1.4826 = 1/qnorm(3/4)
      *
      * @param value 序列
      * @return 绝对中位差MAD
@@ -93,7 +95,7 @@ public class Util {
         for (int i = 0; i < value.length; i++) {
             d[i] = Math.abs(value[i] - mid);
         }
-        return median.evaluate(d);
+        return 1.4826 * median.evaluate(d);
     }
 
     /**

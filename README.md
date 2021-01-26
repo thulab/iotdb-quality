@@ -15,7 +15,7 @@ create function timeliness as “cn.edu.thu.dquality.udf.UDTFTimeliness”
 create function validity as “cn.edu.thu.dquality.udf.UDTFValidity”
 create function previousfill as “cn.edu.thu.dquality.udf.UDTFPreviousFill”
 create function linearfill as “cn.edu.thu.dquality.udf.UDTFLinearFill”
-create function screenrepair as “cn.edu.thu.dquality.udf.UDTFScreenRepair”
+create function lsgreedyrepair as “cn.edu.thu.dquality.udf.UDTFLsGreedyRepair”
 ```
 
 ### How to package the project
@@ -47,7 +47,7 @@ Detailed Instructions：
 mvn clean package -DskipTests
 ```
 
-+ After exection, the JAR package with all dependencies is in target/udf-tsclean-0.1.0-jar-with-dependencies.jar.
++ After exection, the JAR package with all dependencies is in `target/udf-tsclean-0.1.0-jar-with-dependencies.jar`.
 
 ## Introductions of Functions
 
@@ -99,8 +99,8 @@ We develop some value filling functions for time series. Their UDFs are as follo
 
 |     Name     | Type of Input Series |                                                                                                                                                                                    Parameters                                                                                                                                                                                    |     Type of Output Series     |                                                                             Description                                                                             |
 | :----------: | :------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| PREVIOUSFILL |     FLOAT/DOUBLE     |                                                                                             `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity.                                                                                             | Same type as the input series |                 The `NaN` points in the input series will be filled with the value of the previous non-`NaN` point. The new series will be output.                  |
-|  LINEARFILL  |     FLOAT/DOUBLE     | `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity.<br> `afterRange`: The valid range of filling method. Filling works when the time difference between next non-`NaN` point and this point is not more than it. By default, it's infinity. | Same type as the input series | The `NaN` points in the input series will be filled with the value of the previous and next non-`NaN` point by linear interpolation. The new series will be output. |
+| PREVIOUSFILL |    FLOAT / DOUBLE    |                                                                                             `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity.                                                                                             | Same type as the input series |                 The `NaN` points in the input series will be filled with the value of the previous non-`NaN` point. The new series will be output.                  |
+|  LINEARFILL  |    FLOAT / DOUBLE    | `beforeRange`: The valid range of filling method. Filling works when the time difference between previous non-`NaN` point and this point is not more than it. By default, it's infinity.<br> `afterRange`: The valid range of filling method. Filling works when the time difference between next non-`NaN` point and this point is not more than it. By default, it's infinity. | Same type as the input series | The `NaN` points in the input series will be filled with the value of the previous and next non-`NaN` point by linear interpolation. The new series will be output. |
 
 Example:
 ```sql
@@ -127,38 +127,39 @@ It costs 0.421s
 There may be some outliers in time series. We develop some value repairing functions to repair these outliers. Their UDFs are as follows:
 
 
-|     Name     | Type of Input Series |                                                                                                                                                                                    Parameters                                                                                                                                                                                    |     Type of Output Series     |                                                                             Description                                                                             |
-| :----------: | :------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| SCREENREPAIR | INT32/INT64/FLOAT/DOUBLE | `minSpeed`: Speed threshold. Speeds below it will be regarded as outliers. By default, it is the median minus 3 times of median absolute deviation. <br> `maxSpeed`: Speed threshold. Speeds above it will be regarded as outliers. By default, it is the median plus 3 times of median absolute deviation.  | Same type as the input series | The outliers will be repaired by Screen method based on speed constraints. The new series will be output. Before repairing, `NaN` will be filled with linear interpolation.  |
+|      Name      |      Type of Input Series      |                                                                                                                                                 Parameters                                                                                                                                                  |     Type of Output Series     |                                                                                     Description                                                                                      |
+| :------------: | :----------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|  SCREENREPAIR  | INT32 / INT64 / FLOAT / DOUBLE | `minSpeed`: Speed threshold. Speeds below it will be regarded as outliers. By default, it is the median minus 3 times of median absolute deviation. <br> `maxSpeed`: Speed threshold. Speeds above it will be regarded as outliers. By default, it is the median plus 3 times of median absolute deviation. | Same type as the input series |     The outliers will be repaired by Screen method based on speed constraints. The new series will be output. Before repairing, `NaN` will be filled with linear interpolation.      |
+| LSGREEDYREPAIR | INT32 / INT64 / FLOAT / DOUBLE |                                            `center`: Center of the Gaussian distribution of speed changes. By default, it is 0. <br> `sigma`: Standard deviation of the Gaussian distribution of speed changes. By default, it is the median absolute deviation.                                            | Same type as the input series | The outliers will be repaired by LsGreedy method based on speed change likelihoods. The new series will be output. Before repairing, `NaN` will be filled with linear interpolation. |
 
 Example:
 ```sql
-select s1,screenrepair(s1) from root.test.d1 where time <= 2020-01-01 00:00:30
+select s1,screenrepair(s1),lsgreedyrepair(s1) from root.test.d1 where time <= 2020-01-01 00:00:30
 ```
 
 Result:
 ```
-+-----------------------------+---------------+-----------------------------+
-|                         Time|root.test.d1.s1|screenrepair(root.test.d1.s1)|
-+-----------------------------+---------------+-----------------------------+
-|2020-01-01T00:00:02.000+08:00|          100.0|                        100.0|
-|2020-01-01T00:00:03.000+08:00|          101.0|                        101.0|
-|2020-01-01T00:00:04.000+08:00|          102.0|                        102.0|
-|2020-01-01T00:00:06.000+08:00|          104.0|                        104.0|
-|2020-01-01T00:00:08.000+08:00|          126.0|                        106.0|
-|2020-01-01T00:00:10.000+08:00|          108.0|                        108.0|
-|2020-01-01T00:00:14.000+08:00|          112.0|                        112.0|
-|2020-01-01T00:00:15.000+08:00|          113.0|                        113.0|
-|2020-01-01T00:00:16.000+08:00|          114.0|                        114.0|
-|2020-01-01T00:00:18.000+08:00|          116.0|                        116.0|
-|2020-01-01T00:00:20.000+08:00|          118.0|                        118.0|
-|2020-01-01T00:00:22.000+08:00|          120.0|                        120.0|
-|2020-01-01T00:00:26.000+08:00|          124.0|                        124.0|
-|2020-01-01T00:00:28.000+08:00|          126.0|                        126.0|
-|2020-01-01T00:00:30.000+08:00|            NaN|                        128.0|
-+-----------------------------+---------------+-----------------------------+
++-----------------------------+---------------+-----------------------------+-------------------------------+
+|                         Time|root.test.d1.s1|screenrepair(root.test.d1.s1)|lsgreedyrepair(root.test.d1.s1)|
++-----------------------------+---------------+-----------------------------+-------------------------------+
+|2020-01-01T00:00:02.000+08:00|          100.0|                        100.0|                          100.0|
+|2020-01-01T00:00:03.000+08:00|          101.0|                        101.0|                          101.0|
+|2020-01-01T00:00:04.000+08:00|          102.0|                        102.0|                          102.0|
+|2020-01-01T00:00:06.000+08:00|          104.0|                        104.0|                          104.0|
+|2020-01-01T00:00:08.000+08:00|          126.0|                        106.0|                          106.0|
+|2020-01-01T00:00:10.000+08:00|          108.0|                        108.0|                          108.0|
+|2020-01-01T00:00:14.000+08:00|          112.0|                        112.0|                          112.0|
+|2020-01-01T00:00:15.000+08:00|          113.0|                        113.0|                          113.0|
+|2020-01-01T00:00:16.000+08:00|          114.0|                        114.0|                          114.0|
+|2020-01-01T00:00:18.000+08:00|          116.0|                        116.0|                          116.0|
+|2020-01-01T00:00:20.000+08:00|          118.0|                        118.0|                          118.0|
+|2020-01-01T00:00:22.000+08:00|          120.0|                        120.0|                          120.0|
+|2020-01-01T00:00:26.000+08:00|          124.0|                        124.0|                          124.0|
+|2020-01-01T00:00:28.000+08:00|          126.0|                        126.0|                          126.0|
+|2020-01-01T00:00:30.000+08:00|            NaN|                        128.0|                          128.0|
++-----------------------------+---------------+-----------------------------+-------------------------------+
 Total line number = 15
-It costs 0.698s
+It costs 0.766s
 ```
 
 ## Implementations of Functions
@@ -208,7 +209,7 @@ speed<sub>i</sub> = (value<sub>i+1</sub> - value<sub>i</sub>) / (time<sub>i+1</s
 
 speedchange<sub>i</sub> = speed<sub>i+1</sub> - speed<sub>i</sub>
 
-For series x, when the difference between x<sub>i</sub> and the median of x is more than 3 times of the median absolute deviation (MAD) of x, the constraint is broken, i.e. 
+For series x, when the difference between x<sub>i</sub> and the median of x is more than 3 times of the median absolute deviation (MAD, a constant 1.4826 is multipled for asymptotic normality) of x, the constraint is broken, i.e. 
 
 abs(x<sub>i</sub> - mid(x)) > 3 * mad(x)
 
@@ -216,15 +217,23 @@ abs(x<sub>i</sub> - mid(x)) > 3 * mad(x)
 ### Data filling methods
 
 Suppose the timestamp of the data point is t and the previous and next non-`NaN` data points are (t<sub>1</sub>,v<sub>1</sub>) and (t<sub>2</sub>,v<sub>2</sub>) respectively. 
-Thus, filling with **previous** method, the value is
+Thus, filling with **Previous** method, the value is
 
 v = v<sub>1</sub>
 
-Filling with **linear** method, the value is
+Filling with **Linear** method, the value is
 
 v = v<sub>1</sub> + (t - t<sub>1</sub>) * (v<sub>2</sub> - v<sub>1</sub>) / (t<sub>2</sub> - t<sub>1</sub>)
 
 ### Data repairing methods
 
-**Screen** method is based on speed constraints. Its key idea is making the whole time series meet the speed constraints while repairing as few data points as possible. The detailed algorithm is shown in [SIGMOD'15-Screen](https://dl.acm.org/doi/10.1145/2723372.2723730).
+**Screen** method is based on speed constraints. Its key idea is making the whole time series meet the speed constraints while repairing as few data points as possible. 
+Due to the complexity of glocal optimum, the constraints are relaxed into a sliding window with the combination of candidate range and median principle.
+The detailed algorithm is shown in [SIGMOD'15-Screen](https://dl.acm.org/doi/10.1145/2723372.2723730).
 
+**LsGreedy** method is based on speed change likelihoods. Its key idea is modeling the distribution of speed changes and maximizing the likelihood function. 
+Generally, the model is Gaussian. In order to reduce the computational complexity, a greedy algorithm is used.
+Decreasing the difference between the speed change and the center is equal to increasing the likelihood function.
+Kept in a max heap, the data point with the maximum speed change will be modified to make the speed change closer to the center. 
+The algorithm terminates when no speed change difference is larger than 3 times of standard deviation. 
+The detailed algorithm is shown in [SIGMOD'16-Sequential](https://dl.acm.org/doi/10.1145/2882903.2915233).

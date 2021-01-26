@@ -19,7 +19,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 /**
  * 用于填补时间序列缺失值的UDTF：利用前一个和后一个数据点的值进行线性插值填补。
  *
- * @author Wang
+ * @author Wang Haoyu
  */
 public class UDTFLinearFill implements UDTF {
 
