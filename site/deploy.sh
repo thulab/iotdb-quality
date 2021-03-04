@@ -1,10 +1,16 @@
+# Copy documents to docs/
 cp ../README.md docs/
 cp ../README_zh.md docs/
-cp -r ../docs/ docs/
+cp -r ../docs/* docs/
+# Build the web pages
 npm run docs:build
-rm -rf !(.vuepress/)
+# Remove the copied documents
+rm docs/*.md
+# Copy the web pages to the root
 cd ..
+cp -r site/docs/.vuepress/dist/* ./
+# Upload to GitHub
 git add -A
 git commit -m "Update GitHub Pages"
-git push master:gh-pages
+git push origin master:gh-pages
 
