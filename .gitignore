@@ -1,0 +1,3 @@
+site/node_modules/
+site/docs/.vuepress/theme/
+site/docs/.vuepress/dist/
