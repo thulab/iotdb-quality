@@ -6,7 +6,7 @@ TsClean is developed independently by the National Engineering Laboratory for Bi
 TsClean-IoTDB is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean including data quality indicator calculation, value filling, value repairing, etc.
 
 ## Quick Start
-1. Package this project into a JAR with all of its dependencies or directly download it.
+1. Download the JAR with all dependencies of TsClean-IoTDB.
 2. Copy the JAR package to `ext\udf` under the directory of IoTDB server.
 3. Register the UDFs with the following SQL statements in IoTDB: 
 
