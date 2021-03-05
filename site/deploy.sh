@@ -2,7 +2,7 @@
 cp ../README.md docs/
 cp -r ../docs/* docs/
 # Build the web pages
-npm install vuepress
+npm install
 npm run docs:build
 # Remove the copied documents
 rm -rf docs/*
@@ -13,4 +13,7 @@ cp -r site/docs/.vuepress/dist/* ./
 git add -A
 git commit -m "Update GitHub Pages"
 git push origin master:gh-pages
-
+# Clean the root 
+rm *.html
+rm assert/
+rm zh/

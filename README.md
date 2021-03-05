@@ -1,12 +1,12 @@
-# TsClean-IoTDB
-Language: English | [中文](README_zh.md)
-## Introduction
+# Introduction
+
+## What is TsClean-IoTDB
 TsClean is developed independently by the National Engineering Laboratory for Big Data Software, Tsinghua University. It is a data quality system of international advanced level. It focuses on data quality and provides a solid foundation for the application of industrial big data. It has been widely used in many industrial scenes and well received by users. 
 
-This project is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean including data quality indicator calculation, value filling, value repairing, etc.
+TsClean-IoTDB is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean including data quality indicator calculation, value filling, value repairing, etc.
 
 ## Quick Start
-1. Package this project into a JAR with all of its dependencies or directly [download it](proguard-target/udf-tsclean-0.1.0-jar-with-dependencies.jar).
+1. Package this project into a JAR with all of its dependencies or directly download it.
 2. Copy the JAR package to `ext\udf` under the directory of IoTDB server.
 3. Register the UDFs with the following SQL statements in IoTDB: 
 
@@ -50,7 +50,7 @@ mvn clean package -DskipTests
 ```
 
 + After exection, the JAR package with all dependencies is in `target/udf-tsclean-0.1.0-jar-with-dependencies.jar`. -->
-
+<!-- 
 ## Introductions of Functions
 
 ### Functions about data quality indicators
@@ -238,4 +238,4 @@ Generally, the model is Gaussian. In order to reduce the computational complexit
 Decreasing the difference between the speed change and the center is equal to increasing the likelihood function.
 Kept in a max heap, the data point with the maximum speed change will be modified to make the speed change closer to the center. 
 The algorithm terminates when no speed change difference is larger than 3 times of standard deviation. 
-The detailed algorithm is shown in [SIGMOD'16-Sequential](https://dl.acm.org/doi/10.1145/2882903.2915233).
+The detailed algorithm is shown in [SIGMOD'16-Sequential](https://dl.acm.org/doi/10.1145/2882903.2915233). -->
