@@ -26,38 +26,38 @@ module.exports = {
         algolia: {},
         nav: [
           { text: 'Document', link: '/' },
-          { text: 'Download', link: '/Download.md' }
+          { text: 'Download', link: '/en/Download.md' }
         ],
         sidebar: {
           '/': [
             "/", //指的是根目录的md文件 也就是 README.md 里面的内容      
             {
               title: "Universal Function",
-              children: ["Universal/Histogram.md",
-                "Universal/Sample.md",
-                "Universal/Stddev.md",
-                "Universal/Mode.md",
-                "Universal/Spread.md"
+              children: ["/en/Universal/Histogram.md",
+                "/en/Universal/Sample.md",
+                "/en/Universal/Stddev.md",
+                "/en/Universal/Mode.md",
+                "/en/Universal/Spread.md"
               ]
             },
             {
               title: "Data Quality Indicator",
-              children: ["DataQualityIndicator/Completeness.md",
-                "DataQualityIndicator/Consistency.md",
-                "DataQualityIndicator/Timeliness.md",
-                "DataQualityIndicator/Validity.md"
+              children: ["/en/DataQualityIndicator/Completeness.md",
+                "/en/DataQualityIndicator/Consistency.md",
+                "/en/DataQualityIndicator/Timeliness.md",
+                "/en/DataQualityIndicator/Validity.md"
               ]
             },
             {
               title: "Value Filling",
-              children: ["ValueFilling/PreviousFill.md",
-                "ValueFilling/LinearFill.md"
+              children: ["/en/ValueFilling/PreviousFill.md",
+                "/en/ValueFilling/LinearFill.md"
               ]
             },
             {
               title: "Value Repairing",
-              children: ["ValueRepairing/ScreenRepair.md",
-                "ValueRepairing/LsGreedyRepair.md"
+              children: ["/en/ValueRepairing/ScreenRepair.md",
+                "/en/ValueRepairing/LsGreedyRepair.md"
               ]
             }
           ]

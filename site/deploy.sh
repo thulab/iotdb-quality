@@ -15,5 +15,6 @@ git commit -m "Update GitHub Pages"
 git push origin master:gh-pages
 # Clean the root 
 rm *.html
-rm assert/
-rm zh/
+rm -rf assets/
+rm -rf zh/
+rm -rf en/
