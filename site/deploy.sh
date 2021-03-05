@@ -1,9 +1,8 @@
 # Copy documents to docs/
 cp ../README.md docs/
-cp ../README_zh.md docs/
 cp -r ../docs/* docs/
 # Build the web pages
-npm install
+npm install vuepress
 npm run docs:build
 # Remove the copied documents
 rm -rf docs/*
