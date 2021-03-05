@@ -32,32 +32,35 @@ module.exports = {
           '/': [
             "/", //指的是根目录的md文件 也就是 README.md 里面的内容      
             {
-              title: "Universal Function",
-              children: ["/en/Universal/Histogram.md",
-                "/en/Universal/Sample.md",
-                "/en/Universal/Stddev.md",
-                "/en/Universal/Mode.md",
-                "/en/Universal/Spread.md"
+              title: "Data Profiling",
+              children: ["/en/DataProfiling/Histogram.md",
+                "/en/DataProfiling/Sample.md",
+                "/en/DataProfiling/Stddev.md",
+                "/en/DataProfiling/Mode.md",
+                "/en/DataProfiling/Spread.md"
               ]
             },
             {
-              title: "Data Quality Indicator",
-              children: ["/en/DataQualityIndicator/Completeness.md",
-                "/en/DataQualityIndicator/Consistency.md",
-                "/en/DataQualityIndicator/Timeliness.md",
-                "/en/DataQualityIndicator/Validity.md"
+              title: "Data Quality",
+              children: ["/en/DataQuality/Completeness.md",
+                "/en/DataQuality/Consistency.md",
+                "/en/DataQuality/Timeliness.md",
+                "/en/DataQuality/Validity.md"
               ]
             },
             {
-              title: "Value Filling",
-              children: ["/en/ValueFilling/PreviousFill.md",
-                "/en/ValueFilling/LinearFill.md"
+              title: "Anomaly",
+              children: ["/en/Anomaly/PreviousFill.md",
+                "/en/Anomaly/LinearFill.md",
+                "/en/Anomaly/ScreenRepair.md",
+                "/en/Anomaly/LsGreedyRepair.md"
               ]
             },
             {
-              title: "Value Repairing",
-              children: ["/en/ValueRepairing/ScreenRepair.md",
-                "/en/ValueRepairing/LsGreedyRepair.md"
+              title: "Complex Event Processing",
+              children: [
+                "/en/ComplexEventProcessing/EventMatching.md",
+                "/en/ComplexEventProcessing/EventRecovery.md"
               ]
             }
           ]
@@ -85,32 +88,35 @@ module.exports = {
           '/zh/': [
             "/zh/",
             {
-              title: "通用函数",
-              children: ["Universal/Histogram.md",
-                "Universal/Sample.md",
-                "Universal/Stddev.md",
-                "Universal/Mode.md",
-                "Universal/Spread.md"
+              title: "数据画像",
+              children: ["DataProfiling/Histogram.md",
+                "DataProfiling/Sample.md",
+                "DataProfiling/Stddev.md",
+                "DataProfiling/Mode.md",
+                "DataProfiling/Spread.md"
               ]
             },
             {
-              title: "数据质量指标",
-              children: ["DataQualityIndicator/Completeness.md",
-                "DataQualityIndicator/Consistency.md",
-                "DataQualityIndicator/Timeliness.md",
-                "DataQualityIndicator/Validity.md"
+              title: "数据质量",
+              children: ["DataQuality/Completeness.md",
+                "DataQuality/Consistency.md",
+                "DataQuality/Timeliness.md",
+                "DataQuality/Validity.md"
               ]
             },
             {
-              title: "数值填补",
-              children: ["ValueFilling/PreviousFill.md",
-                "ValueFilling/LinearFill.md"
+              title: "数据异常",
+              children: ["Anomaly/PreviousFill.md",
+                "Anomaly/LinearFill.md",
+                "Anomaly/ScreenRepair.md",
+                "Anomaly/LsGreedyRepair.md"
               ]
             },
             {
-              title: "数值修复",
-              children: ["ValueRepairing/ScreenRepair.md",
-                "ValueRepairing/LsGreedyRepair.md"
+              title: "复杂事件处理",
+              children: [
+                "ComplexEventProcessing/EventMatching.md",
+                "ComplexEventProcessing/EventRecovery.md"
               ]
             }
           ]

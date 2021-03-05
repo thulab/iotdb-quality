@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ScreenRepair | TsClean-IoTDB</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    
+    <meta name="description" content="TsClean in Apache IoTDB's UDFs, including data quality indicator calculation, value filling, value repairing">
+    
+    <link rel="preload" href="/tsclean-iotdb/assets/css/0.styles.793859d5.css" as="style"><link rel="preload" href="/tsclean-iotdb/assets/js/app.f92e1827.js" as="script"><link rel="preload" href="/tsclean-iotdb/assets/js/3.b2ac8a72.js" as="script"><link rel="preload" href="/tsclean-iotdb/assets/js/28.793706b4.js" as="script"><link rel="prefetch" href="/tsclean-iotdb/assets/js/10.27ec8c50.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/11.c8de8cd5.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/12.d5b64058.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/13.a73de68e.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/14.2267d40d.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/15.035bf55a.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/16.df33dbc4.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/17.43bef976.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/18.08fc0130.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/19.ae3f8e1b.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/20.5e3f89b6.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/21.57366b34.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/22.7e5c6f10.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/23.587de09e.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/24.2b1e9dcb.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/25.0fb1073d.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/26.372094a8.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/27.21f00115.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/29.b872258e.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/30.b3500a5c.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/31.fe5f283d.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/32.88d60875.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/33.0a4bef91.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/34.b9a8ded8.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/35.bf2cfe69.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/36.7a950fd1.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/37.7a3e39d5.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/38.85ac51ef.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/39.3a5eefa8.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/4.a519bd3a.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/40.99f10e36.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/41.f3e72e5a.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/5.ee3b3e39.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/6.f3a0ad01.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/7.2e6cb6ae.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/8.9b9c5f98.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/9.180ded1c.js"><link rel="prefetch" href="/tsclean-iotdb/assets/js/vendors~docsearch.c6292dad.js">
+    <link rel="stylesheet" href="/tsclean-iotdb/assets/css/0.styles.793859d5.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/tsclean-iotdb/zh/" class="home-link router-link-active"><!----> <span class="site-name">TsClean-IoTDB</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/tsclean-iotdb/zh/" class="nav-link">
+  文档
+</a></div><div class="nav-item"><a href="/tsclean-iotdb/zh/Download.html" class="nav-link">
+  下载
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Select language" class="dropdown-title"><span class="title">选择语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Select language" class="mobile-dropdown-title"><span class="title">选择语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/tsclean-iotdb/" class="nav-link">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/tsclean-iotdb/zh/Anomaly/ScreenRepair.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  简体中文
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/tsclean-iotdb/zh/" class="nav-link">
+  文档
+</a></div><div class="nav-item"><a href="/tsclean-iotdb/zh/Download.html" class="nav-link">
+  下载
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Select language" class="dropdown-title"><span class="title">选择语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Select language" class="mobile-dropdown-title"><span class="title">选择语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/tsclean-iotdb/" class="nav-link">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/tsclean-iotdb/zh/Anomaly/ScreenRepair.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  简体中文
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/tsclean-iotdb/zh/" aria-current="page" class="sidebar-link">概述</a></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>数据画像</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>数据质量</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>数据异常</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/tsclean-iotdb/zh/Anomaly/PreviousFill.html" class="sidebar-link">PreviousFill</a></li><li><a href="/tsclean-iotdb/zh/Anomaly/LinearFill.html" class="sidebar-link">LinearFill</a></li><li><a href="/tsclean-iotdb/zh/Anomaly/ScreenRepair.html" aria-current="page" class="active sidebar-link">ScreenRepair</a></li><li><a href="/tsclean-iotdb/zh/Anomaly/LsGreedyRepair.html" class="sidebar-link">LsGreedyRepair</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>复杂事件处理</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="screenrepair"><a href="#screenrepair" class="header-anchor">#</a> ScreenRepair</h1></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/tsclean-iotdb/zh/Anomaly/LinearFill.html" class="prev">
+        LinearFill
+      </a></span> <span class="next"><a href="/tsclean-iotdb/zh/Anomaly/LsGreedyRepair.html">
+        LsGreedyRepair
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/tsclean-iotdb/assets/js/app.f92e1827.js" defer></script><script src="/tsclean-iotdb/assets/js/3.b2ac8a72.js" defer></script><script src="/tsclean-iotdb/assets/js/28.793706b4.js" defer></script>
+  </body>
+</html>
