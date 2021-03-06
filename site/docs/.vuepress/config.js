@@ -1,7 +1,7 @@
 module.exports = {
-	title: 'TsClean-IoTDB', // 设置网站标题
+	title: 'IoTDB-Quality', // 设置网站标题
 	description:
-		"TsClean in Apache IoTDB's UDFs, including data quality indicator calculation, value filling, value repairing",
+		"Apache IoTDB's UDFs about data quality",
 	base: '/tsclean-iotdb/',
 	locales: {
 		'/': {

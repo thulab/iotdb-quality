@@ -1,12 +1,12 @@
 # 概述
 
-## 什么是TsClean-IoTDB
+## 什么是IoTDB-Quality
 TsClean数据质量系统由清华大学大数据系统软件国家工程实验室自行研发，是一款具有国际领先水平的软件。该系统着眼于数据质量，致力于为工业大数据的应用提供坚实基础。目前，该系统已经在多个工业场景中得到广泛应用，受到用户的一致好评。
 
-TsClean-IoTDB基于[Apache IoTDB](https://github.com/apache/iotdb)的用户自定义函数(UDF)，实现了TsClean数据质量系统的一系列重要函数，包括时序数据的质量指标计算、数值填补、数值修复等。
+IoTDB-Quality基于[Apache IoTDB](https://github.com/apache/iotdb)的用户自定义函数(UDF)，实现了TsClean数据质量系统的一系列重要函数，包括时序数据的质量指标计算、数值填补、数值修复等。
 
 ## 快速开始
-1. 下载TsClean-IoTDB的jar包
+1. 下载jar包
 2. 将jar包复制到IoTDB程序目录的`ext\udf`目录下
 3. 在IoTDB中使用下面的SQL语句注册UDF
 
@@ -20,6 +20,31 @@ create function linearfill as “cn.edu.thu.dquality.udf.UDTFLinearFill”
 create function screenrepair as “cn.edu.thu.dquality.udf.UDTFScreenRepair”
 create function lsgreedyrepair as “cn.edu.thu.dquality.udf.UDTFLsGreedyRepair”
 ```
+## 与InfluxDB的对比
+
+| IoTDB-Quality的数据画像函数 | InfluxQL通用函数 |
+| :-------------------------: | :--------------: |
+|           Native            |     COUNT()      |
+|        **Distinct**         |    DISTINCT()    |
+|        **Integral**         |    INTEGRAL()    |
+|          **Mean**           |      MEAN()      |
+|         **Median**          |     MEDIAN()     |
+|          **Mode**           |      MODE()      |
+|         **Spread**          |     SPREAD()     |
+|         **Stddev**          |     STDDEV()     |
+|           Native            |      SUM()       |
+|        Built-in UDF         |     BOTTOM()     |
+|           Native            |     FIRST()      |
+|           Native            |      LAST()      |
+|           Native            |      MAX()       |
+|           Native            |      MIN()       |
+|       **Percentile**        |   PERCENTILE()   |
+|         **Sample**          |     SAMPLE()     |
+|        Built-in UDF         |      TOP()       |
+|           **Cov**           |                  |
+|        **Histogram**        |                  |
+|         **Pearson**         |                  |
+|          **Skew**           |                  |
 
 <!-- ### 项目打包
 环境准备：

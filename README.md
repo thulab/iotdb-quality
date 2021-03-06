@@ -1,12 +1,12 @@
 # Introduction
 
-## What is TsClean-IoTDB
+## What is IoTDB-Quality
 TsClean is developed independently by the National Engineering Laboratory for Big Data Software, Tsinghua University. It is a data quality system of international advanced level. It focuses on data quality and provides a solid foundation for the application of industrial big data. It has been widely used in many industrial scenes and well received by users. 
 
-TsClean-IoTDB is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean including data quality indicator calculation, value filling, value repairing, etc.
+IoTDB-Quality is User Defined Functions (UDF) of [Apache IoTDB](https://github.com/apache/iotdb). It implements many key functions of TsClean including data quality indicator calculation, value filling, value repairing, etc.
 
 ## Quick Start
-1. Download the JAR with all dependencies of TsClean-IoTDB.
+1. Download the JAR with all dependencies.
 2. Copy the JAR package to `ext\udf` under the directory of IoTDB server.
 3. Register the UDFs with the following SQL statements in IoTDB: 
 
@@ -19,6 +19,33 @@ create function previousfill as “cn.edu.thu.dquality.udf.UDTFPreviousFill”
 create function linearfill as “cn.edu.thu.dquality.udf.UDTFLinearFill”
 create function lsgreedyrepair as “cn.edu.thu.dquality.udf.UDTFLsGreedyRepair”
 ```
+
+## Comparation with InfluxDB
+
+| Data profiling functions of IoTDB-Quality | Univeral functions of InfluxQL |
+| :---------------------------------------: | :----------------------------: |
+|                  Native                   |            COUNT()             |
+|               **Distinct**                |           DISTINCT()           |
+|               **Integral**                |           INTEGRAL()           |
+|                 **Mean**                  |             MEAN()             |
+|                **Median**                 |            MEDIAN()            |
+|                 **Mode**                  |             MODE()             |
+|                **Spread**                 |            SPREAD()            |
+|                **Stddev**                 |            STDDEV()            |
+|                  Native                   |             SUM()              |
+|               Built-in UDF                |            BOTTOM()            |
+|                  Native                   |            FIRST()             |
+|                  Native                   |             LAST()             |
+|                  Native                   |             MAX()              |
+|                  Native                   |             MIN()              |
+|              **Percentile**               |          PERCENTILE()          |
+|                **Sample**                 |            SAMPLE()            |
+|               Built-in UDF                |             TOP()              |
+|                  **Cov**                  |                                |
+|               **Histogram**               |                                |
+|                **Pearson**                |                                |
+|                 **Skew**                  |                                |
+
 
 <!-- ### How to package the project
 Enverionment Requirements:

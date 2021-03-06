@@ -2,4 +2,5 @@
 
 您可以下载下列文件：
 
-+ [包含全部依赖的Jar包](../proguard-target/udf-tsclean-0.1.0-jar-with-dependencies.jar)
++ [包含全部依赖的Jar包](../download/udf-tsclean-0.1.0-jar-with-dependencies.jar)
++ [中文版用户手册](../download/IoTDB-Quality用户手册.pdf)
