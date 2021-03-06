@@ -84,12 +84,14 @@ module.exports = {
 							],
 						},
 						{
-							title: 'Complex Event Processing (4)',
+							title: 'Complex Event Processing (6)',
 							children: [
 								'/en/ComplexEventProcessing/EventMatching.md',
 								'/en/ComplexEventProcessing/MissingEventRecovery.md',
 								'/en/ComplexEventProcessing/EventNameRepair.md',
 								'/en/ComplexEventProcessing/EventTimeRepair.md',
+                                '/en/ComplexEventProcessing/SEQ.md',
+                                '/en/ComplexEventProcessing/AND.md',
 							],
 						},
 					],
@@ -168,12 +170,14 @@ module.exports = {
 							],
 						},
 						{
-							title: '复杂事件处理 (4)',
+							title: '复杂事件处理 (6)',
 							children: [
 								'ComplexEventProcessing/EventMatching.md',
 								'ComplexEventProcessing/MissingEventRecovery.md',
 								'ComplexEventProcessing/EventNameRepair.md',
 								'ComplexEventProcessing/EventTimeRepair.md',
+                                'ComplexEventProcessing/SEQ.md',
+                                'ComplexEventProcessing/AND.md',
 							],
 						}
 					],
