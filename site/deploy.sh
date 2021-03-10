@@ -13,6 +13,12 @@ cp -r site/docs/.vuepress/dist/* ./
 # Upload to GitHub
 git add -A
 git commit -m "Update GitHub Pages"
-git push origin master:gh-pages
-# Go back to the previous version
-git reset --hard HEAD^
+git push origin master:GitHubPages
+# Clean the root 
+rm *.html
+rm -rf assets/
+rm -rf zh/
+rm -rf en/
+# Commit the cleaning
+git add -A
+git commit -m "Clean Environment"
