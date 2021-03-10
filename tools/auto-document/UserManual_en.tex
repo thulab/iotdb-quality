@@ -1,0 +1,102 @@
+\documentclass[11pt,color=green,table]{elegantbook}
+% 请使用XeLatex命令进行编译
+
+\title{User Manual of IoTDB-Quality}
+
+\author{Data Quality Group}
+\institute{School of Software, Tsinghua University}
+\date{\today}
+%\version{}
+%\logo{logo-blue.png}
+\cover{cover.jpg}
+
+% 使用XeLatex编译时，item前面的圆点可能无法显示，下面的代码可以解决该问题
+\makeatletter
+\def\pgfutil@insertatbegincurrentpagefrombox#1{%
+  \edef\pgf@temp{\the\wd\pgfutil@abb}%
+  \global\setbox\pgfutil@abb\hbox{%
+    \unhbox\pgfutil@abb%
+    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
+    #1%
+    \hskip\dimexpr-2in-2\hoffset\relax% new
+  }%
+}
+\makeatother
+
+% 本文档命令
+\newlength\tablewidth
+\definecolor{AliceBlue}{RGB}{240,248,255}
+\definecolor{LightGray}{RGB}{211,211,211}
+\definecolor{tablelinegray}{RGB}{221,221,221}
+\definecolor{tablerowgray}{RGB}{247,247,247}
+\definecolor{tabletopgray}{RGB}{245,246,250}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+
+
+\lstset{
+  breaklines=true,%自动换行
+  columns=fixed,
+  basicstyle=\footnotesize,
+  keywordstyle=\color[RGB]{40,40,255},
+  basewidth=0.45em,
+  frameround=tttt,
+  backgroundcolor=\color{AliceBlue}
+}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\mainmatter
+
+\chapter{Get Started}
+\input{output_en/README.tex}
+\input{output_en/Comparison.tex}
+\input{output_en/QA.tex}
+
+\chapter{Data Profiling}
+\input{output_en/Cov.tex}
+\input{output_en/Distinct.tex}
+\input{output_en/Histogram.tex}
+\input{output_en/Integral.tex}
+\input{output_en/Mean.tex}
+\input{output_en/Median.tex}
+\input{output_en/Mode.tex}
+\input{output_en/Pearson.tex}
+\input{output_en/Percentile.tex}
+\input{output_en/Sample.tex}
+\input{output_en/Skew.tex}
+\input{output_en/Spread.tex}
+\input{output_en/Stddev.tex}
+
+
+\chapter{Data Quality}
+\input{output_en/Completeness.tex}
+\input{output_en/Consistency.tex}
+\input{output_en/Timeliness.tex}
+\input{output_en/Validity.tex}
+
+\chapter{Data Repairing}
+\input{output_en/Fill.tex}
+\input{output_en/ValueRepair.tex}
+\input{output_en/TimestampRepair.tex}
+
+\chapter{Data Matching}
+\input{output_en/SeriesAlign.tex}
+\input{output_en/SeriesSimilarity.tex}
+\input{output_en/DTW.tex}
+
+\chapter{Anomaly Detection}
+\input{output_en/Range.tex}
+\input{output_en/KSigma.tex}
+\input{output_en/LOF.tex}
+
+\chapter{Complex Event Processing}
+\input{output_en/EventMatching.tex}
+\input{output_en/MissingEventRecovery.tex}
+\input{output_en/EventNameRepair.tex}
+\input{output_en/EventTimeRepair.tex}
+\input{output_en/SEQ.tex}
+\input{output_en/AND.tex}
+
+\end{document}

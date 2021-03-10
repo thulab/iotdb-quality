@@ -2,7 +2,7 @@ module.exports = {
 	title: 'IoTDB-Quality', // 设置网站标题
 	description:
 		"Apache IoTDB's UDFs about data quality",
-	base: '/tsclean-iotdb/',
+	base: '/iotdb-quality/',
 	locales: {
 		'/': {
 			lang: 'en-US',
@@ -31,7 +31,14 @@ module.exports = {
 				],
 				sidebar: {
 					'/': [
-						'/', //指的是根目录的md文件，也就是 README.md 里面的内容
+						{
+							title: 'Get Started',
+							children:[
+								'/',//指的是根目录的md文件，也就是 README.md 里面的内容
+								'/en/GetStarted/Comparison.md',
+								'/en/GetStarted/QA.md'
+							]
+						},
                         {
 							title: 'Data Profiling (13)',
 							children: [
@@ -117,7 +124,14 @@ module.exports = {
 				],
 				sidebar: {
 					'/zh/': [
-						'/zh/',
+						{
+							title: '开始',
+							children:[
+								'/zh/',
+								'GetStarted/Comparison.md',
+								'GetStarted/QA.md'
+							]
+						},
 						{
 							title: '数据画像 (13)',
 							children: [

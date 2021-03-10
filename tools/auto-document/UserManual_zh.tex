@@ -1,0 +1,103 @@
+\documentclass[cn,11pt,mode=simple,table]{elegantbook}
+% 请使用XeLatex命令进行编译
+
+\title{IoTDB-Quality用户文档}
+
+\author{数据质量组}
+\institute{清华大学软件学院}
+\date{\today}
+%\version{}
+%\logo{logo-blue.png}
+\cover{cover.jpg}
+
+% 使用XeLatex编译时，item前面的圆点可能无法显示，下面的代码可以解决该问题
+\makeatletter
+\def\pgfutil@insertatbegincurrentpagefrombox#1{%
+  \edef\pgf@temp{\the\wd\pgfutil@abb}%
+  \global\setbox\pgfutil@abb\hbox{%
+    \unhbox\pgfutil@abb%
+    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
+    #1%
+    \hskip\dimexpr-2in-2\hoffset\relax% new
+  }%
+}
+\makeatother
+
+% 本文档命令
+\renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
+\newlength\tablewidth
+
+\definecolor{AliceBlue}{RGB}{240,248,255}
+\definecolor{LightGray}{RGB}{211,211,211}
+\definecolor{tablelinegray}{RGB}{221,221,221}
+\definecolor{tablerowgray}{RGB}{247,247,247}
+\definecolor{tabletopgray}{RGB}{245,246,250}
+\definecolor{airforceblue}{rgb}{0.36, 0.54, 0.66}
+
+\lstset{
+  breaklines=true,%自动换行
+  columns=fixed,
+  basicstyle=\footnotesize,
+  keywordstyle=\color[RGB]{40,40,255},
+  basewidth=0.45em,
+  frameround=tttt,
+  backgroundcolor=\color{AliceBlue}
+}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\mainmatter
+
+\chapter{开始}
+\input{output_zh/README.tex}
+\input{output_zh/Comparison.tex}
+\input{output_zh/QA.tex}
+
+\chapter{数据画像}
+\input{output_zh/Cov.tex}
+\input{output_zh/Distinct.tex}
+\input{output_zh/Histogram.tex}
+\input{output_zh/Integral.tex}
+\input{output_zh/Mean.tex}
+\input{output_zh/Median.tex}
+\input{output_zh/Mode.tex}
+\input{output_zh/Pearson.tex}
+\input{output_zh/Percentile.tex}
+\input{output_zh/Sample.tex}
+\input{output_zh/Skew.tex}
+\input{output_zh/Spread.tex}
+\input{output_zh/Stddev.tex}
+
+
+\chapter{数据质量}
+\input{output_zh/Completeness.tex}
+\input{output_zh/Consistency.tex}
+\input{output_zh/Timeliness.tex}
+\input{output_zh/Validity.tex}
+
+\chapter{数据修复}
+\input{output_zh/Fill.tex}
+\input{output_zh/ValueRepair.tex}
+\input{output_zh/TimestampRepair.tex}
+
+\chapter{数据匹配}
+\input{output_zh/SeriesAlign.tex}
+\input{output_zh/SeriesSimilarity.tex}
+\input{output_zh/DTW.tex}
+
+\chapter{异常检测}
+\input{output_zh/Range.tex}
+\input{output_zh/KSigma.tex}
+\input{output_zh/LOF.tex}
+
+\chapter{复杂事件处理}
+\input{output_zh/EventMatching.tex}
+\input{output_zh/MissingEventRecovery.tex}
+\input{output_zh/EventNameRepair.tex}
+\input{output_zh/EventTimeRepair.tex}
+\input{output_zh/SEQ.tex}
+\input{output_zh/AND.tex}
+
+\end{document}
