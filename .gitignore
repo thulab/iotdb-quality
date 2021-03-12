@@ -9,6 +9,7 @@ tools/auto-document/*.pdf
 tools/auto-document/*.synctex.gz
 tools/auto-document/*.tex.bak
 tools/auto-document/*.toc
+tools/auto-document/*.synctex(busy)
 tools/auto-document/output_zh
 tools/auto-document/output_en
 tools/auto-document/marktex/__pycache__
