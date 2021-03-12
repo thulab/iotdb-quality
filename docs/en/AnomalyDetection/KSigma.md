@@ -45,14 +45,14 @@ Input series:
 SQL for query: 
 
 ```sql
-select ksigma(s1,1.0) from root.test.d1 where time <= 2020-01-01 00:00:30
+select ksigma(s1,"k"="1.0") from root.test.d1 where time <= 2020-01-01 00:00:30
 ```
 
 Output series:
 
 ```
 +-----------------------------+---------------------------------+
-|Time						  |ksigma(root.test.d1.s1,"k"="3.0")|
+|Time                         |ksigma(root.test.d1.s1,"k"="3.0")|
 +-----------------------------+---------------------------------+
 |2020-01-01T00:00:02.000+08:00|                              0.0|
 |2020-01-01T00:00:03.000+08:00|                             50.0|
