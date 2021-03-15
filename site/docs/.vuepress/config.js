@@ -3,6 +3,10 @@ module.exports = {
 	description:
 		"Apache IoTDB's UDFs about data quality",
 	base: '/iotdb-quality/',
+	head: [
+		['script', { async: "async", src: 'https://www.googletagmanager.com/gtag/js?id=G-V8CG1Y9FW6' }],
+		['script', { type: 'text/javascript', src: '/assets/push.js' }],
+	],
 	locales: {
 		'/': {
 			lang: 'en-US',
@@ -33,20 +37,20 @@ module.exports = {
 					'/': [
 						{
 							title: 'Get Started',
-							children:[
+							children: [
 								'/',//指的是根目录的md文件，也就是 README.md 里面的内容
 								'/en/GetStarted/Comparison.md',
 								'/en/GetStarted/QA.md'
 							]
 						},
-                        {
+						{
 							title: 'Data Profiling (13)',
 							children: [
 								'/en/DataProfiling/Cov.md',
 								'/en/DataProfiling/Distinct.md',
 								'/en/DataProfiling/Histogram.md',
 								'/en/DataProfiling/Integral.md',
-                                '/en/DataProfiling/Mad.md',
+								'/en/DataProfiling/Mad.md',
 								'/en/DataProfiling/Mean.md',
 								'/en/DataProfiling/Median.md',
 								'/en/DataProfiling/Mode.md',
@@ -98,8 +102,8 @@ module.exports = {
 								'/en/ComplexEventProcessing/MissingEventRecovery.md',
 								'/en/ComplexEventProcessing/EventNameRepair.md',
 								'/en/ComplexEventProcessing/EventTimeRepair.md',
-                                '/en/ComplexEventProcessing/SEQ.md',
-                                '/en/ComplexEventProcessing/AND.md',
+								'/en/ComplexEventProcessing/SEQ.md',
+								'/en/ComplexEventProcessing/AND.md',
 							],
 						},
 					],
@@ -127,7 +131,7 @@ module.exports = {
 					'/zh/': [
 						{
 							title: '开始',
-							children:[
+							children: [
 								'/zh/',
 								'GetStarted/Comparison.md',
 								'GetStarted/QA.md'
@@ -140,7 +144,7 @@ module.exports = {
 								'DataProfiling/Distinct.md',
 								'DataProfiling/Histogram.md',
 								'DataProfiling/Integral.md',
-                                'DataProfiling/Mad.md',
+								'DataProfiling/Mad.md',
 								'DataProfiling/Mean.md',
 								'DataProfiling/Median.md',
 								'DataProfiling/Mode.md',
@@ -192,8 +196,8 @@ module.exports = {
 								'ComplexEventProcessing/MissingEventRecovery.md',
 								'ComplexEventProcessing/EventNameRepair.md',
 								'ComplexEventProcessing/EventTimeRepair.md',
-                                'ComplexEventProcessing/SEQ.md',
-                                'ComplexEventProcessing/AND.md',
+								'ComplexEventProcessing/SEQ.md',
+								'ComplexEventProcessing/AND.md',
 							],
 						}
 					],
