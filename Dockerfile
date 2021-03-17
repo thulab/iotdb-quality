@@ -22,9 +22,11 @@
 FROM openjdk:11-jre-slim
 
 ADD apache-iotdb-0.12.0-SNAPSHOT-all-bin.zip /
+# jdk will be provided by jenkins
+ADD jdk-8u221-linux-x64.tar.gz /usr/local/
 # add dependency here
 ADD download/udf-tsclean-0.1.0-jar-with-dependencies.jar /
-ADD jdk-8u221-linux-x64.tar.gz /usr/local/
+
 
 RUN apt update \
   && apt install lsof procps unzip -y \
