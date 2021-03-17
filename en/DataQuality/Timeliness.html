@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Timeliness | IoTDB-Quality</title>
+    <meta name="generator" content="VuePress 1.8.2">
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-V8CG1Y9FW6"></script>
+    <script type="text/javascript" src="/iotdb-quality/assets/push.js"></script>
+    <meta name="description" content="Apache IoTDB's UDFs about data quality">
+    
+    <link rel="preload" href="/iotdb-quality/assets/css/0.styles.99f362c4.css" as="style"><link rel="preload" href="/iotdb-quality/assets/js/app.b0cb05e1.js" as="script"><link rel="preload" href="/iotdb-quality/assets/js/3.8cf38c45.js" as="script"><link rel="preload" href="/iotdb-quality/assets/js/41.350fd770.js" as="script"><link rel="prefetch" href="/iotdb-quality/assets/js/10.d2a58496.js"><link rel="prefetch" href="/iotdb-quality/assets/js/11.e97c070e.js"><link rel="prefetch" href="/iotdb-quality/assets/js/12.50c90078.js"><link rel="prefetch" href="/iotdb-quality/assets/js/13.a088340c.js"><link rel="prefetch" href="/iotdb-quality/assets/js/14.4d691f45.js"><link rel="prefetch" href="/iotdb-quality/assets/js/15.1c91478e.js"><link rel="prefetch" href="/iotdb-quality/assets/js/16.41df49c8.js"><link rel="prefetch" href="/iotdb-quality/assets/js/17.51611567.js"><link rel="prefetch" href="/iotdb-quality/assets/js/18.2d3d80d4.js"><link rel="prefetch" href="/iotdb-quality/assets/js/19.06b5406c.js"><link rel="prefetch" href="/iotdb-quality/assets/js/20.086649c8.js"><link rel="prefetch" href="/iotdb-quality/assets/js/21.0744a2e4.js"><link rel="prefetch" href="/iotdb-quality/assets/js/22.63e60cba.js"><link rel="prefetch" href="/iotdb-quality/assets/js/23.57aee565.js"><link rel="prefetch" href="/iotdb-quality/assets/js/24.e756822d.js"><link rel="prefetch" href="/iotdb-quality/assets/js/25.4703c3cd.js"><link rel="prefetch" href="/iotdb-quality/assets/js/26.825f4145.js"><link rel="prefetch" href="/iotdb-quality/assets/js/27.3bd50bd0.js"><link rel="prefetch" href="/iotdb-quality/assets/js/28.7d375601.js"><link rel="prefetch" href="/iotdb-quality/assets/js/29.56d06f50.js"><link rel="prefetch" href="/iotdb-quality/assets/js/30.de2adc20.js"><link rel="prefetch" href="/iotdb-quality/assets/js/31.1a7de0d9.js"><link rel="prefetch" href="/iotdb-quality/assets/js/32.abeb2087.js"><link rel="prefetch" href="/iotdb-quality/assets/js/33.30203946.js"><link rel="prefetch" href="/iotdb-quality/assets/js/34.6a1e6557.js"><link rel="prefetch" href="/iotdb-quality/assets/js/35.bc5804bf.js"><link rel="prefetch" href="/iotdb-quality/assets/js/36.af7aae90.js"><link rel="prefetch" href="/iotdb-quality/assets/js/37.30194f44.js"><link rel="prefetch" href="/iotdb-quality/assets/js/38.7cee8363.js"><link rel="prefetch" href="/iotdb-quality/assets/js/39.784af155.js"><link rel="prefetch" href="/iotdb-quality/assets/js/4.5d90d0ab.js"><link rel="prefetch" href="/iotdb-quality/assets/js/40.9a43f4bf.js"><link rel="prefetch" href="/iotdb-quality/assets/js/42.b8cc428a.js"><link rel="prefetch" href="/iotdb-quality/assets/js/43.b6becaf3.js"><link rel="prefetch" href="/iotdb-quality/assets/js/44.594020af.js"><link rel="prefetch" href="/iotdb-quality/assets/js/45.0091c7ee.js"><link rel="prefetch" href="/iotdb-quality/assets/js/46.697a9924.js"><link rel="prefetch" href="/iotdb-quality/assets/js/47.8c275bbd.js"><link rel="prefetch" href="/iotdb-quality/assets/js/48.34e6fb6a.js"><link rel="prefetch" href="/iotdb-quality/assets/js/49.93616f60.js"><link rel="prefetch" href="/iotdb-quality/assets/js/5.ea83a46f.js"><link rel="prefetch" href="/iotdb-quality/assets/js/50.d0b84186.js"><link rel="prefetch" href="/iotdb-quality/assets/js/51.94ee73b5.js"><link rel="prefetch" href="/iotdb-quality/assets/js/52.79b953b4.js"><link rel="prefetch" href="/iotdb-quality/assets/js/53.169180e3.js"><link rel="prefetch" href="/iotdb-quality/assets/js/54.1994de9f.js"><link rel="prefetch" href="/iotdb-quality/assets/js/55.4eea76c8.js"><link rel="prefetch" href="/iotdb-quality/assets/js/56.119db7af.js"><link rel="prefetch" href="/iotdb-quality/assets/js/57.6adf150b.js"><link rel="prefetch" href="/iotdb-quality/assets/js/58.4a536e5e.js"><link rel="prefetch" href="/iotdb-quality/assets/js/59.7200bc65.js"><link rel="prefetch" href="/iotdb-quality/assets/js/6.f3a0ad01.js"><link rel="prefetch" href="/iotdb-quality/assets/js/60.31d7700e.js"><link rel="prefetch" href="/iotdb-quality/assets/js/61.04a1e43e.js"><link rel="prefetch" href="/iotdb-quality/assets/js/62.49d02a8b.js"><link rel="prefetch" href="/iotdb-quality/assets/js/63.cb328514.js"><link rel="prefetch" href="/iotdb-quality/assets/js/64.a720f5d3.js"><link rel="prefetch" href="/iotdb-quality/assets/js/65.5d813c7d.js"><link rel="prefetch" href="/iotdb-quality/assets/js/66.94e31fd6.js"><link rel="prefetch" href="/iotdb-quality/assets/js/67.afa6b373.js"><link rel="prefetch" href="/iotdb-quality/assets/js/68.f9904338.js"><link rel="prefetch" href="/iotdb-quality/assets/js/69.10c51979.js"><link rel="prefetch" href="/iotdb-quality/assets/js/7.fe3ca09c.js"><link rel="prefetch" href="/iotdb-quality/assets/js/70.689bccef.js"><link rel="prefetch" href="/iotdb-quality/assets/js/71.6cc06069.js"><link rel="prefetch" href="/iotdb-quality/assets/js/72.46ccca70.js"><link rel="prefetch" href="/iotdb-quality/assets/js/73.168529a7.js"><link rel="prefetch" href="/iotdb-quality/assets/js/74.eae626a3.js"><link rel="prefetch" href="/iotdb-quality/assets/js/75.d16e2696.js"><link rel="prefetch" href="/iotdb-quality/assets/js/76.c32b2426.js"><link rel="prefetch" href="/iotdb-quality/assets/js/77.d8c3762a.js"><link rel="prefetch" href="/iotdb-quality/assets/js/78.6aff3737.js"><link rel="prefetch" href="/iotdb-quality/assets/js/79.0e5c7488.js"><link rel="prefetch" href="/iotdb-quality/assets/js/8.6f74edd5.js"><link rel="prefetch" href="/iotdb-quality/assets/js/80.01dde41b.js"><link rel="prefetch" href="/iotdb-quality/assets/js/81.be3e13f5.js"><link rel="prefetch" href="/iotdb-quality/assets/js/82.947e486f.js"><link rel="prefetch" href="/iotdb-quality/assets/js/83.e0c51fcc.js"><link rel="prefetch" href="/iotdb-quality/assets/js/84.c1b8bc8d.js"><link rel="prefetch" href="/iotdb-quality/assets/js/85.c17ac162.js"><link rel="prefetch" href="/iotdb-quality/assets/js/86.7e602878.js"><link rel="prefetch" href="/iotdb-quality/assets/js/87.c4e24505.js"><link rel="prefetch" href="/iotdb-quality/assets/js/88.fc6b898a.js"><link rel="prefetch" href="/iotdb-quality/assets/js/89.bf945715.js"><link rel="prefetch" href="/iotdb-quality/assets/js/9.235fa9ff.js"><link rel="prefetch" href="/iotdb-quality/assets/js/vendors~docsearch.c6292dad.js">
+    <link rel="stylesheet" href="/iotdb-quality/assets/css/0.styles.99f362c4.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/iotdb-quality/" class="home-link router-link-active"><!----> <span class="site-name">IoTDB-Quality</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/iotdb-quality/" class="nav-link">
+  Document
+</a></div><div class="nav-item"><a href="/iotdb-quality/en/Download.html" class="nav-link">
+  Download
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Languages" class="dropdown-title"><span class="title">Languages</span> <span class="arrow down"></span></button> <button type="button" aria-label="Languages" class="mobile-dropdown-title"><span class="title">Languages</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/iotdb-quality/en/DataQuality/Timeliness.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/iotdb-quality/zh/" class="nav-link">
+  简体中文
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/iotdb-quality/" class="nav-link">
+  Document
+</a></div><div class="nav-item"><a href="/iotdb-quality/en/Download.html" class="nav-link">
+  Download
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Languages" class="dropdown-title"><span class="title">Languages</span> <span class="arrow down"></span></button> <button type="button" aria-label="Languages" class="mobile-dropdown-title"><span class="title">Languages</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/iotdb-quality/en/DataQuality/Timeliness.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/iotdb-quality/zh/" class="nav-link">
+  简体中文
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Get Started</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Data Profiling (15)</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>Data Quality (4)</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/iotdb-quality/en/DataQuality/Completeness.html" class="sidebar-link">Completeness</a></li><li><a href="/iotdb-quality/en/DataQuality/Consistency.html" class="sidebar-link">Consistency</a></li><li><a href="/iotdb-quality/en/DataQuality/Timeliness.html" aria-current="page" class="active sidebar-link">Timeliness</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/iotdb-quality/en/DataQuality/Timeliness.html#usage" class="sidebar-link">Usage</a></li><li class="sidebar-sub-header"><a href="/iotdb-quality/en/DataQuality/Timeliness.html#examples" class="sidebar-link">Examples</a></li></ul></li><li><a href="/iotdb-quality/en/DataQuality/Validity.html" class="sidebar-link">Validity</a></li></ul></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Data Repairing (3)</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Data Matching (5)</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Anomaly Detection (3)</span> <span class="arrow right"></span></p> <!----></section></li><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading"><span>Complex Event Processing (7)</span> <span class="arrow right"></span></p> <!----></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="timeliness"><a href="#timeliness" class="header-anchor">#</a> Timeliness</h1> <h2 id="usage"><a href="#usage" class="header-anchor">#</a> Usage</h2> <p>This function is used to calculate the timeliness of time series. The input series are divided into several continuous and non overlapping windows. The timestamp of the first data point and the timeliness of each window will be output.</p> <p><strong>Name:</strong> TIMELINESS</p> <p><strong>Input Series:</strong> Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.</p> <p><strong>Parameters:</strong></p> <ul><li><code>window</code>: The number of data points in each window. The number of data points in the last window may be less than it. By default, all input data belongs to the same window.</li></ul> <p><strong>Output Series:</strong> Output a single series. The type is DOUBLE. The range of each value is [0,1].</p> <p><strong>Note:</strong> Only when the number of data points in the window exceeds 10, the calculation will be performed. Otherwise, the window will be ignored and nothing will be output.</p> <h2 id="examples"><a href="#examples" class="header-anchor">#</a> Examples</h2> <h3 id="default-parameters"><a href="#default-parameters" class="header-anchor">#</a> Default Parameters</h3> <p>With default parameters, this function will regard all input data as the same window.</p> <p>Input series:</p> <div class="language- extra-class"><pre class="language-text"><code>+-----------------------------+---------------+
+|                         Time|root.test.d1.s1|
++-----------------------------+---------------+
+|2020-01-01T00:00:02.000+08:00|          100.0|
+|2020-01-01T00:00:03.000+08:00|          101.0|
+|2020-01-01T00:00:04.000+08:00|          102.0|
+|2020-01-01T00:00:06.000+08:00|          104.0|
+|2020-01-01T00:00:08.000+08:00|          126.0|
+|2020-01-01T00:00:10.000+08:00|          108.0|
+|2020-01-01T00:00:14.000+08:00|          112.0|
+|2020-01-01T00:00:15.000+08:00|          113.0|
+|2020-01-01T00:00:16.000+08:00|          114.0|
+|2020-01-01T00:00:18.000+08:00|          116.0|
+|2020-01-01T00:00:20.000+08:00|          118.0|
+|2020-01-01T00:00:22.000+08:00|          120.0|
+|2020-01-01T00:00:26.000+08:00|          124.0|
+|2020-01-01T00:00:28.000+08:00|          126.0|
+|2020-01-01T00:00:30.000+08:00|            NaN|
++-----------------------------+---------------+
+</code></pre></div><p>SQL for query:</p> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">select</span> timeliness<span class="token punctuation">(</span>s1<span class="token punctuation">)</span> <span class="token keyword">from</span> root<span class="token punctuation">.</span>test<span class="token punctuation">.</span>d1 <span class="token keyword">where</span> <span class="token keyword">time</span> <span class="token operator">&lt;=</span> <span class="token number">2020</span><span class="token operator">-</span><span class="token number">01</span><span class="token operator">-</span><span class="token number">01</span> <span class="token number">00</span>:<span class="token number">00</span>:<span class="token number">30</span>
+</code></pre></div><p>Output series:</p> <div class="language- extra-class"><pre class="language-text"><code>+-----------------------------+---------------------------+
+|                         Time|timeliness(root.test.d1.s1)|
++-----------------------------+---------------------------+
+|2020-01-01T00:00:02.000+08:00|         0.9333333333333333|
++-----------------------------+---------------------------+
+</code></pre></div><h3 id="specific-window-size"><a href="#specific-window-size" class="header-anchor">#</a> Specific Window Size</h3> <p>When the window size is given, this function will divide the input data as multiple windows.</p> <p>Input series:</p> <div class="language- extra-class"><pre class="language-text"><code>+-----------------------------+---------------+
+|                         Time|root.test.d1.s1|
++-----------------------------+---------------+
+|2020-01-01T00:00:02.000+08:00|          100.0|
+|2020-01-01T00:00:03.000+08:00|          101.0|
+|2020-01-01T00:00:04.000+08:00|          102.0|
+|2020-01-01T00:00:06.000+08:00|          104.0|
+|2020-01-01T00:00:08.000+08:00|          126.0|
+|2020-01-01T00:00:10.000+08:00|          108.0|
+|2020-01-01T00:00:14.000+08:00|          112.0|
+|2020-01-01T00:00:15.000+08:00|          113.0|
+|2020-01-01T00:00:16.000+08:00|          114.0|
+|2020-01-01T00:00:18.000+08:00|          116.0|
+|2020-01-01T00:00:20.000+08:00|          118.0|
+|2020-01-01T00:00:22.000+08:00|          120.0|
+|2020-01-01T00:00:26.000+08:00|          124.0|
+|2020-01-01T00:00:28.000+08:00|          126.0|
+|2020-01-01T00:00:30.000+08:00|            NaN|
+|2020-01-01T00:00:32.000+08:00|          130.0|
+|2020-01-01T00:00:34.000+08:00|          132.0|
+|2020-01-01T00:00:36.000+08:00|          134.0|
+|2020-01-01T00:00:38.000+08:00|          136.0|
+|2020-01-01T00:00:40.000+08:00|          138.0|
+|2020-01-01T00:00:42.000+08:00|          140.0|
+|2020-01-01T00:00:44.000+08:00|          142.0|
+|2020-01-01T00:00:46.000+08:00|          144.0|
+|2020-01-01T00:00:48.000+08:00|          146.0|
+|2020-01-01T00:00:50.000+08:00|          148.0|
+|2020-01-01T00:00:52.000+08:00|          150.0|
+|2020-01-01T00:00:54.000+08:00|          152.0|
+|2020-01-01T00:00:56.000+08:00|          154.0|
+|2020-01-01T00:00:58.000+08:00|          156.0|
+|2020-01-01T00:01:00.000+08:00|          158.0|
++-----------------------------+---------------+
+</code></pre></div><p>SQL for query:</p> <div class="language-sql extra-class"><pre class="language-sql"><code><span class="token keyword">select</span> timeliness<span class="token punctuation">(</span>s1<span class="token punctuation">,</span><span class="token string">&quot;window&quot;</span><span class="token operator">=</span><span class="token string">&quot;15&quot;</span><span class="token punctuation">)</span> <span class="token keyword">from</span> root<span class="token punctuation">.</span>test<span class="token punctuation">.</span>d1 <span class="token keyword">where</span> <span class="token keyword">time</span> <span class="token operator">&lt;=</span> <span class="token number">2020</span><span class="token operator">-</span><span class="token number">01</span><span class="token operator">-</span><span class="token number">01</span> <span class="token number">00</span>:<span class="token number">01</span>:<span class="token number">00</span>
+</code></pre></div><p>Output series:</p> <div class="language- extra-class"><pre class="language-text"><code>+-----------------------------+------------------------------------------+
+|                         Time|timeliness(root.test.d1.s1, &quot;window&quot;=&quot;15&quot;)|
++-----------------------------+------------------------------------------+
+|2020-01-01T00:00:02.000+08:00|                        0.9333333333333333|
+|2020-01-01T00:00:32.000+08:00|                                       1.0|
++-----------------------------+------------------------------------------+
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/iotdb-quality/en/DataQuality/Consistency.html" class="prev">
+        Consistency
+      </a></span> <span class="next"><a href="/iotdb-quality/en/DataQuality/Validity.html">
+        Validity
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/iotdb-quality/assets/js/app.b0cb05e1.js" defer></script><script src="/iotdb-quality/assets/js/3.8cf38c45.js" defer></script><script src="/iotdb-quality/assets/js/41.350fd770.js" defer></script>
+  </body>
+</html>
