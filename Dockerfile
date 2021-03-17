@@ -34,13 +34,7 @@ RUN apt update \
   && apt remove unzip -y \
   && apt autoremove -y \
   && apt purge --auto-remove -y \
-  && apt clean -y \
-# move dependency to required location
-  && mv /udf-tsclean-0.1.0-jar-with-dependencies.jar /iotdb/ext/udf/ \
-# include shell command lines in test.sh
-# docker will auto run test commands
-# may also write all commands here
-  && sh /test.sh
+  && apt clean -y
 
 EXPOSE 6667
 EXPOSE 31999
