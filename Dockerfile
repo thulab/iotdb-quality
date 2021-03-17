@@ -40,7 +40,7 @@ RUN apt update \
 # include shell command lines in test.sh
 # docker will auto run test commands
 # may also write all commands here
-  && sh test.sh
+  && sh /test.sh
 
 EXPOSE 6667
 EXPOSE 31999
