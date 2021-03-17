@@ -17,16 +17,10 @@
 
 ## 使用示例
 
-**注册方式：**
+
+输入序列：
 
 ```
-CREATE FUNCTION percentile AS "cn.edu.thu.dquality.udf.UDAFPercentile"
-```
-
- **输入序列：** 
-
-```
-IoTDB> select s0 from root.test
 +-----------------------------+------------+
 |                         Time|root.test.s0|
 +-----------------------------+------------+
@@ -60,13 +54,13 @@ IoTDB> select s0 from root.test
 Total line number = 10000
 ```
 
- **用于查询的SQL语句：** 
+用于查询的SQL语句：
 
-```
-SELECT percentile(s0, "rank"="0.2", "error"="0.01") FROM root.test;
+```sql
+select percentile(s0, "rank"="0.2", "error"="0.01") from root.test;
 ```
 
- **输出序列：** 
+输出序列：
 
 ```
 +-----------------------------+------------------------------------------------------+

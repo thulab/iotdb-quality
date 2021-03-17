@@ -1,9 +1,9 @@
 target/
-site/docs/
-!site/docs/.vuepress/
-site/node_modules/
-site/docs/.vuepress/theme/
-site/docs/.vuepress/dist/
+tools/site/docs/
+!tools/site/docs/.vuepress/
+tools/site/node_modules/
+tools/site/docs/.vuepress/theme/
+tools/site/docs/.vuepress/dist/
 tools/auto-document/*.aux
 tools/auto-document/*.log
 tools/auto-document/*.out
