@@ -1,4 +1,6 @@
 target/
+site/docs/
+!site/docs/.vuepress/
 site/node_modules/
 site/docs/.vuepress/theme/
 site/docs/.vuepress/dist/
