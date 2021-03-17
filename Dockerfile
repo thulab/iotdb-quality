@@ -23,7 +23,7 @@ FROM openjdk:11-jre-slim
 
 ADD apache-iotdb-0.12.0-SNAPSHOT-all-bin.zip /
 # add dependency here
-ADD download/iotdb-quality-0.1.0-jar-with-dependencies.jar /
+ADD download/udf-tsclean-0.1.0-jar-with-dependencies.jar /
 ADD test.sh /
 
 RUN apt update \
