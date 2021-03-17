@@ -36,7 +36,7 @@ RUN apt update \
   && apt purge --auto-remove -y \
   && apt clean -y \
 # move dependency to required location
-  && mv /iotdb-quality-0.1.0-jar-with-dependencies.jar /iotdb/ext/udf/ \
+  && mv /udf-tsclean-0.1.0-jar-with-dependencies.jar /iotdb/ext/udf/ \
 # include shell command lines in test.sh
 # docker will auto run test commands
 # may also write all commands here
