@@ -11,14 +11,14 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
- * calculate approximate quantile
+ * calculate approximate percentile
  * the function has two parameters: $rank$ and $error$
- * $rank$ is the rank ratio of the quantile, e.g. a quantile with $rank$=0.5 is the median
- * $error$ is the rank error, e.g., a quantile with $rank$=0.5 and $error$=0.01 is the the quantile whose rank is within (0.49,0.51)
- * @register: CREATE FUNCTION quantile AS "cn.edu.thu.dquality.udf.UDAFQuantile"
- * @usage: SELECT quantile(s0, "rank"="0.2", "error"="0.01") FROM root.test;
+ * $rank$ is the rank ratio of the percentile, e.g. a percentile with $rank$=0.5 is the median
+ * $error$ is the rank error, e.g., a percentile with $rank$=0.5 and $error$=0.01 is the the percentile whose rank is within (0.49,0.51)
+ * @register: CREATE FUNCTION percentile AS "cn.edu.thu.dquality.udf.UDAFPercentile"
+ * @usage: SELECT percentile(s0, "rank"="0.2", "error"="0.01") FROM root.test;
  */
-public class UDAFQuantile implements UDTF {
+public class UDAFPercentile implements UDTF {
 
     private double rank;
     private GKArray gkArray;
