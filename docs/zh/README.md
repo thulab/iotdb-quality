@@ -16,4 +16,5 @@ create function consistency as 'cn.edu.thu.dquality.udf.UDTFConsistency'
 create function timeliness as 'cn.edu.thu.dquality.udf.UDTFTimeliness'
 create function validity as 'cn.edu.thu.dquality.udf.UDTFValidity'
 create function percentile as 'cn.edu.thu.dquality.udf.UDAFPercentile'
+create function distinct as 'cn.edu.thu.dquality.udf.UDTFDistinct'
 ```
