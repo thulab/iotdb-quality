@@ -5,7 +5,8 @@ docker run --name iotdb-quality-cpy -d iotdb-quality:cpy /bin/bash
 # test scripts here
 echo Test started.
 docker exec iotdb-quality-cpy /bin/sh -c "mv /udf-tsclean-0.1.0-jar-with-dependencies.jar /iotdb/ext/udf/"
-sh /media/sf_sharedfolder/iotdb-benchmark-dev_quality_ci/benchmark.sh
+cd /media/sf_sharedfolder/iotdb-benchmark-dev_quality_ci/
+sh benchmark.sh
 echo Test finished.
 # delete docker image & container.
 docker stop iotdb-quality-cpy
