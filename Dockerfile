@@ -6,7 +6,7 @@ ADD apache-iotdb-0.12.0-SNAPSHOT-all-bin.zip /
 
 # ADD jdk-8u221-linux-x64.tar.gz /usr/local/
 # add dependency here
-ADD download/udf-tsclean-0.1.0-jar-with-dependencies.jar /
+ADD download/iotdb-quality-0.1.0-jar-with-dependencies.jar /
 
 
 RUN apt update \
