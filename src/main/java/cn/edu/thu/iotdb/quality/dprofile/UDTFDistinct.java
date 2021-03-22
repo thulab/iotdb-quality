@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.dquality.udf;
+package cn.edu.thu.iotdb.quality.dprofile;
 
 import java.util.HashSet;
 import org.apache.iotdb.db.query.udf.api.UDTF;

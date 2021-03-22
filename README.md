@@ -13,11 +13,13 @@ It effectively meets the demand for data quality in the industrial field.
 3. Register the UDFs with the following SQL statements in IoTDB: 
 
 ```sql
-create function completeness as 'cn.edu.thu.dquality.udf.UDTFCompleteness'
-create function consistency as 'cn.edu.thu.dquality.udf.UDTFConsistency'
-create function timeliness as 'cn.edu.thu.dquality.udf.UDTFTimeliness'
-create function validity as 'cn.edu.thu.dquality.udf.UDTFValidity'
-create function percentile as 'cn.edu.thu.dquality.udf.UDAFPercentile'
-create function distinct as 'cn.edu.thu.dquality.udf.UDTFDistinct'
+create function completeness as 'cn.edu.thu.iotdb.quality.dquality.UDTFCompleteness'
+create function consistency as 'cn.edu.thu.iotdb.quality.dquality.UDTFConsistency'
+create function timeliness as 'cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness'
+create function validity as 'cn.edu.thu.iotdb.quality.dquality.UDTFValidity'
+create function percentile as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile'
+create function distinct as 'cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct'
+create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'
+create function spread as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSpread'
 ```
 

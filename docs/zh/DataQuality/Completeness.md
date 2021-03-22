@@ -5,7 +5,7 @@
 
 **函数名：** COMPLETENESS
 
-**输入序列：** 仅支持单个输入序列，类型为 INT32 / INT64 / FLOAT / DOUBLE
+**输入序列：** 仅支持单个输入序列，类型为 INT32 / INT64 / FLOAT / DOUBLE。
 
 **参数：** 
 

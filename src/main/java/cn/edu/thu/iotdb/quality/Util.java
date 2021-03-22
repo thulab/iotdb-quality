@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.dquality;
+package cn.edu.thu.iotdb.quality;
 
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.descriptive.rank.Median;

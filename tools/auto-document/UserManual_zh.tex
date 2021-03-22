@@ -11,17 +11,17 @@
 \cover{cover.jpg}
 
 % 使用XeLatex编译时，item前面的圆点可能无法显示，下面的代码可以解决该问题
-%\makeatletter
-%\def\pgfutil@insertatbegincurrentpagefrombox#1{%
-%  \edef\pgf@temp{\the\wd\pgfutil@abb}%
-%  \global\setbox\pgfutil@abb\hbox{%
-%    \unhbox\pgfutil@abb%
-%    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
-%    #1%
-%    \hskip\dimexpr-2in-2\hoffset\relax% new
-%  }%
-%}
-%\makeatother
+\makeatletter
+\def\pgfutil@insertatbegincurrentpagefrombox#1{%
+  \edef\pgf@temp{\the\wd\pgfutil@abb}%
+  \global\setbox\pgfutil@abb\hbox{%
+    \unhbox\pgfutil@abb%
+    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
+    #1%
+    \hskip\dimexpr-2in-2\hoffset\relax% new
+  }%
+}
+\makeatother
 
 % 本文档命令
 \renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
@@ -56,7 +56,7 @@
 \input{output_zh/QA.tex}
 
 \chapter{数据画像}
-\input{output_zh/Cov.tex}
+
 \input{output_zh/Distinct.tex}
 \input{output_zh/Histogram.tex}
 \input{output_zh/Integral.tex}
@@ -86,6 +86,7 @@
 
 
 \chapter{数据匹配}
+\input{output_zh/Cov.tex}
 \input{output_zh/DTW.tex}
 \input{output_zh/Pearson.tex}
 \input{output_zh/SeriesAlign.tex}

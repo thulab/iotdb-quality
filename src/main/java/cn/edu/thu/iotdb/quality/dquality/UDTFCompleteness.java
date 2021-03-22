@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.dquality.udf;
+package cn.edu.thu.iotdb.quality.dquality;
 
-import cn.edu.thu.dquality.TimeSeriesQuality;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

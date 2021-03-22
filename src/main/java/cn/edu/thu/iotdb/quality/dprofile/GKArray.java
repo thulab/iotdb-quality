@@ -1,4 +1,4 @@
-package cn.edu.thu.dquality;
+package cn.edu.thu.iotdb.quality.dprofile;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.dquality.udf;
+package cn.edu.thu.iotdb.quality.dquality;
 
-import cn.edu.thu.dquality.NoNumberException;
-import cn.edu.thu.dquality.TimeSeriesQuality;
+import cn.edu.thu.iotdb.quality.NoNumberException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,11 +18,11 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
- * 用于计算时间序列的时效性的UDTF
+ * 用于计算时间序列的有效性的UDTF
  *
  * @author Wang Haoyu
  */
-public class UDTFTimeliness implements UDTF {
+public class UDTFValidity implements UDTF {
 
     @Override
     public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
@@ -37,8 +36,8 @@ public class UDTFTimeliness implements UDTF {
         try {
             if (rowWindow.windowSize() > TimeSeriesQuality.WINDOWSIZE) {
                 TimeSeriesQuality tsq = new TimeSeriesQuality(rowWindow.getRowIterator());
-                tsq.timeDetect();
-                collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getTimeliness());
+                tsq.valueDetect();
+                collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getValidity());
             }
         } catch (IOException | NoNumberException ex) {
             Logger.getLogger(UDTFCompleteness.class.getName()).log(Level.SEVERE, null, ex);

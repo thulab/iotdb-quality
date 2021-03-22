@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.dquality;
+package cn.edu.thu.iotdb.quality.dquality;
 
+import cn.edu.thu.iotdb.quality.NoNumberException;
+import cn.edu.thu.iotdb.quality.Util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
