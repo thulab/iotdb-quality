@@ -17,3 +17,4 @@ tools/auto-document/output_en
 tools/auto-document/marktex/__pycache__
 tools/auto-document/marktex/markast/__pycache__
 tools/auto-document/marktex/texparser/__pycache__
+.idea/
