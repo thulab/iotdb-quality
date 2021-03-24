@@ -6,7 +6,7 @@ docker rmi iotdb-quality:master
 echo Docker image deleted.
 # create docker image & container
 docker build -t iotdb-quality:master -f Dockerfile .
-docker run --name iotdb-quality-master -d -p 6667:6667 -p 31999:31999 -p 8181:8181 -p 5555:5555 iotdb-quality:cpy /bin/bash
+docker run --name iotdb-quality-master -d -p 6667:6667 -p 31999:31999 -p 8181:8181 -p 5555:5555 iotdb-quality:master /bin/bash
 # test scripts here
 echo Test started.
 docker exec iotdb-quality-master /bin/sh -c "mv /iotdb-quality-0.1.0-jar-with-dependencies.jar /iotdb/ext/udf/"
