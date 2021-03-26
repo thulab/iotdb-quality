@@ -1,0 +1,43 @@
+[
+  {
+    "UDFName": "COMPLETENESS",
+    "FullClassName": "cn.edu.thu.dquality.udf.UDTFCompleteness",
+    "Arguments": [
+      {
+        "Type": "TIMESERIES",
+        "Default": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ],
+    "Comments": ""
+  },
+  {
+    "UDFName": "CONSISTENCY",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFConsistency",
+    "Arguments": [
+      {
+        "Type": "TIMESERIES",
+        "Default": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+  {
+    "UDFName": "TIMELINESS",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness",
+    "Arguments": [
+      {
+        "Type": "TIMESERIES",
+        "Default": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+  {
+    "UDFName": "VALIDITY",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFValidity",
+    "Arguments": [
+      {
+        "Type": "TIMESERIES",
+        "Default": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  }
+]

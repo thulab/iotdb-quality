@@ -6,17 +6,8 @@
 对基于时序数据的应用而言，数据质量至关重要。**IoTDB-Quality**基于IoTDB用户自定义函数(UDF)，实现了一系列关于数据质量的函数，包括数据画像、数据质量评估与修复等，有效满足了工业领域对数据质量的需求。
 
 ## 快速开始
-1. 下载包含全部依赖的jar包
-2. 将jar包复制到IoTDB程序目录的`ext\udf`目录下
-3. 在IoTDB中使用下面的SQL语句注册UDF
+1. 下载包含全部依赖的jar包和注册脚本；
+2. 将jar包复制到IoTDB程序目录的`ext\udf`目录下；
+3. 运行`sbin\start-server.bat`（在Windows下）或`sbin\start-server.sh`（在Linux或MacOS下）以启动IoTDB服务器；
+4. 将注册脚本复制到IoTDB的程序目录下，并运行注册脚本以注册UDF。
 
-```sql
-create function completeness as 'cn.edu.thu.iotdb.quality.dquality.UDTFCompleteness'
-create function consistency as 'cn.edu.thu.iotdb.quality.dquality.UDTFConsistency'
-create function timeliness as 'cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness'
-create function validity as 'cn.edu.thu.iotdb.quality.dquality.UDTFValidity'
-create function percentile as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile'
-create function distinct as 'cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct'
-create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'
-create function spread as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSpread'
-```
