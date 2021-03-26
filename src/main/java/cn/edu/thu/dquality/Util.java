@@ -47,6 +47,38 @@ public class Util {
     }
 
     /**
+     * 从Row中取出第index个值，并转化为Double类型
+     *
+     * @param row
+     * @param index
+     * @return Row中的第index个值
+     * @throws NoNumberException Row的第一个值是非数值类型
+     */
+    public static Double getValueAsDouble(Row row, int index) throws NoNumberException {
+        double ans = 0;
+        if (row.isNull(index)) {
+            return null;
+        }
+        switch (row.getDataType(index)) {
+            case INT32:
+                ans = row.getInt(index);
+                break;
+            case INT64:
+                ans = row.getLong(index);
+                break;
+            case FLOAT:
+                ans = row.getFloat(index);
+                break;
+            case DOUBLE:
+                ans = row.getDouble(index);
+                break;
+            default:
+                throw new NoNumberException();
+        }
+        return ans;
+    }
+
+    /**
      * 将{@code ArrayList<Double>}转化为长度相同的{@code double[]}。
      * <p>
      * 用户需要保证{@code ArrayList<Double>}中没有空值{@code  null}
