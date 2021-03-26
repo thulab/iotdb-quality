@@ -41,7 +41,7 @@
 用于查询的SQL语句：
 
 ```sql
- select spread(s1) from root.test.d1 where time <= 2020-01-01 00:00:30
+select spread(s1) from root.test.d1 where time <= 2020-01-01 00:00:30
 ```
 
 输出序列：

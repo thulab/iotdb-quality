@@ -38,27 +38,32 @@ public class TimeSeriesQuality {
     private int speedchangeCnt = 0;//违背速度变化约束的数据点个数
     private final double[] time, origin;//除去特殊值的时间序列
 
-    public TimeSeriesQuality(RowIterator dataIterator) throws IOException, NoNumberException {
+    public TimeSeriesQuality(RowIterator dataIterator) throws Exception {
         ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
         while (dataIterator.hasNextRow()) {
             Row row = dataIterator.next();
             cnt++;
             Double v = Util.getValueAsDouble(row);
+            double t = Long.valueOf(row.getTime()).doubleValue();
             if (v == null) {//对空值的处理
                 nullCnt++;
+                timeList.add(t);
+                originList.add(Double.NaN);
             } else if (Double.isFinite(v)) {
-                double t = Long.valueOf(row.getTime()).doubleValue();
                 timeList.add(t);
                 originList.add(v);
             } else {//对特殊值的处理，包括NAN，INF等
                 specialCnt++;
+                timeList.add(t);
+                originList.add(Double.NaN);
             }
         }
         time = Util.toDoubleArray(timeList);
         origin = Util.toDoubleArray(originList);
+        processNaN();
     }
 
-    public TimeSeriesQuality(String filename) throws FileNotFoundException, ParseException {
+    public TimeSeriesQuality(String filename) throws Exception {
         Scanner sc = new Scanner(new File(filename));
         ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -73,10 +78,50 @@ public class TimeSeriesQuality {
                 originList.add(v);
             } else {//对特殊值的处理，包括NAN，INF等
                 specialCnt++;
+                timeList.add(t);
+                originList.add(Double.NaN);
             }
         }
         time = Util.toDoubleArray(timeList);
         origin = Util.toDoubleArray(originList);
+        processNaN();
+    }
+
+    /**
+     * 对数据序列中的NaN进行处理，采用线性插值方法
+     */
+    private void processNaN() throws Exception {
+        int n = origin.length;
+        int index1 = 0, index2;//线性插值的两个基准
+        //找到两个非NaN的基准
+        while (index1 < n && Double.isNaN(origin[index1])) {
+            index1++;
+        }
+        index2 = index1 + 1;
+        while (index2 < n && Double.isNaN(origin[index2])) {
+            index2++;
+        }
+        if (index2 >= n) {
+            throw new Exception("At least two non-NaN values are needed");
+        }
+        //对序列开头的NaN进行插值
+        for (int i = 0; i < index2; i++) {
+            origin[i] = origin[index1] + (origin[index2] - origin[index1]) * (time[i] - time[index1]) / (time[index2] - time[index1]);
+        }
+        //对序列中间的NaN进行插值
+        for (int i = index2 + 1; i < n; i++) {
+            if (!Double.isNaN(origin[i])) {
+                index1 = index2;
+                index2 = i;
+                for (int j = index1 + 1; j < index2; j++) {
+                    origin[j] = origin[index1] + (origin[index2] - origin[index1]) * (time[j] - time[index1]) / (time[index2] - time[index1]);
+                }
+            }
+        }
+        //对序列末尾的NaN进行插值
+        for (int i = index2 + 1; i < n; i++) {
+            origin[i] = origin[index1] + (origin[index2] - origin[index1]) * (time[i] - time[index1]) / (time[index2] - time[index1]);
+        }
     }
 
     /**
@@ -203,7 +248,7 @@ public class TimeSeriesQuality {
         return 1 - (valueCnt + variationCnt + speedCnt + speedchangeCnt) * 0.25 / cnt;
     }
 
-    public static void main(String[] args) throws FileNotFoundException, IOException, NoNumberException, ParseException {
+    public static void main(String[] args) throws Exception {
         TimeSeriesQuality tsq = new TimeSeriesQuality("temp.csv");
         tsq.timeDetect();
         tsq.valueDetect();

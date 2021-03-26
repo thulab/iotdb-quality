@@ -35,6 +35,7 @@ public class UDTFLinearFill implements UDTF {
 
     @Override
     public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
+        System.out.println(rowWindow.getRow(0).size());
         RowIterator iterator = rowWindow.getRowIterator();
         switch (rowWindow.getDataType(0)) {
             case DOUBLE:
