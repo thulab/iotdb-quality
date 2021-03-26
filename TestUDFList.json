@@ -1,7 +1,7 @@
 [
   {
     "UDFName": "COMPLETENESS",
-    "FullClassName": "cn.edu.thu.dquality.udf.UDTFCompleteness",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFCompleteness",
     "Arguments": [
       {
         "Type": "TIMESERIES",
