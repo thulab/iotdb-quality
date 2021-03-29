@@ -55,7 +55,7 @@ Total line number = 10000
 用于查询的SQL语句：
 
 ```sql
-select median(s0, "error"="0.01") from root.test;
+select median(s0, "error"="0.01") from root.test
 ```
 
 输出序列：

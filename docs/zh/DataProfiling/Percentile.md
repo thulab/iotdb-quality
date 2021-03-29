@@ -57,7 +57,7 @@ Total line number = 10000
 用于查询的SQL语句：
 
 ```sql
-select percentile(s0, "rank"="0.2", "error"="0.01") from root.test;
+select percentile(s0, "rank"="0.2", "error"="0.01") from root.test
 ```
 
 输出序列：
