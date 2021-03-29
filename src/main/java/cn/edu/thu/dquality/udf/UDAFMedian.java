@@ -11,16 +11,14 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
- * calculate approximate percentile
- * the function has two parameters: $rank$ and $error$
- * $rank$ is the rank ratio of the percentile, e.g. a percentile with $rank$=0.5 is the median
- * $error$ is the rank error, e.g., a percentile with $rank$=0.5 and $error$=0.01 is the the percentile whose rank is within (0.49,0.51)
- * @register: CREATE FUNCTION percentile AS "cn.edu.thu.dquality.udf.UDAFPercentile"
- * @usage: SELECT percentile(s0, "rank"="0.2", "error"="0.01") FROM root.test;
+ * calculate approximate median
+ * the function has one parameter: $error$
+ * $error$ is the rank error, e.g., a median with $error$=0.01 is the element whose rank is within (0.49,0.51)
+ * @register: CREATE FUNCTION median AS "cn.edu.thu.dquality.udf.UDAFMedian"
+ * @usage: SELECT median(s0, "error"="0.01") FROM root.test;
  */
-public class UDAFPercentile implements UDTF {
+public class UDAFMedian implements UDTF {
 
-    private double rank;
     private GKArray gkArray;
     private Long startTime;
 
@@ -28,10 +26,6 @@ public class UDAFPercentile implements UDTF {
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) {
         udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.DOUBLE);
-        rank = udfParameters.getDoubleOrDefault("rank", 0.5);
-        if(rank < 0 || rank > 1){
-            throw new IllegalArgumentException("parameter $rank$ should be within [0,1]");
-        }
         double error = udfParameters.getDoubleOrDefault("error", 0.01);
         if(error <= 0 || error >= 1){
             throw new IllegalArgumentException("parameter $error$ should be within (0,1)");
@@ -52,6 +46,6 @@ public class UDAFPercentile implements UDTF {
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(startTime, gkArray.query(rank));
+        collector.putDouble(startTime, gkArray.query(0.5));
     }
 }

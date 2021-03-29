@@ -23,6 +23,12 @@
 CREATE FUNCTION percentile AS "cn.edu.thu.dquality.udf.UDAFPercentile"
 ```
 
+**取消注册方式：**
+
+```
+DROP FUNCTION percentile
+```
+
  **输入序列：** 
 
 ```
@@ -75,3 +81,4 @@ SELECT percentile(s0, "rank"="0.2", "error"="0.01") FROM root.test;
 |2021-03-17T13:18:56.054+08:00|                                    0.1801469624042511|
 +-----------------------------+------------------------------------------------------+
 ```
+
