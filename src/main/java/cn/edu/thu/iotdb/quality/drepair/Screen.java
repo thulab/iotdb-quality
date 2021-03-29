@@ -6,14 +6,10 @@
 package cn.edu.thu.iotdb.quality.drepair;
 
 import cn.edu.thu.iotdb.quality.Util;
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
-import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 
 /**
@@ -21,70 +17,22 @@ import org.apache.iotdb.db.query.udf.api.access.RowIterator;
  *
  * @author Wang Haoyu
  */
-public class Screen {
+public class Screen extends ValueRepair {
 
     private double smin, smax;
     private double w;
-    private final int n;
-    private final long time[];
-    private final double original[];
-    private final double repaired[];
 
     public Screen(RowIterator dataIterator) throws Exception {
-        ArrayList<Long> timeList = new ArrayList<>();
-        ArrayList<Double> originList = new ArrayList<>();
-        while (dataIterator.hasNextRow()) {//读取数据
-            Row row = dataIterator.next();
-            Double v = Util.getValueAsDouble(row);
-            timeList.add(row.getTime());
-            if (v == null || !Double.isFinite(v)) {//对空值的处理和特殊值的处理
-                originList.add(Double.NaN);
-            } else {
-                originList.add(v);
-            }
-        }
-        //保存时间序列
-        time = Util.toLongArray(timeList);
-        original = Util.toDoubleArray(originList);
-        n = time.length;
-        repaired = new double[n];
-        //NaN处理
-        processNaN();
-        //设置默认的速度阈值
-        double[] speed = Util.speed(original, time);
-        Median median = new Median();
-        double mid = median.evaluate(speed);
-        double sigma = Util.mad(speed);
-        smax = mid + 3 * sigma;
-        smin = mid - 3 * sigma;
-        //设置默认的窗口大小
-        double interval[] = Util.variation(time);
-        w = 5 * median.evaluate(interval);
+        super(dataIterator);
+        setParameters();
     }
 
     public Screen(String filename) throws Exception {
-        Scanner sc = new Scanner(new File(filename));
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sc.useDelimiter("\\s*(,|\\r|\\n)\\s*");//设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
-        sc.nextLine();
-        ArrayList<Long> timeList = new ArrayList<>();
-        ArrayList<Double> originList = new ArrayList<>();
-        while (sc.hasNext()) {//读取数据
-            timeList.add(format.parse(sc.next()).getTime());
-            Double v = sc.nextDouble();
-            if (!Double.isFinite(v)) {//对空值的处理和特殊值的处理
-                originList.add(Double.NaN);
-            } else {
-                originList.add(v);
-            }
-        }
-        //保存时间序列
-        time = Util.toLongArray(timeList);
-        original = Util.toDoubleArray(originList);
-        n = time.length;
-        repaired = new double[n];
-        //NaN处理
-        processNaN();
+        super(filename);
+        setParameters();
+    }
+
+    private void setParameters() {
         //设置默认的速度阈值
         double[] speed = Util.speed(original, time);
         Median median = new Median();
@@ -97,45 +45,7 @@ public class Screen {
         w = 5 * median.evaluate(interval);
     }
 
-    /**
-     * 对数据序列中的NaN进行处理，采用线性插值方法
-     */
-    private void processNaN() throws Exception {
-        int index1 = 0, index2;//线性插值的两个基准
-        //找到两个非NaN的基准
-        while (index1 < n && Double.isNaN(original[index1])) {
-            index1++;
-        }
-        index2 = index1 + 1;
-        while (index2 < n && Double.isNaN(original[index2])) {
-            index2++;
-        }
-        if (index2 >= n) {
-            throw new Exception("At least two non-NaN values are needed");
-        }
-        //对序列开头的NaN进行插值
-        for (int i = 0; i < index2; i++) {
-            original[i] = original[index1] + (original[index2] - original[index1]) * (time[i] - time[index1]) / (time[index2] - time[index1]);
-        }
-        //对序列中间的NaN进行插值
-        for (int i = index2 + 1; i < n; i++) {
-            if (!Double.isNaN(original[i])) {
-                index1 = index2;
-                index2 = i;
-                for (int j = index1 + 1; j < index2; j++) {
-                    original[j] = original[index1] + (original[index2] - original[index1]) * (time[j] - time[index1]) / (time[index2] - time[index1]);
-                }
-            }
-        }
-        //对序列末尾的NaN进行插值
-        for (int i = index2 + 1; i < n; i++) {
-            original[i] = original[index1] + (original[index2] - original[index1]) * (time[i] - time[index1]) / (time[index2] - time[index1]);
-        }
-    }
-
-    /**
-     * 开始修复
-     */
+    @Override
     public void repair() {
         //准备使用固定的window
         ArrayList<Pair<Long, Double>> ans = new ArrayList<>();
@@ -231,20 +141,6 @@ public class Screen {
      */
     public void setW(int w) {
         this.w = w;
-    }
-
-    /**
-     * @return the time
-     */
-    public long[] getTime() {
-        return time;
-    }
-
-    /**
-     * @return the repaired
-     */
-    public double[] getRepaired() {
-        return repaired;
     }
 
     public static void main(String[] args) throws Exception {

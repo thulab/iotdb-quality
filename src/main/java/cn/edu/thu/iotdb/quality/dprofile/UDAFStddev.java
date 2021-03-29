@@ -10,10 +10,10 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 public class UDAFStddev implements UDTF {
-    private Long lastTime;
+
     private long count = 0;
     private double mean = 0.0;
-    private double std = 0.0;
+    private double var = 0.0;
 
     @Override
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) throws Exception {
@@ -23,17 +23,17 @@ public class UDAFStddev implements UDTF {
 
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
-        lastTime = row.getTime();
         Double value = Util.getValueAsDouble(row);
-        if(value != null && !Double.isNaN(value)){
+        if (value != null && !Double.isNaN(value)) {
             this.count++;
-            this.std = Math.sqrt((Math.pow(this.std, 2) * (this.count - 1) + (this.count - 1) * 1.0 / this.count * Math.pow(value - this.mean, 2)) / this.count);
+            this.var = this.var * (this.count - 1) / this.count
+                    + Math.pow(value - this.mean, 2) * (this.count - 1) / (this.count * this.count);
             this.mean += (value - this.mean) / this.count;
         }
     }
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(lastTime, this.std);
+        collector.putDouble(0, Math.sqrt(this.var));
     }
 }
