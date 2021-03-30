@@ -5,9 +5,11 @@
  */
 package cn.edu.thu.iotdb.quality;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
+import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 
 /**
  *
@@ -44,6 +46,63 @@ public class Util {
                 throw new NoNumberException();
         }
         return ans;
+    }
+
+    /**
+     * 从Row中取出第一个值，并转化为Object类型
+     *
+     * @param row
+     * @return Row中的第一个值
+     */
+    public static Object getValueAsObject(Row row) {
+        Object ans = 0;
+        if (row.isNull(0)) {
+            return null;
+        }
+        switch (row.getDataType(0)) {
+            case INT32:
+                ans = row.getInt(0);
+                break;
+            case INT64:
+                ans = row.getLong(0);
+                break;
+            case FLOAT:
+                ans = row.getFloat(0);
+                break;
+            case DOUBLE:
+                ans = row.getDouble(0);
+                break;
+            case BOOLEAN:
+                ans = row.getBoolean(0);
+                break;
+            case TEXT:
+                ans = row.getString(0);
+                break;
+        }
+        return ans;
+    }
+
+    /**
+     * 向PointCollector中加入新的数据点
+     * @param pc PointCollector
+     * @param t 时间戳
+     * @param o Object类型的值
+     * @throws Exception 
+     */
+    public static void putValue(PointCollector pc, long t, Object o) throws Exception {
+        if (o instanceof Integer) {
+            pc.putInt(t, (Integer) o);
+        } else if (o instanceof Long) {
+            pc.putLong(t, (Long) o);
+        } else if (o instanceof Float) {
+            pc.putFloat(t, (Float) o);
+        } else if (o instanceof Double) {
+            pc.putDouble(t, (Double) o);
+        } else if (o instanceof String) {
+            pc.putString(t, (String) o);
+        } else if (o instanceof Boolean) {
+            pc.putBoolean(t, (Boolean) o);
+        }
     }
 
     /**

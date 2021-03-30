@@ -5,6 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.Util;
 import java.util.HashSet;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -58,19 +59,7 @@ public class UDTFDistinct implements UDTF {
         long i = 0;
         for (Object o : set) {
             i++;
-            if (o instanceof Integer) {
-                pc.putInt(i, (Integer) o);
-            } else if (o instanceof Long) {
-                pc.putLong(i, (Long) o);
-            } else if (o instanceof Float) {
-                pc.putFloat(i, (Float) o);
-            } else if (o instanceof Double) {
-                pc.putDouble(i, (Double) o);
-            } else if (o instanceof String) {
-                pc.putString(i, (String) o);
-            } else if (o instanceof Boolean) {
-                pc.putBoolean(i, (Boolean) o);
-            }
+            Util.putValue(pc, i, o);
         }
     }
 

@@ -5,6 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.Util;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,26 +33,8 @@ public class UDAFMode implements UDTF {
     @Override
     public void transform(Row row, PointCollector pc) throws Exception {
         if (!row.isNull(0)) {
-            switch (row.getDataType(0)) {
-                case INT32:
-                    map.put(row.getInt(0), map.getOrDefault(row.getInt(0), 0) + 1);
-                    break;
-                case INT64:
-                    map.put(row.getLong(0), map.getOrDefault(row.getLong(0), 0) + 1);
-                    break;
-                case FLOAT:
-                    map.put(row.getFloat(0), map.getOrDefault(row.getFloat(0), 0) + 1);
-                    break;
-                case DOUBLE:
-                    map.put(row.getDouble(0), map.getOrDefault(row.getDouble(0), 0) + 1);
-                    break;
-                case TEXT:
-                    map.put(row.getString(0), map.getOrDefault(row.getString(0), 0) + 1);
-                    break;
-                case BOOLEAN:
-                    map.put(row.getBoolean(0), map.getOrDefault(row.getBoolean(0), 0) + 1);
-                    break;
-            }
+            Object key = Util.getValueAsObject(row);
+            map.put(key, map.getOrDefault(key, 0) + 1);
         }
     }
 
@@ -69,19 +52,7 @@ public class UDAFMode implements UDTF {
             }
         }
         //输出
-        if (o instanceof Integer) {
-            pc.putInt(0, (Integer) o);
-        } else if (o instanceof Long) {
-            pc.putLong(0, (Long) o);
-        } else if (o instanceof Float) {
-            pc.putFloat(0, (Float) o);
-        } else if (o instanceof Double) {
-            pc.putDouble(0, (Double) o);
-        } else if (o instanceof String) {
-            pc.putString(0, (String) o);
-        } else if (o instanceof Boolean) {
-            pc.putBoolean(0, (Boolean) o);
-        }
+        Util.putValue(pc, 0, o);
     }
 
 }
