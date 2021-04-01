@@ -14,7 +14,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  * the function has two parameters: $rank$ and $error$
  * $rank$ is the rank ratio of the percentile, e.g. a percentile with $rank$=0.5 is the median
  * $error$ is the rank error, e.g., a percentile with $rank$=0.5 and $error$=0.01 is the the percentile whose rank is within (0.49,0.51)
- * @register: CREATE FUNCTION percentile AS "cn.edu.thu.dquality.udf.UDAFPercentile"
+ * @register: CREATE FUNCTION percentile AS "cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile"
  * @usage: SELECT percentile(s0, "rank"="0.2", "error"="0.01") FROM root.test;
  */
 public class UDAFPercentile implements UDTF {

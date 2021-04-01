@@ -14,7 +14,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  * calculate approximate median
  * the function has one parameter: $error$
  * $error$ is the rank error, e.g., a median with $error$=0.01 is the element whose rank is within (0.49,0.51)
- * @register: CREATE FUNCTION median AS "cn.edu.thu.dquality.udf.UDAFMedian"
+ * @register: CREATE FUNCTION median AS "cn.edu.thu.iotdb.quality.dprofile.UDAFMedian"
  * @usage: SELECT median(s0, "error"="0.01") FROM root.test;
  */
 public class UDAFMedian implements UDTF {

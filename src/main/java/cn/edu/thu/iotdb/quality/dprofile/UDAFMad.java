@@ -16,16 +16,12 @@ import java.util.logging.Logger;
 
 /**
  * calculate approximate median absolute deviation (mad) the function has two
- * parameters: $error$ and $bucketNum$ $error$ is the relative error, e.g., an
- * approxMAD with $error$=0.01 satisfies 0.99 * MAD <= approxMAD <= 1.01 * MAD
- * @register
- *
- * : CREATE FUNCTION mad AS "cn.edu.thu.dquality.udf.UDAFMad"
- * @usage: SELECT mad(s0, "error"="0.01", "bucketNum"="2048") FROM root.test;
+ * parameters: $error$ is the relative error, e.g., an approxMAD with $error$=0.01
+ * satisfies 0.99 * MAD <= approxMAD <= 1.01 * MAD
+ * @register CREATE FUNCTION mad AS "cn.edu.thu.iotdb.quality.dprofile.UDAFMad"
+ * @usage: select mad(s0, "error"="0.01") from root.test;
  */
 public class UDAFMad implements UDTF {
-
-    private static final int WINDOWSIZE = 10;
     private MADSketch madSketch;
     private Long startTime;
     private double result;
@@ -38,52 +34,48 @@ public class UDAFMad implements UDTF {
         if (error < 0 || error > 1) {
             throw new IllegalArgumentException("parameter $error$ should be within [0,1]");
         }
-        int bucketNum = udfParameters.getIntOrDefault("bucketNum", 2048);
-        if (bucketNum <= 0) {
-            throw new IllegalArgumentException("parameter $error$ should be positive)");
-        }
-        madSketch = new MADSketch(error, bucketNum);
+//        int bucketNum = udfParameters.getIntOrDefault("bucketNum", 2048);
+//        if (bucketNum <= 0) {
+//            throw new IllegalArgumentException("parameter $error$ should be positive)");
+//        }
+        madSketch = new MADSketch(error);
     }
 
     @Override
     public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
-        try {
-            if (rowWindow.windowSize() > WINDOWSIZE) {
-                startTime = rowWindow.getRow(0).getTime();
-                if (madSketch.getAlpha() > 0) {
-                    RowIterator iterator = rowWindow.getRowIterator();
+        if (rowWindow.windowSize() > 0) {
+            startTime = rowWindow.getRow(0).getTime();
+            if (madSketch.getAlpha() > 0) {
+                RowIterator iterator = rowWindow.getRowIterator();
+                while (iterator.hasNextRow()) {
+                    Double value = Util.getValueAsDouble(iterator.next());
+                    if (value != null && !Double.isNaN(value)) {
+                        madSketch.insert(value);
+                    }
+                }
+                Mad mad = madSketch.getMad();
+                if (mad.error_bound <= madSketch.getAlpha()) {
+                    result = mad.error_bound;
+                    return;
+                }
+
+                if (madSketch.isAppropriate()) {
+                    double[] bounds = madSketch.getValid_range();
+                    madSketch = new MADSketch(madSketch.getBeta() * madSketch.getAlpha());
+                    iterator = rowWindow.getRowIterator();
                     while (iterator.hasNextRow()) {
                         Double value = Util.getValueAsDouble(iterator.next());
                         if (value != null && !Double.isNaN(value)) {
-                            madSketch.insert(value);
+                            madSketch.insert(value, bounds);
                         }
                     }
-                    Mad mad = madSketch.getMad();
-                    if (mad.error_bound <= madSketch.getAlpha()) {
-                        result = mad.error_bound;
-                        return;
-                    }
-
-                    if (madSketch.isAppropriate()) {
-                        double[] bounds = madSketch.getValid_range();
-                        madSketch = new MADSketch(madSketch.getBeta() * madSketch.getAlpha(), madSketch.getBucket_num_limit());
-                        iterator = rowWindow.getRowIterator();
-                        while (iterator.hasNextRow()) {
-                            Double value = Util.getValueAsDouble(iterator.next());
-                            if (value != null && !Double.isNaN(value)) {
-                                madSketch.insert(value, bounds);
-                            }
-                        }
-                        result = madSketch.getMad().result;
-                    } else {
-                        result = ExactMAD.mad(rowWindow.getRowIterator(), (int) madSketch.total_count());
-                    }
+                    result = madSketch.getMad().result;
                 } else {
-                    result = ExactMAD.mad(rowWindow.getRowIterator());
+                    result = ExactMAD.mad(rowWindow.getRowIterator(), (int) madSketch.total_count());
                 }
+            } else {
+                result = ExactMAD.mad(rowWindow.getRowIterator());
             }
-        } catch (IOException ex) {
-            Logger.getLogger(UDAFMad.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
