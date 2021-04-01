@@ -24,12 +24,26 @@ public class MADSketch implements Serializable {
     private final static double COEFFICIENT = 1.5;
 
     public MADSketch() {
-        this(EPSILON, 2048);
+        this(EPSILON);
+    }
+
+    public MADSketch(double alpha){
+        this.alpha = alpha;
+        this.threshold_for_compression = Integer.MAX_VALUE;
+
+        this.gamma = 2 * alpha / (1 - alpha) + 1;
+        this.multiplier = Math.log(Math.E) / (Math.log1p(gamma - 1));
+        this.beta = 1;
+        this.positive_buckets = new HashMap<>();
+        this.negative_buckets = new HashMap<>();
+        this.zero_count = 0;
+        this.collapse_bound = -Double.MAX_VALUE;
+        this.valid_range = new double[6];
     }
 
     public MADSketch(double alpha, int bucket_num_limit){
         this.alpha = alpha;
-        this.bucket_num_limit = Math.max(bucket_num_limit, 2);
+        this.bucket_num_limit = Math.max(bucket_num_limit, 128);
         this.threshold_for_compression = (int) (bucket_num_limit * COEFFICIENT);
 
         this.gamma = 2 * alpha / (1 - alpha) + 1;
