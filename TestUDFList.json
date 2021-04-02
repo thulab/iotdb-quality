@@ -1,11 +1,158 @@
 [
   {
+    "UDFName": "DISTINCT",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+  {
+    "UDFName": "HISTOGRAM",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      },
+      {
+        "Key": "start",
+        "Value": ""
+      },
+      {
+        "Key": "end",
+        "Value": ""
+      },
+      {
+        "Key": "count",
+        "Value": "100"
+      }
+    ]
+  },
+  {
+    "UDFName": "INTEGRAL",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFIntegral",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+  {
+    "UDFName": "MAD",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMad.java",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      },
+      {
+        "Key": "error",
+        "Value": "0"
+      }
+    ]
+  },
+  {
+    "UDFName": "MEDIAN",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMedian",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      },
+      {
+        "Key": "error",
+        "Value": "0"
+      }
+    ]
+  },
+  {
+    "UDFName": "MODE",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMode",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+  {
+    "UDFName": "PERCENTILE",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      },
+      {
+        "Key": "rank",
+        "Value": "0.5"
+      },
+      {
+        "Key": "error",
+        "Value": "0.01"
+      }
+    ]
+  },
+  {
+    "UDFName": "SAMPLE",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFSample",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      },
+      {
+        "Key": "method",
+        "Value": "isometric"
+      },
+      {
+        "Key": "k",
+        "Value": "100"
+      }
+    ]
+  },
+  {
+    "UDFName": "SKEW",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFSkew",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+  {
+    "UDFName": "SPREAD",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFSpread",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+  {
+    "UDFName": "SEDDEV",
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFStddev",
+    "Arguments": [
+      {
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
+      }
+    ]
+  },
+
+  {
     "UDFName": "COMPLETENESS",
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFCompleteness",
     "Arguments": [
       {
-        "Type": "TIMESERIES",
-        "Default": "INT32|INT64|FLOAT|DOUBLE"
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
       }
     ],
     "Comments": ""
@@ -15,8 +162,8 @@
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFConsistency",
     "Arguments": [
       {
-        "Type": "TIMESERIES",
-        "Default": "INT32|INT64|FLOAT|DOUBLE"
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
       }
     ]
   },
@@ -25,8 +172,8 @@
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness",
     "Arguments": [
       {
-        "Type": "TIMESERIES",
-        "Default": "INT32|INT64|FLOAT|DOUBLE"
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
       }
     ]
   },
@@ -35,9 +182,10 @@
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFValidity",
     "Arguments": [
       {
-        "Type": "TIMESERIES",
-        "Default": "INT32|INT64|FLOAT|DOUBLE"
+        "Key": "TIMESERIES",
+        "Value": "INT32|INT64|FLOAT|DOUBLE"
       }
     ]
   }
+
 ]
