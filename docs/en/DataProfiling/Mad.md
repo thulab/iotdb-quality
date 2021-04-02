@@ -12,7 +12,7 @@ Take a dataset {1,3,3,5,5,6,7,8,9} as an instance. Its median is 5 and the devia
 
 **Parameter:**
 
-+ `error`：the relative error of the approximate MAD. It should be within [0,1] and the default value is 0. Taking `error`=0.01 as an instance，the function outputs an approximate MAD satisfying 0.99 * MAD <= APPROX_MAD <= 1.01 * MAD. With `error`=0, the output is the exact MAD.
++ `error`：the relative error of the approximate MAD. It should be within [0,1] and the default value is 0. Taking `error`=0.01 as an instance，the function outputs an approximate MAD satisfying 0.99 MAD <= APPROX_MAD <= 1.01 MAD. With `error`=0, the output is the exact MAD.
 
 **Output Series:** an approximate MAD
 
