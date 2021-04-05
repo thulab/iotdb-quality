@@ -15,7 +15,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  * @register: CREATE FUNCTION INTEGRAL AS "cn.edu.thu.iotdb.quality.dprofile.UDTFIntegral"
  * @usage: SELECT INTEGRAL(s0, "unit"="1s") FROM root.test
  */
-public class UDTFIntegral implements UDTF {
+public class UDAFIntegral implements UDTF {
 
     private static final String TIME_UNIT_KEY="unit";
     private static final String TIME_UNIT_MS="1S";
@@ -102,7 +102,7 @@ public class UDTFIntegral implements UDTF {
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble((long) lastTime, integralValue);
+        collector.putDouble(0, integralValue);//所有UDAF函数的时间戳都默认为0
     }
 
 }

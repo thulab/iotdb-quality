@@ -10,11 +10,11 @@ This function is used to calculate the distribution histogram of a single column
 
 **Parameters:**
 
-+ `start`: The lower limit of the requested data range, the default value is -0x1.fffffffffffffP+1023.
-+ `end`: The upper limit of the requested data range, the default value is 0x1.fffffffffffffP+1023, and the value of start must be less than or equal to end.
-+ `count`: The number of buckets of the histogram, the default value is 10, and its value must be a positive integer.
++ `start`: The lower limit of the requested data range, the default value is -Double.MAX_VALUE.
++ `end`: The upper limit of the requested data range, the default value is Double.MAX_VALUE, and the value of start must be less than or equal to end.
++ `count`: The number of buckets of the histogram, the default value is 1. It must be a positive integer.
 
-**Output Series:** The value of the bucket of the histogram, where the data range represented by the i-th bucket is [start+(i-1)*((end-start)/count), start+i*((end-start)/count))
+**Output Series:** The value of the bucket of the histogram, where the lower bound represented by the i-th bucket (index starts from 1) is start+(i-1)(end-start)/count and the upper bound is start+i(end-start)/count.
 
 ## Examples
 

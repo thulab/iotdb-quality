@@ -51,6 +51,6 @@ public class UDAFPercentile implements UDTF {
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(startTime, gkArray.query(rank));
+        collector.putDouble(0, gkArray.query(rank));//所有UDAF函数的时间戳都默认为0
     }
 }

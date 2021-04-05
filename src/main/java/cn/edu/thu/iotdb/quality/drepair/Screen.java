@@ -59,6 +59,10 @@ public class Screen extends ValueRepair {
                 startIndex++;
             }
         }
+        while (startIndex < n) {//修复窗口中剩余的数据点
+            local(ans, startIndex);
+            startIndex++;
+        }
         int k = 0;
         for (Pair<Long, Double> p : ans) {
             this.repaired[k] = p.getRight();
@@ -75,7 +79,7 @@ public class Screen extends ValueRepair {
      */
     private double getMedian(ArrayList<Pair<Long, Double>> list, int index) {
         int m = 0;
-        while (list.get(index + m + 1).getLeft() <= list.get(index).getLeft() + w) {
+        while (index + m + 1 < list.size() && list.get(index + m + 1).getLeft() <= list.get(index).getLeft() + w) {
             m++;
         }
         double x[] = new double[2 * m + 1];
