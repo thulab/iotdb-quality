@@ -26,6 +26,10 @@ Choosing different `unit` implies different scaling of time axis, thus making it
 
 ## Examples
 
+### Default Parameters
+
+With default parameters, this function will take one second as 1.0. 
+
 Input series:
 ```
 +-----------------------------+---------------+
@@ -44,9 +48,7 @@ Input series:
 +-----------------------------+---------------+
 ```
 
-### Default Parameters
-
-With default parameters, this function will take one second as 1.0. SQL for query:
+SQL for query:
 
 ```sql
 select integral(s1) from root.test.d1 where time <= 2020-01-01 00:00:10
@@ -65,7 +67,9 @@ Calculation expression: (1+2)/2.0 * 1 + (2+3)/2.0 * 1 + (5+6)/2.0 * 1 + (6+7)/2.
 
 ### Specific time unit
 
-With time unit specified as "1m", this function will take one minute as 1.0. SQL for query:
+With time unit specified as "1m", this function will take one minute as 1.0. 
+
+Input series is the same as above, the SQL for query is shown below:
 
 ```sql
 select integral(s1, "unit"="1m") from root.test.d1 where time <= 2020-01-01 00:00:10
