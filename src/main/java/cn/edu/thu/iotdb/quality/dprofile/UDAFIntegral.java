@@ -9,6 +9,8 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+import static cn.edu.thu.iotdb.quality.Util.getValueAsDouble;
+
 /**
  * calculate the integral or the area under the curve of input series
  * $unit$ is the time scale for the area calculation, chosen from 1s(second, default), 1m(minute), 1h(hour), 1d(day)
@@ -24,10 +26,10 @@ public class UDAFIntegral implements UDTF {
     private static final String TIME_UNIT_H="1H";
     private static final String TIME_UNIT_D="1d";
 
-    long unitTime;
-    Object lastTime;
-    Object lastValue;
-    double integralValue;
+    Long unitTime;
+    Long lastTime;
+    Double lastValue;
+    Double integralValue;
 
     @Override
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) throws Exception {
@@ -39,18 +41,18 @@ public class UDAFIntegral implements UDTF {
             case DOUBLE:
                 switch (udfParameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S).toLowerCase()) {
                     case TIME_UNIT_MS:
-                        unitTime = 1;
+                        unitTime = 1L;
                     case TIME_UNIT_S:
-                        unitTime = 1000;
+                        unitTime = 1000L;
                         break;
                     case TIME_UNIT_M:
-                        unitTime = 60000;
+                        unitTime = 60000L;
                         break;
                     case TIME_UNIT_H:
-                        unitTime = 3600000;
+                        unitTime = 3600000L;
                         break;
                     case TIME_UNIT_D:
-                        unitTime = 3600000*24;
+                        unitTime = 3600000L*24L;
                         break;
                     default:
                         throw new Exception("Unknown time unit input: "+udfParameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S).toLowerCase());
@@ -69,31 +71,16 @@ public class UDAFIntegral implements UDTF {
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         if (!row.isNull(0)) {
-
             long nowTime = row.getTime();
-            double nowValue;
-            switch (row.getDataType(0)) {
-                case INT32:
-                    nowValue = row.getInt(0);
-                    break;
-                case INT64:
-                    nowValue = row.getLong(0);
-                    break;
-                case FLOAT:
-                    nowValue = row.getFloat(0);
-                    break;
-                case DOUBLE:
-                    nowValue = row.getDouble(0);
-                    break;
-                case BOOLEAN:
-                case TEXT:
-                default:
-                    throw new NoNumberException();
+            double nowValue = getValueAsDouble(row);
+            // skip NaN values
+            if (Double.isNaN(nowValue)) {
+                return;
             }
             // calculate the ladder-shaped area between last point and this one
             // skip and initialize the memory if no existing previous point is available
             if (lastValue != null) {
-                integralValue += ((double) lastValue + nowValue) * (nowTime - (long) lastTime) / 2.0 / unitTime;
+                integralValue += (lastValue + nowValue) * (nowTime - lastTime) / 2.0 / unitTime;
             }
             lastTime = nowTime;
             lastValue = nowValue;
