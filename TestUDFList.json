@@ -2,190 +2,146 @@
   {
     "UDFName": "DISTINCT",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "BOOLEAN|INT32|INT64|FLOAT|DOUBLE|TEXT"
+    ],
+    "Arguments": {}
   },
   {
     "UDFName": "HISTOGRAM",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      },
-      {
-        "Key": "start",
-        "Value": ""
-      },
-      {
-        "Key": "end",
-        "Value": ""
-      },
-      {
-        "Key": "count",
-        "Value": "100"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "start": "",
+      "end": "",
+      "count": "100"
+    }
   },
   {
     "UDFName": "INTEGRAL",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFIntegral",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFIntegral",
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "unit": "1s"
+    }
   },
   {
     "UDFName": "MAD",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMad.java",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      },
-      {
-        "Key": "error",
-        "Value": "0"
-      }
-    ]
+    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMad",
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "error": "0"
+    }
   },
   {
     "UDFName": "MEDIAN",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMedian",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      },
-      {
-        "Key": "error",
-        "Value": "0"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "error": "0.01"
+    }
   },
   {
     "UDFName": "MODE",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMode",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "BOOLEAN|INT32|INT64|FLOAT|DOUBLE|TEXT"
+    ],
+    "Arguments": {}
   },
   {
     "UDFName": "PERCENTILE",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      },
-      {
-        "Key": "rank",
-        "Value": "0.5"
-      },
-      {
-        "Key": "error",
-        "Value": "0.01"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "rank": "0.5",
+      "error": "0.01"
+    }
   },
   {
     "UDFName": "SAMPLE",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFSample",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      },
-      {
-        "Key": "method",
-        "Value": "isometric"
-      },
-      {
-        "Key": "k",
-        "Value": "100"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "method": "isometric",
+      "k": "10"
+    }
   },
   {
     "UDFName": "SKEW",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFSkew",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {}
   },
   {
     "UDFName": "SPREAD",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFSpread",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {}
   },
   {
-    "UDFName": "SEDDEV",
+    "UDFName": "STDDEV",
     "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFStddev",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {}
   },
 
   {
     "UDFName": "COMPLETENESS",
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFCompleteness",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
     ],
-    "Comments": ""
+    "Arguments": {
+      "window": ""
+    }
   },
   {
     "UDFName": "CONSISTENCY",
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFConsistency",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "window": ""
+    }
   },
   {
     "UDFName": "TIMELINESS",
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "window": ""
+    }
   },
   {
     "UDFName": "VALIDITY",
     "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFValidity",
-    "Arguments": [
-      {
-        "Key": "TIMESERIES",
-        "Value": "INT32|INT64|FLOAT|DOUBLE"
-      }
-    ]
+    "TimeSeries": [
+      "INT32|INT64|FLOAT|DOUBLE"
+    ],
+    "Arguments": {
+      "window": ""
+    }
   }
-
 ]
