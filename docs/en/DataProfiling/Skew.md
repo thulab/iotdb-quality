@@ -2,13 +2,13 @@
 
 ## Usage
 
-This function is used to calculate the overall skewness.
+This function is used to calculate the population skewness.
 
 **Name:** SKEW
 
 **Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-**Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the overall skewness.
+**Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the population skewness.
 
 ## Examples
 
