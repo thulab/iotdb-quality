@@ -64,9 +64,8 @@ Output series:
 ```
 
 Calculation expression: 
-$$
-\frac{1}{2}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 56.5
-$$
+$$\frac{1}{2}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 56.5$$
+
 ### Specific time unit
 
 With time unit specified as "1m", this function will take one minute as 1.0. 
@@ -87,6 +86,4 @@ Output series:
 ```
 
 Calculation expression: 
-$$
-\frac{1}{2\times 60}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 0.942
-$$
+$$\frac{1}{2\times 60}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 0.942$$

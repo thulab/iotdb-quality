@@ -62,10 +62,7 @@ select integral(s1) from root.test.d1 where time <= 2020-01-01 00:00:10
 ```
 
 其计算公式为：
-
-$$
-\frac{1}{2}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 56.5
-$$
+$$\frac{1}{2}[(1+2)\times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 56.5$$
 
 
 ### 指定时间单位
@@ -89,7 +86,4 @@ select integral(s1, "unit"="1m") from root.test.d1 where time <= 2020-01-01 00:0
 ```
 
 其计算公式为：
-
-$$
-\frac{1}{2\times 60}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 0.942
-$$
+$$\frac{1}{2\times 60}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 0.942$$
