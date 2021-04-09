@@ -63,8 +63,10 @@ Output series:
 +-----------------------------+-------------------------+
 ```
 
-Calculation expression: (1+2)/2.0 * 1 + (2+3)/2.0 * 1 + (5+6)/2.0 * 1 + (6+7)/2.0 * 1 + (7+8)/2.0 * 3 + (8+10)/2.0 * 2 = 56.5
-
+Calculation expression: 
+$$
+\frac{1}{2}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 56.5
+$$
 ### Specific time unit
 
 With time unit specified as "1m", this function will take one minute as 1.0. 
@@ -84,5 +86,7 @@ Output series:
 +-----------------------------+-------------------------+
 ```
 
-Calculation expression: (1+2)/2.0*(1.0/60) + (2+3)/2.0*(1.0/60) + (5+6)/2.0*(1.0/60) + (6+7)/2.0*(1.0/60) + (7+8)/2.0*(3.0/60) + (8+10)/2.0*(2.0/60) = 0.941667
-
+Calculation expression: 
+$$
+\frac{1}{2\times 60}[(1+2) \times 1 + (2+3) \times 1 + (5+6) \times 1 + (6+7) \times 1 + (7+8) \times 3 + (8+10) \times 2] = 0.942
+$$
