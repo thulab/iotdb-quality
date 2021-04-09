@@ -14,7 +14,8 @@
 + `end`：表示所求数据范围的上限，默认值为Double.MAX_VALUE，`start`的值必须小于或等于`end`。
 + `count`: 表示直方图分桶的数量，默认值为1，其值必须为正整数。
 
-**输出序列：** 直方图分桶的值，其中第i个桶（从1开始计数）表示的数据范围下界为start+(i-1)(end-start)/count，数据范围上界为start+i(end-start)/count。
+**输出序列：** 直方图分桶的值，其中第i个桶（从1开始计数）表示的数据范围下界为$start+ (i-1)\cdot\frac{end-start}{count}$，数据范围上界为$start+ i \cdot \frac{end-start}{count}$。
+
 
 **提示：** 
 

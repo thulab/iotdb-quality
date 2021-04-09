@@ -14,7 +14,7 @@ This function is used to calculate the distribution histogram of a single column
 + `end`: The upper limit of the requested data range, the default value is Double.MAX_VALUE, and the value of start must be less than or equal to end.
 + `count`: The number of buckets of the histogram, the default value is 1. It must be a positive integer.
 
-**Output Series:** The value of the bucket of the histogram, where the lower bound represented by the i-th bucket (index starts from 1) is start+(i-1)(end-start)/count and the upper bound is start+i(end-start)/count.
+**Output Series:** The value of the bucket of the histogram, where the lower bound represented by the i-th bucket (index starts from 1) is $start+ (i-1)\cdot\frac{end-start}{count}$ and the upper bound is $start+ i \cdot \frac{end-start}{count}$.
 
 **Note:** 
 
