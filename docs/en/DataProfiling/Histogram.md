@@ -16,6 +16,11 @@ This function is used to calculate the distribution histogram of a single column
 
 **Output Series:** The value of the bucket of the histogram, where the lower bound represented by the i-th bucket (index starts from 1) is start+(i-1)(end-start)/count and the upper bound is start+i(end-start)/count.
 
+**Note:** 
+
++ If the value is lower than `start`, it will be put into the 1st bucket. If the value is larger than `end`, it will be put into the last bucket.
++ Missing points, null points and `NaN` in the input series will be ignored.
+
 ## Examples
 
 Input series: 

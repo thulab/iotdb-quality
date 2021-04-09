@@ -24,7 +24,7 @@ public class UDAFStddev implements UDTF {
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         Double value = Util.getValueAsDouble(row);
-        if (value != null && !Double.isNaN(value)) {
+        if (value != null && Double.isFinite(value)) {
             this.count++;
             this.var = this.var * (this.count - 1) / this.count
                     + Math.pow(value - this.mean, 2) * (this.count - 1) / (this.count * this.count);

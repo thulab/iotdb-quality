@@ -46,7 +46,7 @@ public class UDAFMad implements UDTF {
                 RowIterator iterator = rowWindow.getRowIterator();
                 while (iterator.hasNextRow()) {
                     Double value = Util.getValueAsDouble(iterator.next());
-                    if (value != null && !Double.isNaN(value)) {
+                    if (value != null && Double.isFinite(value)) {
                         madSketch.insert(value);
                     }
                 }
