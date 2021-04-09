@@ -9,7 +9,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-
 public class UDTFHistogram implements UDTF {
 
     private int[] bucket;
@@ -37,7 +36,7 @@ public class UDTFHistogram implements UDTF {
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         Double value = Util.getValueAsDouble(row);
-        if (value != null && !Double.isNaN(value)) {
+        if (value != null && Double.isFinite(value)) {
             int id = Math.min(Math.max((int) Math.floor((value - start) / gap), 0), count - 1);
             bucket[id]++;
         }

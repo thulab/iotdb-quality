@@ -40,6 +40,9 @@ if __name__ == "__main__":
     fs = show_files('../../docs/zh',[])
     for f in fs:
         # print(f)
+        if f.endswith('Download.md'):
+            # 由于该文件使用了无法转换的html语法，跳过该文件
+            continue
         api.convert(f,output_dir='output_zh')
         tmp = f.split('\\')
         tmp = 'output_zh/'+ tmp[-1].replace('.md','.tex')
@@ -51,6 +54,9 @@ if __name__ == "__main__":
     fs = show_files('../../docs/en',[])
     for f in fs:
         # print(f)
+        if f.endswith('Download.md'):
+            # 由于该文件使用了无法转换的html语法，跳过该文件
+            continue
         api.convert(f,output_dir='output_en')
         tmp = f.split('\\')
         tmp = 'output_en/'+ tmp[-1].replace('.md','.tex')

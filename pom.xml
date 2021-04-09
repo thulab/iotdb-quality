@@ -99,7 +99,7 @@
                     <!-- 加载文件的过滤器，就是你的工程目录了-->
                     <!--<inFilter>com/deceen/ **</inFilter>-->
                     <!-- 对什么东西进行加载，这里仅有classes成功，毕竟你也不可能对配置文件及JSP混淆吧-->
-                    <injar>iotdb-quality-0.1.0-jar-with-dependencies.jar</injar>
+                    <injar>classes</injar>
                     <!-- 输出目录-->
                     <outputDirectory>${project.build.directory}</outputDirectory>
                 </configuration>

@@ -15,6 +15,8 @@ The function is used to compute the approximate quantile of a numeric time serie
 
 **Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the approximate percentile.
 
+**Note:** Missing points, null points and `NaN` in the input series will be ignored.
+
 ## Examples
 
 Input series:

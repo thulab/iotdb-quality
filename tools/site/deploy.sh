@@ -34,6 +34,7 @@ rm *.html
 rm -rf assets/
 rm -rf zh/
 rm -rf en/
+rm -rf V1.0.x/
 # Commit the cleaning
 git add -A
 git commit -m "Clean Environment"

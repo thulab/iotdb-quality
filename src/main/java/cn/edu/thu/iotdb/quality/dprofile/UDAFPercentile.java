@@ -44,7 +44,7 @@ public class UDAFPercentile implements UDTF {
             startTime = row.getTime();
         }
         Double value = Util.getValueAsDouble(row);
-        if(value != null && !Double.isNaN(value)){
+        if(value != null && Double.isFinite(value)){
             gkArray.insert(value);
         }
     }

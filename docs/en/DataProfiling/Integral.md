@@ -22,7 +22,7 @@ which equals to the area under the curve with time as X-axis and values as Y-axi
 + The integral value equals to the sum of the areas of right-angled trapezoids consisting of each two adjacent points and the time-axis. 
 Choosing different `unit` implies different scaling of time axis, thus making it apparent to convert the value among those results with constant coefficient.
   
-+ The calculation ignores missing points and null values. The curve or trapezoids will skip these points and use the next valid point.
++ Missing points, null points and `NaN` in the input series will be ignored. The curve or trapezoids will skip these points and use the next valid point.
 
 ## Examples
 

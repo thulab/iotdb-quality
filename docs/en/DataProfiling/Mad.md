@@ -16,6 +16,8 @@ Take a dataset {1,3,3,5,5,6,7,8,9} as an instance. Its median is 5 and the devia
 
 **Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the approximate MAD.
 
+**Note:** Missing points, null points and `NaN` in the input series will be ignored.
+
 ## Examples
 
 ### Exact Query

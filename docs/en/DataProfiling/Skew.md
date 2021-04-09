@@ -10,6 +10,8 @@ This function is used to calculate the population skewness.
 
 **Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the population skewness.
 
+**Note:** Missing points, null points and `NaN` in the input series will be ignored.
+
 ## Examples
 
 Input series:
