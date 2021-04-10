@@ -79,9 +79,9 @@ public class UDTFSample implements UDTF {
         //等距采样法
         int n = rowWindow.windowSize();
         if (this.k < n) {
-            for (int i = 0; i < this.k; i++) {
-                int j = Math.floorDiv(i * n, k);
-                Row row = rowWindow.getRow(j);
+            for (long i = 0; i < this.k; i++) {
+                long j = Math.floorDiv(i * (long) n, (long) k);
+                Row row = rowWindow.getRow((int) j);
                 Util.putValue(collector, row.getTime(), Util.getValueAsObject(row));
             }
         } else {//采样数大于等于输入序列长度，输出所有元素
