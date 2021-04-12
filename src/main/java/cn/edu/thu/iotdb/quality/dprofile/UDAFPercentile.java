@@ -9,6 +9,11 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 /**
  * calculate approximate percentile
  * the function has two parameters: $rank$ and $error$
@@ -19,23 +24,30 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  */
 public class UDAFPercentile implements UDTF {
 
-    private double rank;
+    private Double phi;
     private GKArray gkArray;
+    private List<Double> cache;
     private Long startTime;
+    private boolean approx;
 
     @Override
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) {
         udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.DOUBLE);
-        rank = udfParameters.getDoubleOrDefault("rank", 0.5);
-        if(rank < 0 || rank > 1){
-            throw new IllegalArgumentException("parameter $rank$ should be within [0,1]");
+        phi = udfParameters.getDouble("rank");
+        if(phi == null || phi < 0 || phi > 1){
+            throw new IllegalArgumentException("parameter $rank$ should be specified within [0,1]");
         }
-        double error = udfParameters.getDoubleOrDefault("error", 0.01);
-        if(error <= 0 || error >= 1){
-            throw new IllegalArgumentException("parameter $error$ should be within (0,1)");
+        double error = udfParameters.getDoubleOrDefault("error", 0);
+        if(error < 0 || error >= 1){
+            throw new IllegalArgumentException("parameter $error$ should be within [0,1)");
         }
-        gkArray = new GKArray(error);
+        approx = error > 0;
+        if(approx){
+            gkArray = new GKArray(error);
+        }else{
+            cache = new ArrayList<>();
+        }
     }
 
     @Override
@@ -44,13 +56,25 @@ public class UDAFPercentile implements UDTF {
             startTime = row.getTime();
         }
         Double value = Util.getValueAsDouble(row);
-        if(value != null && Double.isFinite(value)){
-            gkArray.insert(value);
+        if(value != null && !Double.isNaN(value)){
+            if(approx){
+                gkArray.insert(value);
+            }else{
+                cache.add(value);
+            }
         }
     }
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(0, gkArray.query(rank));//所有UDAF函数的时间戳都默认为0
+        if(approx){
+            collector.putDouble(startTime, gkArray.query(phi));
+        }else{
+            if(cache.isEmpty()){
+                throw new NoSuchElementException("No values in the time series");
+            }
+            cache.sort(Comparator.comparingDouble(x-> x));
+            collector.putDouble(startTime, cache.get((int)(Math.ceil(cache.size() * phi) - 1)));
+        }
     }
 }

@@ -31,10 +31,6 @@ public class UDAFMad implements UDTF {
         if (error < 0 || error > 1) {
             throw new IllegalArgumentException("parameter $error$ should be within [0,1]");
         }
-//        int bucketNum = udfParameters.getIntOrDefault("bucketNum", 2048);
-//        if (bucketNum <= 0) {
-//            throw new IllegalArgumentException("parameter $error$ should be positive)");
-//        }
         madSketch = new MADSketch(error);
     }
 
