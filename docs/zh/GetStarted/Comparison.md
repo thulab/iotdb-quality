@@ -9,7 +9,7 @@
 |          *Native*           |      COUNT()       |
 |        **Distinct**         |     DISTINCT()     |
 |        **Integral**         |     INTEGRAL()     |
-|          **Mean**           |       MEAN()       |
+|          *Native*           |       MEAN()       |
 |         **Median**          |      MEDIAN()      |
 |          **Mode**           |       MODE()       |
 |         **Spread**          |      SPREAD()      |
@@ -23,5 +23,6 @@
 |       **Percentile**        |    PERCENTILE()    |
 |         **Sample**          |      SAMPLE()      |
 |       *Built-in UDF*        |       TOP()        |
-|        **Histogram**        |                    |
+|        **Histogram**        |    HISTOGRAM()     |
+|           **Mad**           |                    |
 |          **Skew**           |                    |
