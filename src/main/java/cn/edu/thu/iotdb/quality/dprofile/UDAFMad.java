@@ -10,9 +10,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * calculate approximate median absolute deviation (mad) the function has two
@@ -45,7 +42,7 @@ public class UDAFMad implements UDTF {
                 RowIterator iterator = rowWindow.getRowIterator();
                 while (iterator.hasNextRow()) {
                     Double value = Util.getValueAsDouble(iterator.next());
-                    if (value != null && !Double.isNaN(value)) {
+                    if (value != null && Double.isFinite(value)) {
                         madSketch.insert(value);
                     }
                 }
@@ -77,6 +74,6 @@ public class UDAFMad implements UDTF {
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(startTime, result);
+        collector.putDouble(0, result);//所有UDAF函数的时间戳都默认为0
     }
 }

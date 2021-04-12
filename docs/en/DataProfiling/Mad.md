@@ -4,17 +4,19 @@
 
 The function is used to compute the exact or approximate median absolute deviation (MAD) of a numeric time series. MAD is the median of the deviation of each element from the elements' median.
 
-Take a dataset {1,3,3,5,5,6,7,8,9} as an instance. Its median is 5 and the deviation of each element from the median is {0,0,1,2,2,2,3,4,4}, whose median is 2. Therefore, the MAD of the original dataset is 2.
+Take a dataset $\{1,3,3,5,5,6,7,8,9\}$ as an instance. Its median is 5 and the deviation of each element from the median is $\{0,0,1,2,2,2,3,4,4\}$, whose median is 2. Therefore, the MAD of the original dataset is 2.
 
 **Name:** MAD
 
-**Input Series:** Only support a single input series. The data type can be INT32 / INT64 / FLOAT / DOUBLE.
+**Input Series:** Only support a single input series. The data type is INT32 / INT64 / FLOAT / DOUBLE.
 
 **Parameter:**
 
-+ `error`：the relative error of the approximate MAD. It should be within [0,1] and the default value is 0. Taking `error`=0.01 as an instance，the function outputs an approximate MAD satisfying 0.99 * MAD <= APPROX_MAD <= 1.01 * MAD. With `error`=0, the output is the exact MAD.
++ `error`：the relative error of the approximate MAD. It should be within [0,1] and the default value is 0. Taking `error`=0.01 as an instance, suppose the exact MAD is $a$ and the approximate MAD is $b$, we have $0.99a \le b \le 1.01a$. With `error`=0, the output is the exact MAD.
 
-**Output Series:** an approximate MAD
+**Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the approximate MAD.
+
+**Note:** Missing points, null points and `NaN` in the input series will be ignored.
 
 ## Examples
 
@@ -70,7 +72,7 @@ Output series:
 +-----------------------------+------------------+
 |                         Time| mad(root.test.s0)|
 +-----------------------------+------------------+
-|2021-03-17T10:32:17.054+08:00|0.6806197166442871|
+|1970-01-01T08:00:00.000+08:00|0.6806197166442871|
 +-----------------------------+------------------+
 ```
 
@@ -90,6 +92,6 @@ Output series:
 +-----------------------------+---------------------------------+
 |                         Time|mad(root.test.s0, "error"="0.01")|
 +-----------------------------+---------------------------------+
-|2021-03-17T10:32:17.054+08:00|               0.6806616245859518|
+|1970-01-01T08:00:00.000+08:00|               0.6806616245859518|
 +-----------------------------+---------------------------------+
 ```

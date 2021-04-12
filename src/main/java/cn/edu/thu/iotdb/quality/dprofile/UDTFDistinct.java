@@ -6,7 +6,7 @@
 package cn.edu.thu.iotdb.quality.dprofile;
 
 import cn.edu.thu.iotdb.quality.Util;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -20,7 +20,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
  */
 public class UDTFDistinct implements UDTF {
 
-    HashSet set = new HashSet<>();
+    LinkedHashSet set = new LinkedHashSet<>();
 
     @Override
     public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {

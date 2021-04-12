@@ -23,7 +23,5 @@
 |       **Percentile**        |    PERCENTILE()    |
 |         **Sample**          |      SAMPLE()      |
 |       *Built-in UDF*        |       TOP()        |
-|           **Cov**           |                    |
 |        **Histogram**        |                    |
-|         **Pearson**         |                    |
 |          **Skew**           |                    |

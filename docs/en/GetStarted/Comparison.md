@@ -27,7 +27,5 @@ The comparison is shown below. *Native* means this function has been the native 
 |              **Percentile**               |          PERCENTILE()          |
 |                **Sample**                 |            SAMPLE()            |
 |              *Built-in UDF*               |             TOP()              |
-|                  **Cov**                  |                                |
 |               **Histogram**               |                                |
-|                **Pearson**                |                                |
 |                 **Skew**                  |                                |

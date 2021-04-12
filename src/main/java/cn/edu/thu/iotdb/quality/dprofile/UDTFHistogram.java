@@ -9,31 +9,43 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-public class UDAFStddev implements UDTF {
+public class UDTFHistogram implements UDTF {
 
-    private long count = 0;
-    private double mean = 0.0;
-    private double var = 0.0;
+    private int[] bucket;
+    private double gap;
+    private int count;
+    private double start;
 
     @Override
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) throws Exception {
         udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy())
-                .setOutputDataType(TSDataType.DOUBLE);
+                .setOutputDataType(TSDataType.INT32);
+        start = udfParameters.getDoubleOrDefault("start", -Double.MAX_VALUE);
+        double end = udfParameters.getDoubleOrDefault("end", Double.MAX_VALUE);
+        count = udfParameters.getIntOrDefault("count", 1);
+        if (count <= 0) {
+            throw new IllegalArgumentException("parameter $count$ should be larger than 0");
+        }
+        if (start > end) {
+            throw new IllegalArgumentException("parameter $end$ should be larger than or equal to $start$");
+        }
+        bucket = new int[count];
+        gap = (end - start) / count;
     }
 
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         Double value = Util.getValueAsDouble(row);
         if (value != null && Double.isFinite(value)) {
-            this.count++;
-            this.var = this.var * (this.count - 1) / this.count
-                    + Math.pow(value - this.mean, 2) * (this.count - 1) / (this.count * this.count);
-            this.mean += (value - this.mean) / this.count;
+            int id = Math.min(Math.max((int) Math.floor((value - start) / gap), 0), count - 1);
+            bucket[id]++;
         }
     }
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(0, Math.sqrt(this.var));
+        for (int i = 0; i < count; i++) {
+            collector.putInt(i, bucket[i]);
+        }
     }
 }
