@@ -41,7 +41,7 @@ public class UDTFSample implements UDTF {
             throw new Exception("k should be a positive integer.");
         }
         //算法设置
-        String method = parameters.getStringOrDefault("method", "isometric");
+        String method = parameters.getStringOrDefault("method", "reservoir");
         if ("isometric".equalsIgnoreCase(method)) {
             configurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
                     .setOutputDataType(parameters.getDataType(0));
