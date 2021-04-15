@@ -41,7 +41,7 @@ public class UDTFSample implements UDTF {
             throw new Exception("k should be a positive integer.");
         }
         //算法设置
-        String method = parameters.getStringOrDefault("method", "isometric");
+        String method = parameters.getStringOrDefault("method", "reservoir");
         if ("isometric".equalsIgnoreCase(method)) {
             configurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
                     .setOutputDataType(parameters.getDataType(0));
@@ -80,7 +80,7 @@ public class UDTFSample implements UDTF {
         int n = rowWindow.windowSize();
         if (this.k < n) {
             for (long i = 0; i < this.k; i++) {
-                long j = Math.floorDiv(i * (long) n, (long) k);
+                long j = Math.floorDiv(i * (long) n, (long) k);//防止中间数据超过int类型范围
                 Row row = rowWindow.getRow((int) j);
                 Util.putValue(collector, row.getTime(), Util.getValueAsObject(row));
             }

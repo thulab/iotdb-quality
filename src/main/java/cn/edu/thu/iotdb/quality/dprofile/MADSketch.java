@@ -249,7 +249,7 @@ public class MADSketch implements Serializable {
         int p_index = find_p_index(buckets, total_count);
 
         if(p_index == -1){
-            throw new NoSuchElementException("No values in the sketch");
+            throw new NoSuchElementException("No values in the time series");
         }
 
         int q_index = find_q_index(p_index, buckets, total_count);
