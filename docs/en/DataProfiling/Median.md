@@ -10,7 +10,9 @@ The function is used to compute the approximate median of a numeric time series.
 
 **Parameter:**
 
-+ `error`： the rank error of the approximate median. It should be within (0,1) and the default value is 0.01. For instance, a median with `error`=0.01 is the value of the element with rank percentage 0.49~0.51.
++ `error`： the rank error of the approximate median. It should be within [0,1) and the default value is 0.
+  For instance, a median with `error`=0.01 is the value of the element with rank percentage 0.49~0.51.
+  With `error`=0, the output is the exact median.
 
 **Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the approximate median.
 
