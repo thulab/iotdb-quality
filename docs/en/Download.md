@@ -8,6 +8,7 @@ You can download the following files:
         <th align="center">Jar with all dependencies</th>
         <th align="center" colspan="2">Script of registering UDF</th>
         <th align="center" colspan="2">User Manual</th>
+        <th align="center">Supported IoTDB Version</th>
     </tr>
     <tr>
         <td align="center">In progress</td>
@@ -16,6 +17,7 @@ You can download the following files:
         <td align="center"><a href="../download/register-UDF.sh">Linux/MacOS</a></td>
         <td align="center"><a href="../download/UserManual_zh.pdf">English</a></td>
         <td align="center"><a href="../download/UserManual_zh.pdf">Chinese</a></td>
+        <td align="center">0.12.0</td>
     </tr>
     <tr>
         <td align="center">V1.0.0</td>
@@ -24,6 +26,7 @@ You can download the following files:
         <td align="center"><a href="../download/V1.0.x/register-UDF.sh">Linux/MacOS</a></td>
         <td align="center"><a href="../download/V1.0.x/UserManual_zh.pdf">English</a></td>
         <td align="center"><a href="../download/V1.0.x/UserManual_zh.pdf">Chinese</a></td>
+        <td align="center">0.12.0</td>
     </tr>
 </table>
 
