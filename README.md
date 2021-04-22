@@ -13,5 +13,7 @@ It effectively meets the demand for data quality in the industrial field.
 3. Run `sbin\start-server.bat` (for Windows) or `sbin\start-server.sh` (for Linux or MacOS) to start IoTDB server.
 4. Copy the script to the directory of IoTDB system and run it to register UDF.
 
+## Contact
 
++ Email: iotdb-quality@protonmail.com
 
