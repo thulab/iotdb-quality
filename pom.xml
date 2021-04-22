@@ -39,6 +39,8 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <finalName>${project.build.finalName}-jar-with-dependencies-for-pg</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
@@ -67,7 +69,37 @@
                 <configuration>
                     <classpathScope>test</classpathScope>
                 </configuration>
-            </plugin>                   
+            </plugin>               
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.11</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>5.3.3</proguardVersion>
+                    <injar>${project.build.finalName}-jar-with-dependencies-for-pg.jar</injar>
+                    <outjar>${project.build.finalName}-jar-with-dependencies.jar</outjar>
+                    <proguardInclude>${project.basedir}/conf/proguard.cfg</proguardInclude>
+                    <libs>
+                        <!-- Include main JAVA library required.-->
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>6.2.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
     <properties>
