@@ -18,7 +18,7 @@ mkdir tools/site/docs/zh/V1.0.x
 mkdir download/V1.0.x
 cp -r ../tmp/en/* tools/site/docs/V1.0.x
 cp -r ../tmp/zh/* tools/site/docs/zh/V1.0.x
-# cp -r ../tmp/download/* download/V1.0.x
+cp -r ../tmp/download/* download/V1.0.x
 rm -rf ../tmp
 cd tools/site
 # Build the web pages
