@@ -1,14 +1,14 @@
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import org.eclipse.collections.api.factory.Lists;
+import org.eclipse.collections.api.list.MutableList;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 public class GKArray {
     private final double rankAccuracy;
-    private ArrayList<Tuple> entries;
+    private MutableList<Tuple> entries;
     private final double[] incoming;
     private int incomingIndex;
     private long compressedCount;
@@ -16,7 +16,7 @@ public class GKArray {
 
     public GKArray(double rankAccuracy) {
         this.rankAccuracy = rankAccuracy;
-        this.entries = new ArrayList<>();
+        this.entries = Lists.mutable.empty();
         this.incoming = new double[(int) (1 / rankAccuracy) + 1];
         this.incomingIndex = 0;
         this.minValue = Double.MAX_VALUE;
@@ -34,16 +34,9 @@ public class GKArray {
         return entries.isEmpty() && incomingIndex == 0;
     }
 
-    public void clear() {
-        entries.clear();
-        incomingIndex = 0;
-        compressedCount = 0;
-        minValue = Double.MAX_VALUE;
-    }
-
     public double query(double phi) {
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new ArithmeticException();
         }
         compressIfNecessary();
 
@@ -72,10 +65,10 @@ public class GKArray {
     }
 
     private void compress() {
-        compress(new ArrayList<>());
+        compress(Lists.mutable.empty());
     }
 
-    private void compress(List<Tuple> additionalEntries) {
+    private void compress(MutableList<Tuple> additionalEntries) {
 
         for (int i = 0; i < incomingIndex; i++) {
             additionalEntries.add(new Tuple(incoming[i], 1, 0));
@@ -88,13 +81,11 @@ public class GKArray {
         }
 
         final long removalThreshold = 2 * (long) (rankAccuracy * (compressedCount - 1));
-        final ArrayList<Tuple> mergedEntries = new ArrayList<>(entries.size() + additionalEntries.size() / 3);
+        final MutableList<Tuple> mergedEntries = Lists.mutable.ofInitialCapacity(entries.size() + additionalEntries.size() / 3);
 
         int i = 0, j = 0;
         while (i < additionalEntries.size() || j < entries.size()) {
-
             if (i == additionalEntries.size()) {
-
                 if (j + 1 < entries.size() &&
                         entries.get(j).g + entries.get(j + 1).g + entries.get(j + 1).delta <= removalThreshold) {
                     // Removable from sketch.
@@ -106,7 +97,6 @@ public class GKArray {
                 j++;
 
             } else if (j == entries.size()) {
-
                 // Done with sketch; now only considering incoming.
                 if (i + 1 < additionalEntries.size() &&
                         additionalEntries.get(i).g + additionalEntries.get(i + 1).g + additionalEntries.get(i + 1).delta
@@ -120,7 +110,6 @@ public class GKArray {
                 i++;
 
             } else if (additionalEntries.get(i).v < entries.get(j).v) {
-
                 if (additionalEntries.get(i).g + entries.get(j).g + entries.get(j).delta <= removalThreshold) {
                     entries.get(j).g += additionalEntries.get(i).g;
                 } else {
@@ -132,7 +121,6 @@ public class GKArray {
                 i++;
 
             } else {
-
                 if (j + 1 < entries.size() &&
                         entries.get(j).g + entries.get(j + 1).g + entries.get(j + 1).delta <= removalThreshold) {
                     // Removable from sketch.
