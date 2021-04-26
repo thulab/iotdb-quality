@@ -2,7 +2,7 @@
 
 ## Usage
 
-The function is used to compute the approximate quantile of a numeric time series. A quantile is value of element in the certain rank of the sorted series.
+The function is used to compute the exact or approximate quantile of a numeric time series. A quantile is value of element in the certain rank of the sorted series.
 
 **Name:** PERCENTILE
 
@@ -10,8 +10,8 @@ The function is used to compute the approximate quantile of a numeric time serie
 
 **Parameter:**
 
-+ `rank`: The rank percentage of the quantile. It should be [0,1] and the default value is 0.5. For instance, a quantile with `rank`=0.5 is the median.
-+ `error`: The rank error of the approximate quantile. It should be within (0,1) and the default value is 0.01. For instance, a 0.5-quantile with `error`=0.01 is the value of the element with rank percentage 0.49~0.51.
++ `rank`: The rank percentage of the quantile. It should be (0,1]. For instance, a quantile with `rank`=0.5 is the median.
++ `error`(optional): The rank error of the approximate quantile. It should be within (0,1) and the default value is 0.01. For instance, a 0.5-quantile with `error`=0.01 is the value of the element with rank percentage 0.49~0.51.
 
 **Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the approximate percentile.
 
@@ -67,7 +67,7 @@ Output series:
 +-----------------------------+------------------------------------------------------+
 |                         Time|percentile(root.test.s0, "rank"="0.2", "error"="0.01")|
 +-----------------------------+------------------------------------------------------+
-|1970-01-01T08:00:00.000+08:00|                                    0.1801469624042511|
+|2021-03-17T10:32:17.054+08:00|                                    0.1801469624042511|
 +-----------------------------+------------------------------------------------------+
 ```
 
