@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package cn.edu.thu.iotdb.quality.dprofile;
 
 import org.apache.iotdb.db.exception.metadata.MetadataException;
@@ -65,10 +64,16 @@ public abstract class Exact implements UDTF {
                 longArrayList.add(row.getLong(0));
                 break;
             case FLOAT:
-                floatArrayList.add(row.getFloat(0));
+                float vf = row.getFloat(0);
+                if (Float.isFinite(vf)) { //跳过NaN
+                    floatArrayList.add(vf);
+                }
                 break;
             case DOUBLE:
-                doubleArrayList.add(row.getDouble(0));
+                double vd = row.getDouble(0);
+                if (Double.isFinite(vd)) { //跳过NaN
+                    doubleArrayList.add(vd);
+                }
                 break;
             default:
                 // This will not happen.

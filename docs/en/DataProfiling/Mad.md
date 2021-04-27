@@ -12,15 +12,17 @@ Take a dataset $\{1,3,3,5,5,6,7,8,9\}$ as an instance. Its median is 5 and the d
 
 **Parameter:**
 
-+ `error`(optional): The relative error of the approximate MAD. It should be within (0,1). Taking `error`=0.01 as an instance, suppose the exact MAD is $a$ and the approximate MAD is $b$, we have $0.99a \le b \le 1.01a$. With `error`=0, the output is the exact MAD.
++ `error`: The relative error of the approximate MAD. It should be within [0,1) and the default value is 0. Taking `error`=0.01 as an instance, suppose the exact MAD is $a$ and the approximate MAD is $b$, we have $0.99a \le b \le 1.01a$. With `error`=0, the output is the exact MAD.
 
-**Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the approximate MAD.
+**Output Series:** Output a single series. The type is DOUBLE. There is only one data point in the series, whose timestamp is 0 and value is the MAD.
 
 **Note:** Missing points, null points and `NaN` in the input series will be ignored.
 
 ## Examples
 
 ### Exact Query
+
+With the default `error`(`error`=0), the function queries the exact MAD.
 
 Input series:
 
@@ -70,13 +72,13 @@ Output series:
 +-----------------------------+------------------+
 |                         Time| mad(root.test.s0)|
 +-----------------------------+------------------+
-|2021-03-17T10:32:17.054+08:00|0.6806197166442871|
+|1970-01-01T08:00:00.000+08:00|0.6806197166442871|
 +-----------------------------+------------------+
 ```
 
 ### Approximate Query
 
-If `error` is set, the function queries the approximate MAD with error bounds. Otherwise, the error of the result is not guaranteed.
+By setting `error` within (0,1), the function queries the approximate MAD.
 
 SQL for query:
 
@@ -90,6 +92,6 @@ Output series:
 +-----------------------------+---------------------------------+
 |                         Time|mad(root.test.s0, "error"="0.01")|
 +-----------------------------+---------------------------------+
-|2021-03-17T10:32:17.054+08:00|               0.6806616245859518|
+|1970-01-01T08:00:00.000+08:00|               0.6806616245859518|
 +-----------------------------+---------------------------------+
 ```

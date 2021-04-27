@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 public class GKArray {
+
     private final double rankAccuracy;
     private MutableList<Tuple> entries;
     private final double[] incoming;
@@ -24,9 +25,11 @@ public class GKArray {
     }
 
     public void insert(double value) {
-        incoming[incomingIndex++] = value;
-        if (incomingIndex == incoming.length) {
-            compress();
+        if (Double.isFinite(value)) {
+            incoming[incomingIndex++] = value;
+            if (incomingIndex == incoming.length) {
+                compress();
+            }
         }
     }
 
@@ -86,8 +89,8 @@ public class GKArray {
         int i = 0, j = 0;
         while (i < additionalEntries.size() || j < entries.size()) {
             if (i == additionalEntries.size()) {
-                if (j + 1 < entries.size() &&
-                        entries.get(j).g + entries.get(j + 1).g + entries.get(j + 1).delta <= removalThreshold) {
+                if (j + 1 < entries.size()
+                        && entries.get(j).g + entries.get(j + 1).g + entries.get(j + 1).delta <= removalThreshold) {
                     // Removable from sketch.
                     entries.get(j + 1).g += entries.get(j).g;
                 } else {
@@ -98,9 +101,9 @@ public class GKArray {
 
             } else if (j == entries.size()) {
                 // Done with sketch; now only considering incoming.
-                if (i + 1 < additionalEntries.size() &&
-                        additionalEntries.get(i).g + additionalEntries.get(i + 1).g + additionalEntries.get(i + 1).delta
-                                <= removalThreshold) {
+                if (i + 1 < additionalEntries.size()
+                        && additionalEntries.get(i).g + additionalEntries.get(i + 1).g + additionalEntries.get(i + 1).delta
+                        <= removalThreshold) {
                     // Removable from incoming.
                     additionalEntries.get(i + 1).g += additionalEntries.get(i).g;
                 } else {
@@ -113,16 +116,16 @@ public class GKArray {
                 if (additionalEntries.get(i).g + entries.get(j).g + entries.get(j).delta <= removalThreshold) {
                     entries.get(j).g += additionalEntries.get(i).g;
                 } else {
-                    additionalEntries.get(i).delta =
-                            entries.get(j).g + entries.get(j).delta - additionalEntries.get(i).g;
+                    additionalEntries.get(i).delta
+                            = entries.get(j).g + entries.get(j).delta - additionalEntries.get(i).g;
                     mergedEntries.add(additionalEntries.get(i));
                 }
 
                 i++;
 
             } else {
-                if (j + 1 < entries.size() &&
-                        entries.get(j).g + entries.get(j + 1).g + entries.get(j + 1).delta <= removalThreshold) {
+                if (j + 1 < entries.size()
+                        && entries.get(j).g + entries.get(j + 1).g + entries.get(j + 1).delta <= removalThreshold) {
                     // Removable from sketch.
                     entries.get(j + 1).g += entries.get(j).g;
                 } else {
