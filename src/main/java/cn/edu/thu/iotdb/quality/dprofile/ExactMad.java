@@ -4,12 +4,7 @@ import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.exception.UDFInputSeriesDataTypeNotValidException;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * calculate the exact median absolute deviation (mad)
- * @register CREATE FUNCTION mad AS "cn.edu.thu.iotdb.quality.dprofile.UDAFExactMad"
- * @usage: select mad(s0) from root.test;
- */
-public class UDAFExactMad extends UDAFExactMedian {
+public class ExactMad extends ExactMedian {
     @Override
     public void terminate(PointCollector collector) throws Exception {
         switch (dataType) {
