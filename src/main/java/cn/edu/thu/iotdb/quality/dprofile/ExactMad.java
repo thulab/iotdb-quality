@@ -4,21 +4,22 @@ import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.exception.UDFInputSeriesDataTypeNotValidException;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-public class ExactMad extends ExactMedian {
+public class ExactMad extends Exact {
+
     @Override
     public void terminate(PointCollector collector) throws Exception {
         switch (dataType) {
             case INT32:
-                collector.putDouble(startTime, ExactOrderStatistics.getMad(intArrayList));
+                collector.putDouble(0, ExactOrderStatistics.getMad(intArrayList));
                 break;
             case INT64:
-                collector.putDouble(startTime, ExactOrderStatistics.getMad(longArrayList));
+                collector.putDouble(0, ExactOrderStatistics.getMad(longArrayList));
                 break;
             case FLOAT:
-                collector.putDouble(startTime, ExactOrderStatistics.getMad(floatArrayList));
+                collector.putDouble(0, ExactOrderStatistics.getMad(floatArrayList));
                 break;
             case DOUBLE:
-                collector.putDouble(startTime, ExactOrderStatistics.getMad(doubleArrayList));
+                collector.putDouble(0, ExactOrderStatistics.getMad(doubleArrayList));
                 break;
             default:
                 throw new UDFInputSeriesDataTypeNotValidException(

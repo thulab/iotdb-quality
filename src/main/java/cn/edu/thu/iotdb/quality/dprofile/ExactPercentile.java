@@ -7,30 +7,30 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.exception.UDFInputSeriesDataTypeNotValidException;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-public class ExactPercentile extends ExactMedian {
+public class ExactPercentile extends Exact {
 
     private double rank;
 
     @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws UDFInputSeriesDataTypeNotValidException, MetadataException {
-        super.beforeStart(parameters,configurations);
-        rank = parameters.getDouble("rank");
+        super.beforeStart(parameters, configurations);
+        rank = parameters.getDoubleOrDefault("rank", 0.5);
     }
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
         switch (dataType) {
             case INT32:
-                collector.putDouble(startTime, ExactOrderStatistics.getPercentile(intArrayList, rank));
+                collector.putDouble(0, ExactOrderStatistics.getPercentile(intArrayList, rank));
                 break;
             case INT64:
-                collector.putDouble(startTime, ExactOrderStatistics.getPercentile(longArrayList, rank));
+                collector.putDouble(0, ExactOrderStatistics.getPercentile(longArrayList, rank));
                 break;
             case FLOAT:
-                collector.putDouble(startTime, ExactOrderStatistics.getPercentile(floatArrayList, rank));
+                collector.putDouble(0, ExactOrderStatistics.getPercentile(floatArrayList, rank));
                 break;
             case DOUBLE:
-                collector.putDouble(startTime, ExactOrderStatistics.getPercentile(doubleArrayList, rank));
+                collector.putDouble(0, ExactOrderStatistics.getPercentile(doubleArrayList, rank));
                 break;
             default:
                 throw new UDFInputSeriesDataTypeNotValidException(

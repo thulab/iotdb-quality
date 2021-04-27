@@ -32,6 +32,7 @@ public class UDAFMad implements UDTF {
                         validator.getParameters().getDoubleOrDefault("error", 0));
     }
 
+    @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
         double error = parameters.getDoubleOrDefault("error", 0);
         if(error == 0){
@@ -42,10 +43,12 @@ public class UDAFMad implements UDTF {
         mad.beforeStart(parameters,configurations);
     }
 
+    @Override
     public void transform(Row row, PointCollector collector) throws Exception{
         mad.transform(row, collector);
     }
 
+    @Override
     public void terminate(PointCollector collector) throws Exception {
         mad.terminate(collector);
     }

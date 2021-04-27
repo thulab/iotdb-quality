@@ -5,7 +5,6 @@
  */
 package cn.edu.thu.iotdb.quality;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -18,17 +17,14 @@ import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 public class Util {
 
     /**
-     * 从Row中取出第一个值，并转化为Double类型
+     * 从Row中取出第一个值，并转化为double类型。注意，必须保证Row中不存在null。
      *
      * @param row
      * @return Row中的第一个值
      * @throws NoNumberException Row的第一个值是非数值类型
      */
-    public static Double getValueAsDouble(Row row) throws NoNumberException {
+    public static double getValueAsDouble(Row row) throws NoNumberException {
         double ans = 0;
-        if (row.isNull(0)) {
-            return null;
-        }
         switch (row.getDataType(0)) {
             case INT32:
                 ans = row.getInt(0);

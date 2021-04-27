@@ -30,7 +30,6 @@ public class UDAFPercentile implements UDTF {
                 .validate(error -> (double) error >= 0 && (double) error < 1,
                         "error has to be greater than or equal to 0 and less than 1.",
                         validator.getParameters().getDoubleOrDefault("error", 0))
-                .validateRequiredAttribute("rank")
                 .validate(rank -> (double) rank > 0 && (double) rank <= 1,
                         "rank has to be greater than 0 and less than or equal to 1.",
                         validator.getParameters().getDouble("rank"));

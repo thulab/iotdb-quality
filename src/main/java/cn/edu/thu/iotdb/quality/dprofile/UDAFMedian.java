@@ -42,10 +42,12 @@ public class UDAFMedian implements UDTF {
         median.beforeStart(parameters,configurations);
     }
 
+    @Override
     public void transform(Row row, PointCollector collector) throws Exception{
         median.transform(row, collector);
     }
 
+    @Override
     public void terminate(PointCollector collector) throws Exception {
         median.terminate(collector);
     }

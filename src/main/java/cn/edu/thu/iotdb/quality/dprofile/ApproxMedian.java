@@ -1,5 +1,6 @@
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.Util;
 import org.apache.iotdb.db.exception.metadata.MetadataException;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -11,8 +12,8 @@ import org.apache.iotdb.db.query.udf.api.exception.UDFInputSeriesDataTypeNotVali
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 public class ApproxMedian implements UDTF {
+
     protected GKArray sketch;
-    protected Long startTime;
     protected TSDataType dataType;
 
     @Override
@@ -25,35 +26,11 @@ public class ApproxMedian implements UDTF {
 
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
-        if(startTime == null){
-            startTime = row.getTime();
-        }
-        switch (dataType) {
-            case INT32:
-                sketch.insert(row.getInt(0));
-                break;
-            case INT64:
-                sketch.insert(row.getLong(0));
-                break;
-            case FLOAT:
-                sketch.insert(row.getFloat(0));
-                break;
-            case DOUBLE:
-                sketch.insert(row.getDouble(0));
-                break;
-            default:
-                throw new UDFInputSeriesDataTypeNotValidException(
-                        0,
-                        dataType,
-                        TSDataType.INT32,
-                        TSDataType.INT64,
-                        TSDataType.FLOAT,
-                        TSDataType.DOUBLE);
-        }
+        sketch.insert(Util.getValueAsDouble(row));
     }
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(startTime, sketch.query(0.5));
+        collector.putDouble(0, sketch.query(0.5));
     }
 }
