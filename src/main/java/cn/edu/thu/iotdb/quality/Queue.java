@@ -106,13 +106,13 @@ public class Queue {
             this.timeQueueList[rear]=timestamp;
             switch(datatype){
                 case INT32:
-                    intValueQueueList[rear]= (int) value;
+                    intValueQueueList[rear]= Integer.parseInt(value.toString());
                 case INT64:
-                    longValueQueueList[rear]= (long) value;
+                    longValueQueueList[rear]= Long.parseLong(value.toString());
                 case FLOAT:
-                    floatValueQueueList[rear] = (float) value;
+                    floatValueQueueList[rear] = Float.parseFloat(value.toString());
                 case DOUBLE:
-                    doubleValueQueueList[rear] = (double) value;
+                    doubleValueQueueList[rear] = Double.parseDouble(value.toString());
             }
         }
         else{

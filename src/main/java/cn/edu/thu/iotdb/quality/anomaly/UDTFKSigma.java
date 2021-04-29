@@ -44,11 +44,11 @@ public class UDTFKSigma implements UDTF {
     public void transform(Row row, PointCollector collector) throws Exception {
         double value = Util.getValueAsDouble(row);
         long timestamp = row.getTime();
-        if (Double.isFinite(value)) {
+        if (Double.isFinite(value)&&!Double.isNaN(value)) {
             if (q.isFull()) {
                 double frontValue = q.queueFrontValue();
                 q.pop();
-                q.push(timestamp, value);
+                q.push(timestamp, Util.getValueAsObject(row));
                 this.sum_x_1 = this.sum_x_1 - frontValue + value;
                 this.sum_x_2 = this.sum_x_2 - frontValue * frontValue + value * value;
                 this.mean = this.sum_x_1 / q.getLength();
@@ -57,7 +57,7 @@ public class UDTFKSigma implements UDTF {
                     Util.putValue(collector,dataType,timestamp, Util.getValueAsObject(row));
                 }
             } else {
-                q.push(timestamp, value);
+                q.push(timestamp, Util.getValueAsObject(row));
                 this.sum_x_1 = this.sum_x_1 + value;
                 this.sum_x_2 = this.sum_x_2 + value * value;
                 this.mean = this.sum_x_1 / q.getLength();
