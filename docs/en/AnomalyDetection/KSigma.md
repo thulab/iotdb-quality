@@ -10,7 +10,7 @@ This function is used to detect distribution anomaly of time series. According t
 
 + `k`:how many times to multiply on standard deviation to define extreme value.
 
-**Output Series:** Output a single series. The type is DOUBLE.
+**Output Series:** Output a single series. The type is same as input series.
 
 **Note:** Only when is larger than 0, the anomaly detection will be performed. Otherwise, nothing will be output.
 
