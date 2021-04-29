@@ -11,3 +11,6 @@
 3. 运行`sbin\start-server.bat`（在Windows下）或`sbin\start-server.sh`（在Linux或MacOS下）以启动IoTDB服务器；
 4. 将注册脚本复制到IoTDB的程序目录下，并运行注册脚本以注册UDF。
 
+## 联系我们
+
++ Email: iotdb-quality@protonmail.com

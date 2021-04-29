@@ -9,7 +9,9 @@ This function is used to calculate the mode of time series, that is, the value t
 
 **Output Series:** Output a single series. The type is the same as the input. There is only one data point in the series, whose timestamp is 0 and value is the mode.
 
-**Note:** If there are multiple values with the most occurrences, the one that appears first will be output.
+**Note:** 
++ If there are multiple values with the most occurrences, the arbitrary one will be output.
++ Missing points and null points in the input series will be ignored, but `NaN` will not.
 
 ## Examples
 

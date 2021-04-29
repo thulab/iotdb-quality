@@ -9,7 +9,10 @@ This function returns all unique values in time series.
 
 **Output Series:** Output a single series. The type is the same as the input. 
 
-**Note:** The timestamp of the output series is meaningless without the guarantee on the order.
+**Note:** 
+
++ The timestamp of the output series is meaningless. The output order is arbitrary.
++ Missing points and null points in the input series will be ignored, but `NaN` will not.
 
 
 ## Examples

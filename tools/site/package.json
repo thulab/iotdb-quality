@@ -12,6 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "markdown-it-katex": "^2.0.3",
     "vuepress": "^1.8.2"
+  },
+  "devDependencies": {
+    "vuepress-plugin-mathjax": "^1.2.8"
   }
 }

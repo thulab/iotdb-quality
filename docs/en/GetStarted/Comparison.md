@@ -13,7 +13,7 @@ The comparison is shown below. *Native* means this function has been the native 
 |                 *Native*                  |            COUNT()             |
 |               **Distinct**                |           DISTINCT()           |
 |               **Integral**                |           INTEGRAL()           |
-|                 **Mean**                  |             MEAN()             |
+|                 *Native*                  |             MEAN()             |
 |                **Median**                 |            MEDIAN()            |
 |                 **Mode**                  |             MODE()             |
 |                **Spread**                 |            SPREAD()            |
@@ -27,7 +27,6 @@ The comparison is shown below. *Native* means this function has been the native 
 |              **Percentile**               |          PERCENTILE()          |
 |                **Sample**                 |            SAMPLE()            |
 |              *Built-in UDF*               |             TOP()              |
-|                  **Cov**                  |                                |
-|               **Histogram**               |                                |
-|                **Pearson**                |                                |
+|               **Histogram**               |          HISTOGRAM()           |
+|                  **Mad**                  |                                |
 |                 **Skew**                  |                                |

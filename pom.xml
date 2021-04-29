@@ -4,18 +4,23 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.edu.thu.dquality</groupId>
     <artifactId>iotdb-quality</artifactId>
-    <version>0.1.0</version>
+    <version>2.0.0-SNAPSHOT</version>
     <dependencies>
+        <dependency>
+            <groupId>org.eclipse.collections</groupId>
+            <artifactId>eclipse-collections</artifactId>
+            <version>10.4.0</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.iotdb</groupId>
             <artifactId>iotdb-server</artifactId>
-            <version>0.12.0-SNAPSHOT</version>
+            <version>0.12.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.iotdb</groupId>
             <artifactId>tsfile</artifactId>
-            <version>0.12.0-SNAPSHOT</version>
+            <version>0.12.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -39,6 +44,8 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <finalName>${project.build.finalName}-jar-with-dependencies-for-pg</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
@@ -67,6 +74,36 @@
                 <configuration>
                     <classpathScope>test</classpathScope>
                 </configuration>
+            </plugin>               
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.11</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>5.3.3</proguardVersion>
+                    <injar>${project.build.finalName}-jar-with-dependencies-for-pg.jar</injar>
+                    <outjar>${project.build.finalName}-jar-with-dependencies.jar</outjar>
+                    <proguardInclude>${project.basedir}/conf/proguard.cfg</proguardInclude>
+                    <libs>
+                        <!-- Include main JAVA library required.-->
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>6.2.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

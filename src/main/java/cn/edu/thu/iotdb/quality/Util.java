@@ -8,6 +8,8 @@ package cn.edu.thu.iotdb.quality;
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
+import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
  *
@@ -16,17 +18,14 @@ import org.apache.iotdb.db.query.udf.api.access.Row;
 public class Util {
 
     /**
-     * 从Row中取出第一个值，并转化为Double类型
+     * 从Row中取出第一个值，并转化为double类型。注意，必须保证Row中不存在null。
      *
      * @param row
      * @return Row中的第一个值
      * @throws NoNumberException Row的第一个值是非数值类型
      */
-    public static Double getValueAsDouble(Row row) throws NoNumberException {
+    public static double getValueAsDouble(Row row) throws NoNumberException {
         double ans = 0;
-        if (row.isNull(0)) {
-            return null;
-        }
         switch (row.getDataType(0)) {
             case INT32:
                 ans = row.getInt(0);
@@ -44,6 +43,67 @@ public class Util {
                 throw new NoNumberException();
         }
         return ans;
+    }
+
+    /**
+     * 从Row中取出第一个值，并转化为Object类型
+     *
+     * @param row
+     * @return Row中的第一个值
+     */
+    public static Object getValueAsObject(Row row) {
+        Object ans = 0;
+        switch (row.getDataType(0)) {
+            case INT32:
+                ans = row.getInt(0);
+                break;
+            case INT64:
+                ans = row.getLong(0);
+                break;
+            case FLOAT:
+                ans = row.getFloat(0);
+                break;
+            case DOUBLE:
+                ans = row.getDouble(0);
+                break;
+            case BOOLEAN:
+                ans = row.getBoolean(0);
+                break;
+            case TEXT:
+                ans = row.getString(0);
+                break;
+        }
+        return ans;
+    }
+
+    /**
+     * 向PointCollector中加入新的数据点
+     * @param pc PointCollector
+     * @param type 数据类型
+     * @param t 时间戳
+     * @param o Object类型的值
+     * @throws Exception 
+     */
+    public static void putValue(PointCollector pc, TSDataType type, long t, Object o) throws Exception {
+        switch(type){
+            case INT32:
+                pc.putInt(t, (Integer) o);
+                break;
+            case INT64:
+                pc.putLong(t, (Long) o);
+                break;
+            case FLOAT:
+                pc.putFloat(t, (Float) o);
+                break;
+            case DOUBLE:
+                pc.putDouble(t, (Double) o);
+                break;
+            case TEXT:
+                pc.putString(t, (String) o);
+                break;
+            case BOOLEAN:
+                pc.putBoolean(t, (Boolean) o);
+        }
     }
 
     /**
