@@ -1,5 +1,6 @@
 package cn.edu.thu.iotdb.quality;
 
+import org.apache.commons.math3.analysis.function.Max;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 public class Queue {
@@ -19,14 +20,26 @@ public class Queue {
         switch(datatype){
             case INT32:
                 intValueQueueList=new int[MaxLen];
+                //longValueQueueList=new long[1];
+                //floatValueQueueList=new float[1];
+                //doubleValueQueueList=new double[1];
                 break;
             case INT64:
+                //intValueQueueList=new int[1];
                 longValueQueueList=new long[MaxLen];
+                //floatValueQueueList=new float[1];
+                //doubleValueQueueList=new double[1];
                 break;
             case FLOAT:
+                //intValueQueueList=new int[1];
+                //longValueQueueList=new long[1];
                 floatValueQueueList=new float[MaxLen];
+                //doubleValueQueueList=new double[1];
                 break;
             case DOUBLE:
+                //intValueQueueList=new int[1];
+                //longValueQueueList=new long[1];
+                //floatValueQueueList=new float[1];
                 doubleValueQueueList=new double[MaxLen];
                 break;
         }
@@ -107,12 +120,16 @@ public class Queue {
             switch(datatype){
                 case INT32:
                     intValueQueueList[rear]= Integer.parseInt(value.toString());
+                    break;
                 case INT64:
                     longValueQueueList[rear]= Long.parseLong(value.toString());
+                    break;
                 case FLOAT:
                     floatValueQueueList[rear] = Float.parseFloat(value.toString());
+                    break;
                 case DOUBLE:
                     doubleValueQueueList[rear] = Double.parseDouble(value.toString());
+                    break;
             }
         }
         else{
