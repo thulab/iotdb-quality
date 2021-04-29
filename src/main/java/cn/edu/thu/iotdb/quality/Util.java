@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
  *
@@ -52,9 +53,6 @@ public class Util {
      */
     public static Object getValueAsObject(Row row) {
         Object ans = 0;
-        if (row.isNull(0)) {
-            return null;
-        }
         switch (row.getDataType(0)) {
             case INT32:
                 ans = row.getInt(0);
@@ -81,23 +79,30 @@ public class Util {
     /**
      * 向PointCollector中加入新的数据点
      * @param pc PointCollector
+     * @param type 数据类型
      * @param t 时间戳
      * @param o Object类型的值
      * @throws Exception 
      */
-    public static void putValue(PointCollector pc, long t, Object o) throws Exception {
-        if (o instanceof Integer) {
-            pc.putInt(t, (Integer) o);
-        } else if (o instanceof Long) {
-            pc.putLong(t, (Long) o);
-        } else if (o instanceof Float) {
-            pc.putFloat(t, (Float) o);
-        } else if (o instanceof Double) {
-            pc.putDouble(t, (Double) o);
-        } else if (o instanceof String) {
-            pc.putString(t, (String) o);
-        } else if (o instanceof Boolean) {
-            pc.putBoolean(t, (Boolean) o);
+    public static void putValue(PointCollector pc, TSDataType type, long t, Object o) throws Exception {
+        switch(type){
+            case INT32:
+                pc.putInt(t, (Integer) o);
+                break;
+            case INT64:
+                pc.putLong(t, (Long) o);
+                break;
+            case FLOAT:
+                pc.putFloat(t, (Float) o);
+                break;
+            case DOUBLE:
+                pc.putDouble(t, (Double) o);
+                break;
+            case TEXT:
+                pc.putString(t, (String) o);
+                break;
+            case BOOLEAN:
+                pc.putBoolean(t, (Boolean) o);
         }
     }
 

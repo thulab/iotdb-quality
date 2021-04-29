@@ -11,7 +11,7 @@ This function returns all unique values in time series.
 
 **Note:** 
 
-+ The timestamp of the output series is meaningless. The output order is the same as the appearing order of values.
++ The timestamp of the output series is meaningless. The output order is arbitrary.
 + Missing points and null points in the input series will be ignored, but `NaN` will not.
 
 

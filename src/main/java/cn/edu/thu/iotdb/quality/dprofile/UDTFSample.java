@@ -15,9 +15,11 @@ import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
  * 使用蓄水池采样算法进行数据采样的UDTF
@@ -31,47 +33,53 @@ public class UDTFSample implements UDTF {
     //下列变量在蓄水池采样法中使用
     private Pair<Long, Object>[] samples;//采样得到的样本
     private int num = 0;//计数器，记录当前一共有多少个元素
-    private final Random random = new Random();
+    private Random random;
+    private TSDataType dataType;
+
+    @Override
+    public void validate(UDFParameterValidator validator) throws Exception {
+        validator.validateInputSeriesNumber(1).
+                validate(k -> (int) k > 0,
+                        "k should be a positive integer.",
+                        validator.getParameters().getIntOrDefault("k", 1)).
+                validate(method -> "isometric".equalsIgnoreCase((String) method) || "reservoir".equalsIgnoreCase((String) method),
+                        "Illegal sampling method.",
+                        validator.getParameters().getStringOrDefault("method", "reservoir"));
+    }
 
     @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
-        //参数验证
+        //参数
         this.k = parameters.getIntOrDefault("k", 1);
-        if (this.k <= 0) {
-            throw new Exception("k should be a positive integer.");
-        }
+        this.dataType = parameters.getDataType(0);
         //算法设置
         String method = parameters.getStringOrDefault("method", "reservoir");
         if ("isometric".equalsIgnoreCase(method)) {
             configurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
                     .setOutputDataType(parameters.getDataType(0));
-        } else if ("reservoir".equalsIgnoreCase(method)) {
+        } else {
             configurations.setAccessStrategy(new RowByRowAccessStrategy())
                     .setOutputDataType(parameters.getDataType(0));
             this.samples = new Pair[this.k];
-        } else {
-            throw new Exception("Illegal sampling method.");
+            this.random = new Random();
         }
-
     }
 
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         //蓄水池采样法
-        Object v = Util.getValueAsObject(row);
-        Long t = row.getTime();
-        if (v != null) {
-            if (this.num < this.k) {
-                this.samples[this.num] = Pair.of(t, v);
-                this.num++;
-            } else {
-                this.num++;
-                int x = random.nextInt(num);
-                if (x < this.k) {
-                    this.samples[x] = Pair.of(t, v);
-                }
-            }
+        int x;
+        if (this.num < this.k) {
+            x = this.num;
+        } else {
+            x = random.nextInt(num + 1);
         }
+        if (x < this.k) {
+            Object v = Util.getValueAsObject(row);
+            Long t = row.getTime();
+            this.samples[x] = Pair.of(t, v);
+        }
+        this.num++;
     }
 
     @Override
@@ -82,13 +90,13 @@ public class UDTFSample implements UDTF {
             for (long i = 0; i < this.k; i++) {
                 long j = Math.floorDiv(i * (long) n, (long) k);//防止中间数据超过int类型范围
                 Row row = rowWindow.getRow((int) j);
-                Util.putValue(collector, row.getTime(), Util.getValueAsObject(row));
+                Util.putValue(collector, dataType, row.getTime(), Util.getValueAsObject(row));
             }
         } else {//采样数大于等于输入序列长度，输出所有元素
             RowIterator iterator = rowWindow.getRowIterator();
             while (iterator.hasNextRow()) {
                 Row row = iterator.next();
-                Util.putValue(collector, row.getTime(), Util.getValueAsObject(row));
+                Util.putValue(collector, dataType, row.getTime(), Util.getValueAsObject(row));
             }
         }
     }
@@ -100,7 +108,7 @@ public class UDTFSample implements UDTF {
             Arrays.sort(samples, 0, m);
             for (int i = 0; i < m; i++) {
                 Pair<Long, Object> p = samples[i];
-                Util.putValue(pc, p.getLeft(), p.getRight());
+                Util.putValue(pc, dataType, p.getLeft(), p.getRight());
             }
         }
     }
