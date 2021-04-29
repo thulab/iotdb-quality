@@ -36,24 +36,24 @@ public class Queue {
         }
     }
     public long queueithTime(int i) throws Exception{
-        int index=(front+i)%MaxLen;
-        if(rear>=front&&(i>rear||i<front)){
+        int index=(front+i+1)%MaxLen;
+        if(rear>=front&&(index>rear||index<=front)){
             System.out.println("ERROR01 Out of index");
             throw new Exception();
         }
-        if(rear<front&&i>rear&&i<front){
+        if(rear<front&&index>rear&&index<=front){
             System.out.println("ERROR02 Out of index");
             throw new Exception();
         }
         return timeQueueList[index];
     }
     public double queueithValue(int i) throws Exception{
-        int index=(front+i)%MaxLen;
-        if(rear>=front&&(i>rear||i<front)){
+        int index=(front+i+1)%MaxLen;
+        if(rear>=front&&(index>rear||index<=front)){
             System.out.println("ERROR01 Out of index");
             throw new Exception();
         }
-        if(rear<front&&i>rear&&i<front){
+        if(rear<front&&index>rear&&index<=front){
             System.out.println("ERROR02 Out of index");
             throw new Exception();
         }
