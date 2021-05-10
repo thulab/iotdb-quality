@@ -1,17 +1,51 @@
 package cn.edu.thu.iotdb.quality;
 
+import org.apache.commons.math3.analysis.function.Max;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+
 public class Queue {
     static int MaxLen;
     private int front;
     private int rear;
+    TSDataType datatype;
     long[] timeQueueList;
-    double[] valueQueueList;
-    public Queue(int len) {
+    double[] doubleValueQueueList;
+    float[] floatValueQueueList;
+    int[] intValueQueueList;
+    long[] longValueQueueList;
+    public Queue(int len, TSDataType type) {
         MaxLen=len;
         timeQueueList=new long[MaxLen];
-        valueQueueList=new double[MaxLen];
+        datatype=type;
+        switch(datatype){
+            case INT32:
+                intValueQueueList=new int[MaxLen];
+                //longValueQueueList=new long[1];
+                //floatValueQueueList=new float[1];
+                //doubleValueQueueList=new double[1];
+                break;
+            case INT64:
+                //intValueQueueList=new int[1];
+                longValueQueueList=new long[MaxLen];
+                //floatValueQueueList=new float[1];
+                //doubleValueQueueList=new double[1];
+                break;
+            case FLOAT:
+                //intValueQueueList=new int[1];
+                //longValueQueueList=new long[1];
+                floatValueQueueList=new float[MaxLen];
+                //doubleValueQueueList=new double[1];
+                break;
+            case DOUBLE:
+                //intValueQueueList=new int[1];
+                //longValueQueueList=new long[1];
+                //floatValueQueueList=new float[1];
+                doubleValueQueueList=new double[MaxLen];
+                break;
+        }
         front=0;
         rear=0;
+
     }
     public boolean isEmpty() {
         return front == rear;
@@ -29,7 +63,17 @@ public class Queue {
     }
     public double queueFrontValue() throws Exception {
         if(!isEmpty()){
-            return valueQueueList[(front+1)%MaxLen];
+            switch(datatype){
+                case INT32:
+                    return intValueQueueList[(front+1)%MaxLen];
+                case INT64:
+                    return (double) longValueQueueList[(front+1)%MaxLen];
+                case FLOAT:
+                    return floatValueQueueList[(front+1)%MaxLen];
+                case DOUBLE:
+                    return doubleValueQueueList[(front+1)%MaxLen];
+            }
+            return 0;
         }
         else {
             throw new Exception();
@@ -47,7 +91,7 @@ public class Queue {
         }
         return timeQueueList[index];
     }
-    public double queueithValue(int i) throws Exception{
+    public Object queueithValue(int i) throws Exception{
         int index=(front+i+1)%MaxLen;
         if(rear>=front&&(index>rear||index<=front)){
             System.out.println("ERROR01 Out of index");
@@ -57,13 +101,36 @@ public class Queue {
             System.out.println("ERROR02 Out of index");
             throw new Exception();
         }
-        return valueQueueList[index];
+        switch(datatype){
+            case INT32:
+                return intValueQueueList[index];
+            case INT64:
+                return longValueQueueList[index];
+            case FLOAT:
+                return floatValueQueueList[index];
+            case DOUBLE:
+                return doubleValueQueueList[index];
+        }
+        return 0;
     }
-    public void push(long timestamp, double value) {
+    public void push(long timestamp, Object value) {
         if(!isFull()){
             rear=(rear+1)%MaxLen;
             this.timeQueueList[rear]=timestamp;
-            this.valueQueueList[rear]=value;
+            switch(datatype){
+                case INT32:
+                    intValueQueueList[rear]= Integer.parseInt(value.toString());
+                    break;
+                case INT64:
+                    longValueQueueList[rear]= Long.parseLong(value.toString());
+                    break;
+                case FLOAT:
+                    floatValueQueueList[rear] = Float.parseFloat(value.toString());
+                    break;
+                case DOUBLE:
+                    doubleValueQueueList[rear] = Double.parseDouble(value.toString());
+                    break;
+            }
         }
         else{
             System.out.println("ERROR:Queue is Full");

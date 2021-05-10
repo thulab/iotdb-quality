@@ -19,8 +19,8 @@ public class UDTFKSigma implements UDTF {
     private double sum_x_2 = 0.0;
     private double sum_x_1 = 0.0;
     private double k;
-    private Queue q = new Queue(10000);
-
+    private Queue q;
+    private TSDataType dataType;
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
         validator.validateInputSeriesNumber(1)
@@ -34,28 +34,30 @@ public class UDTFKSigma implements UDTF {
     @Override
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) throws Exception {
         udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy())
-                .setOutputDataType(TSDataType.DOUBLE);
+                .setOutputDataType(udfParameters.getDataType(0));
         this.k = udfParameters.getDoubleOrDefault("k", 3);
+        this.dataType = udfParameters.getDataType(0);
+        this.q= new Queue(10000, dataType);
     }
 
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         double value = Util.getValueAsDouble(row);
         long timestamp = row.getTime();
-        if (Double.isFinite(value)) {
+        if (Double.isFinite(value)&&!Double.isNaN(value)) {
             if (q.isFull()) {
                 double frontValue = q.queueFrontValue();
                 q.pop();
-                q.push(timestamp, value);
+                q.push(timestamp, Util.getValueAsObject(row));
                 this.sum_x_1 = this.sum_x_1 - frontValue + value;
                 this.sum_x_2 = this.sum_x_2 - frontValue * frontValue + value * value;
                 this.mean = this.sum_x_1 / q.getLength();
                 this.var = this.sum_x_2 / q.getLength() - this.mean * this.mean;
                 if (Math.abs(value - mean) > k * Math.sqrt(this.var * q.getLength() / (q.getLength() - 1))) {
-                    collector.putDouble(timestamp, value);
+                    Util.putValue(collector,dataType,timestamp, Util.getValueAsObject(row));
                 }
             } else {
-                q.push(timestamp, value);
+                q.push(timestamp, Util.getValueAsObject(row));
                 this.sum_x_1 = this.sum_x_1 + value;
                 this.sum_x_2 = this.sum_x_2 + value * value;
                 this.mean = this.sum_x_1 / q.getLength();
@@ -63,10 +65,37 @@ public class UDTFKSigma implements UDTF {
                 if (q.isFull()) {
                     double stddev = Math.sqrt(this.var * q.getLength() / (q.getLength() - 1));
                     for (int i = 0; i < q.getLength(); i++) {
-                        value = q.queueithValue(i);
+                        Object v = q.queueithValue(i);
                         timestamp = q.queueithTime(i);
-                        if (Math.abs(value - mean) > k * stddev) {
-                            collector.putDouble(timestamp, value);
+                        double vdouble;
+                        float vfloat;
+                        long vlong;
+                        int vint;
+                        switch (dataType){
+                            case INT32:
+                                vint=Integer.parseInt(v.toString());
+                                if (Math.abs((double)vint - mean) > k * stddev) {
+                                    Util.putValue(collector,dataType,timestamp, v);
+                                }
+                                break;
+                            case INT64:
+                                vlong=Long.parseLong(v.toString());
+                                if (Math.abs((double)vlong - mean) > k * stddev) {
+                                    Util.putValue(collector,dataType,timestamp, v);
+                                }
+                                break;
+                            case FLOAT:
+                                vfloat=Float.parseFloat(v.toString());
+                                if (Math.abs((double)vfloat - mean) > k * stddev) {
+                                    Util.putValue(collector,dataType,timestamp, v);
+                                }
+                                break;
+                            case DOUBLE:
+                                vdouble=Double.parseDouble(v.toString());
+                                if (Math.abs(vdouble - mean) > k * stddev) {
+                                    Util.putValue(collector,dataType,timestamp, v);
+                                }
+                                break;
                         }
                     }
                 }
@@ -80,10 +109,37 @@ public class UDTFKSigma implements UDTF {
         if (!q.isFull() && q.getLength() > 1) {
             double stddev = Math.sqrt(this.var * q.getLength() / (q.getLength() - 1));
             for (int i = 0; i < q.getLength(); i++) {
-                double value = q.queueithValue(i);
+                Object v = q.queueithValue(i);
                 long timestamp = q.queueithTime(i);
-                if (Math.abs(value - mean) > k * stddev) {
-                    collector.putDouble(timestamp, value);
+                double vdouble;
+                float vfloat;
+                long vlong;
+                int vint;
+                switch (dataType){
+                    case INT32:
+                        vint=Integer.parseInt(v.toString());
+                        if (Math.abs((double)vint - mean) > k * stddev) {
+                            Util.putValue(collector,dataType,timestamp, v);
+                        }
+                        break;
+                    case INT64:
+                        vlong=Long.parseLong(v.toString());
+                        if (Math.abs((double)vlong - mean) > k * stddev) {
+                            Util.putValue(collector,dataType,timestamp, v);
+                        }
+                        break;
+                    case FLOAT:
+                        vfloat=Float.parseFloat(v.toString());
+                        if (Math.abs((double)vfloat - mean) > k * stddev) {
+                            Util.putValue(collector,dataType,timestamp, v);
+                        }
+                        break;
+                    case DOUBLE:
+                        vdouble=Double.parseDouble(v.toString());
+                        if (Math.abs(vdouble - mean) > k * stddev) {
+                            Util.putValue(collector,dataType,timestamp, v);
+                        }
+                        break;
                 }
             }
         }
