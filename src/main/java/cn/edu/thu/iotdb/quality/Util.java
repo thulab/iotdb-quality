@@ -18,31 +18,43 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 public class Util {
 
     /**
-     * 从Row中取出第一个值，并转化为double类型。注意，必须保证Row中不存在null。
+     * 从Row中取出指定位置的值，并转化为double类型。注意，必须保证Row中不存在null。
      *
-     * @param row
-     * @return Row中的第一个值
-     * @throws NoNumberException Row的第一个值是非数值类型
+     * @param row 数据行
+     * @param index 指定位置的索引
+     * @return Row中的指定位置的值
+     * @throws NoNumberException Row中的指定位置的值是非数值类型
      */
-    public static double getValueAsDouble(Row row) throws NoNumberException {
+    public static double getValueAsDouble(Row row, int index) throws NoNumberException {
         double ans = 0;
-        switch (row.getDataType(0)) {
+        switch (row.getDataType(index)) {
             case INT32:
-                ans = row.getInt(0);
+                ans = row.getInt(index);
                 break;
             case INT64:
-                ans = row.getLong(0);
+                ans = row.getLong(index);
                 break;
             case FLOAT:
-                ans = row.getFloat(0);
+                ans = row.getFloat(index);
                 break;
             case DOUBLE:
-                ans = row.getDouble(0);
+                ans = row.getDouble(index);
                 break;
             default:
                 throw new NoNumberException();
         }
         return ans;
+    }
+
+    /**
+     * 从Row中取出第0列的值，并转化为double类型。注意，必须保证Row中不存在null。
+     *
+     * @param row 数据行
+     * @return Row中的第0列的值
+     * @throws NoNumberException Row中的第0列的值是非数值类型
+     */
+    public static double getValueAsDouble(Row row) throws NoNumberException {
+        return getValueAsDouble(row, 0);
     }
 
     /**
@@ -78,14 +90,15 @@ public class Util {
 
     /**
      * 向PointCollector中加入新的数据点
+     *
      * @param pc PointCollector
      * @param type 数据类型
      * @param t 时间戳
      * @param o Object类型的值
-     * @throws Exception 
+     * @throws Exception
      */
     public static void putValue(PointCollector pc, TSDataType type, long t, Object o) throws Exception {
-        switch(type){
+        switch (type) {
             case INT32:
                 pc.putInt(t, (Integer) o);
                 break;

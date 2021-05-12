@@ -12,6 +12,7 @@ pass=root
 # Data Profiling
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function distinct as 'cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function histogram as 'cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function integral as 'cn.edu.thu.iotdb.quality.dprofile.UDAFIntegral'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function mad as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMad'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function median as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMedian'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'"
@@ -28,5 +29,13 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function timeliness as 'cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function validity as 'cn.edu.thu.iotdb.quality.dquality.UDTFValidity'"
 
-#Anomaly Detection
+
+# Data Repairing
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function valuerepair as 'cn.edu.thu.iotdb.quality.drepair.UDTFValueRepair'"
+
+# Data Matching
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
+
+
+# Anomaly Detection
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ksigma as 'cn.edu.thu.iotdb.quality.anomaly.UDTFKSigma'"

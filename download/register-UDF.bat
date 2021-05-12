@@ -12,6 +12,7 @@
 @REM Data Profiling
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function distinct as 'cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function histogram as 'cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function integral as 'cn.edu.thu.iotdb.quality.dprofile.UDAFIntegral'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function mad as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMad'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function median as 'cn.edu.thu.iotdb.quality.dprofile.ExactMedian'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'"
@@ -27,6 +28,14 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function consistency as 'cn.edu.thu.iotdb.quality.dquality.UDTFConsistency'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function timeliness as 'cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function validity as 'cn.edu.thu.iotdb.quality.dquality.UDTFValidity'"
+
+
+@REM Data Repairing
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function valuerepair as 'cn.edu.thu.iotdb.quality.drepair.UDTFValueRepair'"
+
+
+@REM Data Matching
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
 
 
 @REM Anomaly Detection
