@@ -1,4 +1,4 @@
-# KSigma(TODO)
+# KSigma
 
 ## 函数简介
 

@@ -1,4 +1,4 @@
-# Range(TODO)
+# Range
 
 ## Usage
 
@@ -11,9 +11,9 @@ This function is used to detect range anomaly of time series. According to upper
 + `lower_bound`:lower bound of range anomaly detection.
 + `upper_bound`:upper bound of range anomaly detection.
 
-**Output Series:** Output a single series. The type is DOUBLE.
+**Output Series:** Output a single series. The type is the same as the input.
 
-**Note:** Only when upper_bound is larger than lower_bound, the anomaly detection will be performed. Otherwise, nothing will be output.
+**Note:** Only when `upper_bound` is larger than `lower_bound`, the anomaly detection will be performed. Otherwise, nothing will be output.
 
 
 
