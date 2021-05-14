@@ -39,3 +39,4 @@ pass=root
 
 # Anomaly Detection
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ksigma as 'cn.edu.thu.iotdb.quality.anomaly.UDTFKSigma'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function range as 'cn.edu.thu.iotdb.quality.anomaly.UDTFRange'"
