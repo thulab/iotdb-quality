@@ -17,6 +17,7 @@ import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 public class LsGreedy extends ValueRepair {
 
     private double center = 0, sigma;
+    private final double eps = 1e-12;
 
     public LsGreedy(RowIterator dataIterator) throws Exception {
         super(dataIterator);
@@ -48,7 +49,7 @@ public class LsGreedy extends ValueRepair {
         }//初始化，填充堆
         while (true) {
             RepairNode top = heap.peek();
-            if (top == null || Math.abs(top.getU() - center) < 3 * sigma) {
+            if (top == null || Math.abs(top.getU() - center) < Math.max(eps, 3 * sigma)) {
                 break;
             }//堆是空的，或者所有的速度变化都在center±3sigma范围内，停止贪心
             top.modify();
@@ -82,7 +83,7 @@ public class LsGreedy extends ValueRepair {
          */
         public void modify() {
             double temp;
-            if (sigma < 1e-10) {
+            if (sigma < eps) {
                 temp = Math.abs(u - center);
             } else {
                 temp = Math.max(sigma, Math.abs(u - center) / 3);
