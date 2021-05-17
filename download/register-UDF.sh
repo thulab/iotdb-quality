@@ -35,7 +35,7 @@ pass=root
 
 # Data Matching
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
-
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pearson as 'cn.edu.thu.iotdb.quality.dmatch.UDAFPearson'"
 
 # Anomaly Detection
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ksigma as 'cn.edu.thu.iotdb.quality.anomaly.UDTFKSigma'"

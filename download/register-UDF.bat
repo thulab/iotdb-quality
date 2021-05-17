@@ -36,6 +36,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 
 @REM Data Matching
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function pearson as 'cn.edu.thu.iotdb.quality.dmatch.UDAFPearson'"
 
 
 @REM Anomaly Detection
