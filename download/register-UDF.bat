@@ -13,6 +13,7 @@
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function distinct as 'cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function histogram as 'cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function integral as 'cn.edu.thu.iotdb.quality.dprofile.UDAFIntegral'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function timeweightedavg as 'cn.edu.thu.iotdb.quality.dprofile.UDAFTimeWeightedAvg'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function mad as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMad'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function median as 'cn.edu.thu.iotdb.quality.dprofile.ExactMedian'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'"
