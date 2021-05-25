@@ -33,6 +33,7 @@ public class UDTFRange implements UDTF{
         this.dataType = udfParameters.getDataType(0);
     }
 
+    @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         int intValue;
         long longValue;
