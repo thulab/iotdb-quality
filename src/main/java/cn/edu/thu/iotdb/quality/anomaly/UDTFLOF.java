@@ -42,14 +42,14 @@ public class UDTFLOF implements UDTF{
         if(index+1==k)
             return A[index][0];
         else if(index+1<k)
-            findKthNum(A,index+1,right,k);
+            return findKthNum(A,index+1,right,k);
         else
-            findKthNum(A,left,index-1,k);
-        return -1.0;
+            return findKthNum(A,left,index-1,k);
     }
-    public double getLOF(Double[][] knn, Double[] x) {
+    public double getLOF(Double[][] knn, Double[] x, int length) {
         double sum = 0;
-        for (Double[] o : knn) {
+        for (int i=0;i<length;i++) {
+            Double[] o=knn[i];
             sum += getLocDens(knn, o) / getLocDens(knn, x);
         }
         return sum / k;
@@ -71,7 +71,7 @@ public class UDTFLOF implements UDTF{
             d[i][0]= (double)i;
             d[i][1]=dist(knn[i], x);
         }
-        index=Integer.parseInt(findKthNum(d,0,knn.length-1,k+1).toString());
+        index=(int)(double)(findKthNum(d,0,knn.length-1,k+1));
         return knn[index];
     }
     public double reachDist(Double[] o, Double[] x, Double[] nnk) {
@@ -86,8 +86,6 @@ public class UDTFLOF implements UDTF{
 
         return Math.sqrt(sum);
     }
-
-
 
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
@@ -131,7 +129,7 @@ public class UDTFLOF implements UDTF{
         double[] lof =new double[rowWindow.windowSize()];
         if(size>k) {
             for (int i = 0; i < size; i++) {
-                lof[i] = getLOF(knn, knn[i]);
+                lof[i] = getLOF(knn, knn[i],size);
                 if (lof[i] > threshold) {
                     collector.putDouble(timestamp[i], lof[i]);
                 }
