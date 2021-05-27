@@ -91,8 +91,7 @@ public class UDTFLOF implements UDTF{
 
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
-        validator.validateInputSeriesNumber(1)
-                .validateInputSeriesDataType(0,
+        validator.validateInputSeriesDataType(0,
                         TSDataType.INT32,
                         TSDataType.INT64,
                         TSDataType.FLOAT,
@@ -104,7 +103,7 @@ public class UDTFLOF implements UDTF{
         udtfConfigurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(udfParameters.getIntOrDefault("window", 10000)))
                 .setOutputDataType(udfParameters.getDataType(0));
         this.k = udfParameters.getIntOrDefault("k", 3);
-        this.threshold = udfParameters.getDoubleOrDefault("threshold",3);
+        this.threshold = udfParameters.getDoubleOrDefault("threshold",1);
         dim=udfParameters.getPaths().size();
     }
 
