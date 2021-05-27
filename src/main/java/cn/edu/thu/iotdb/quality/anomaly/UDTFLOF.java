@@ -110,8 +110,8 @@ public class UDTFLOF implements UDTF{
         int size=rowWindow.windowSize();
         Double[][] knn =new Double[rowWindow.windowSize()][dim];
         long[] timestamp =new long[rowWindow.windowSize()];
-        boolean flag=false;
-        for (int i=0;i<size;i++){
+        int i=0;
+        while(i<size){
             timestamp[i]=rowWindow.getRow(i).getTime();
             for(int j=0;j<dim;j++){
                 if(!rowWindow.getRow(i).isNull(j)) {
@@ -120,13 +120,10 @@ public class UDTFLOF implements UDTF{
                 else{
                     i--;
                     size--;
-                    flag=true;
                     break;
                 }
             }
-            if(flag){
-                flag=false;
-            }
+            i++;
         }
         double[] lof =new double[rowWindow.windowSize()];
         if(size>k) {
