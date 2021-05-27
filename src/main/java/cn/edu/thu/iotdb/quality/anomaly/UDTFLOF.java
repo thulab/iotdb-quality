@@ -114,8 +114,10 @@ public class UDTFLOF implements UDTF{
         for (int i=0;i<size;i++){
             timestamp[i]=rowWindow.getRow(i).getTime();
             for(int j=0;j<dim;j++){
-                knn[i][j]=Util.getValueAsDouble(rowWindow.getRow(i),j);
-                if(knn[i][j]==null||Double.isNaN(knn[i][j])||Double.isInfinite(knn[i][j])){
+                if(!rowWindow.getRow(i).isNull(j)) {
+                    knn[i][j] = Util.getValueAsDouble(rowWindow.getRow(i), j);
+                }
+                else{
                     i--;
                     size--;
                     flag=true;
