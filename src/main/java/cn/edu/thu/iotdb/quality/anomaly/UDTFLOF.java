@@ -105,9 +105,7 @@ public class UDTFLOF implements UDTF{
                 .setOutputDataType(udfParameters.getDataType(0));
         this.k = udfParameters.getIntOrDefault("k", 3);
         this.threshold = udfParameters.getDoubleOrDefault("threshold",3);
-        //需要获得输入维度
-        //dim=
-
+        dim=udfParameters.getPaths().size();
     }
 
     @Override
