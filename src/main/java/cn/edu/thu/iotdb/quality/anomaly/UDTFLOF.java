@@ -72,7 +72,7 @@ public class UDTFLOF implements UDTF{
             d[i][0]= (double)i;
             d[i][1]=dist(knn[i], x);
         }
-        index=(int)(double)(findKthNum(d,0,knn.length-1,k+1));
+        index=(int)(double)(findKthNum(d,0,length-1,k+1));
         return knn[index];
     }
     public double reachDist(Double[] o, Double[] x, Double[] nnk) {
