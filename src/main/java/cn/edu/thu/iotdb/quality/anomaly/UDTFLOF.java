@@ -102,7 +102,7 @@ public class UDTFLOF implements UDTF{
         udtfConfigurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(udfParameters.getIntOrDefault("window", 10000)))
                 .setOutputDataType(udfParameters.getDataType(0));
         this.k = udfParameters.getIntOrDefault("k", 3);
-        this.threshold = udfParameters.getDoubleOrDefault("threshold",1);
+        //this.threshold = udfParameters.getDoubleOrDefault("threshold",1);
         dim=udfParameters.getPaths().size();
     }
 
@@ -130,9 +130,10 @@ public class UDTFLOF implements UDTF{
         if(size>k) {
             for (int m = 0; m < size; m++) {
                 lof[m] = getLOF(knn, knn[m],size);
-                if (lof[m] > threshold) {
+                /*if (lof[m] > threshold) {
                     collector.putDouble(timestamp[m], lof[m]);
-                }
+                }*/
+                collector.putDouble(timestamp[m], lof[m]);
             }
         }
     }
