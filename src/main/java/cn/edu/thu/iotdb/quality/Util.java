@@ -6,10 +6,13 @@
 package cn.edu.thu.iotdb.quality;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+import org.eclipse.collections.api.tuple.primitive.LongIntPair;
+import org.eclipse.collections.impl.map.mutable.primitive.LongIntHashMap;
 
 /**
  *
@@ -232,4 +235,26 @@ public class Util {
         }
         return speed;
     }
+
+    /**
+     * 计算序列的众数
+     * @param values 序列
+     * @return 众数
+     */
+    public static long mode(long[] values) {
+        LongIntHashMap map = new LongIntHashMap();
+        for (long v : values) {
+            map.addToValue(v, 1);
+        }
+        long key = 0;
+        int maxValue = 0;
+        for (LongIntPair p : map.keyValuesView()) {
+            if (p.getTwo() > maxValue) {
+                key = p.getOne();
+                maxValue = p.getTwo();
+            }
+        }
+        return key;
+    }
+
 }
