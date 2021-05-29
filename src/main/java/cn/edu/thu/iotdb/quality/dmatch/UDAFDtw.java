@@ -33,7 +33,7 @@ public class UDAFDtw implements UDTF {
     @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
         configurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
-                .setOutputDataType(parameters.getDataType(0));
+                .setOutputDataType(TSDataType.DOUBLE);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class UDAFDtw implements UDTF {
         dp[0][0] = 0;
         for(int i=1;i<=m;i++){
             for(int j=1;j<=m;j++){
-                dp[i][j] = Math.abs(a.get(i)-b.get(j))+Math.min(Math.min(dp[i][j-1],dp[i+1][j]),dp[i+1][j-1]);
+                dp[i][j] = Math.abs(a.get(i-1)-b.get(j-1))+Math.min(Math.min(dp[i][j-1],dp[i-1][j]),dp[i-1][j-1]);
             }
         }
     }
