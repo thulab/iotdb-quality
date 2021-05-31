@@ -23,7 +23,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  *
  * @author Wang Haoyu
  */
-public class UDTFLocalMaxContSeries implements UDTF {
+public class UDTFConsecutiveSequences implements UDTF {
 
     private static final int MAXLEN = 128;
     private long gap;
@@ -114,7 +114,7 @@ public class UDTFLocalMaxContSeries implements UDTF {
      */
     void process(long time, boolean nullExist, PointCollector collector) throws IOException {
         if (nullExist) {//数据行存在空值，连续序列结束
-            if (count > 0) {
+            if (count > 1) {
                 collector.putInt(first, count);
             }
             first = last = -gap;
@@ -124,7 +124,7 @@ public class UDTFLocalMaxContSeries implements UDTF {
                 last = time;
                 count++;
             } else {//数据行非空但间隔不正常，连续序列结束，以当前数据行为起点开启新的序列
-                if (count > 0) {
+                if (count > 1) {
                     collector.putInt(first, count);
                 }
                 first = last = time;
@@ -139,7 +139,7 @@ public class UDTFLocalMaxContSeries implements UDTF {
             gap = calculateGap();
             cleanWindow(collector);
         }
-        if (count > 0) {
+        if (count > 1) {
             collector.putInt(first, count);
         }
     }
