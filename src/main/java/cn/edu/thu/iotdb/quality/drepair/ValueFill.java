@@ -19,6 +19,10 @@ public abstract class ValueFill {
     protected long time[];
     protected double original[];
     protected double repaired[];
+    protected double mean = 0;
+    protected double var = 0;
+    protected int not_nan_number = 0;
+
 
     public ValueFill(RowIterator dataIterator) throws Exception {
         // 首先用ArrayList存起来，然后再修复
@@ -39,6 +43,7 @@ public abstract class ValueFill {
         original = Util.toDoubleArray(originList);
         n = time.length;
         repaired = new double[n];
+//        calMeanAndVar();
     }
     public ValueFill(String filename) throws Exception {
         Scanner sc = new Scanner(new File(filename));
@@ -61,6 +66,7 @@ public abstract class ValueFill {
         original = Util.toDoubleArray(originList);
         n = time.length;
         repaired = new double[n];
+//        calMeanAndVar();
     }
 
     public abstract void fill();
@@ -76,4 +82,21 @@ public abstract class ValueFill {
      * @return the filled
      */
     public double[] getFilled() { return repaired; };
+
+    public void calMeanAndVar() {
+        for(double v : original){
+            if(!Double.isNaN(v)){
+                mean += v;
+                not_nan_number += 1;
+            }
+        }
+        assert not_nan_number > 0 : "All values are NaN";
+        mean /= not_nan_number;
+        for(double v : original){
+            if(!Double.isNaN(v)){
+                var += (v-mean) * (v-mean);
+            }
+        }
+        var /= not_nan_number;
+    }
 }

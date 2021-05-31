@@ -38,6 +38,15 @@ public class UDTFValueFill implements UDTF {
         if("ffill".equalsIgnoreCase(method)){
             vf = new PreviousFill(rowWindow.getRowIterator());
         }
+        else if("linear".equalsIgnoreCase(method)){
+            vf = new LinearFill(rowWindow.getRowIterator());
+        }
+        else if("mean".equalsIgnoreCase(method)){
+            vf = new MeanFill(rowWindow.getRowIterator());
+        }
+        else if("ar".equalsIgnoreCase(method)){
+            vf = new ARFill(rowWindow.getRowIterator());
+        }
         else {
             throw new Exception("Illegal method");
         }

@@ -7,6 +7,8 @@ package cn.edu.thu.iotdb.quality.drepair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import com.google.gson.internal.$Gson$Preconditions;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
@@ -23,7 +25,11 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
  */
 public class LinearFill extends ValueFill {
 
-    private long beforeRange, afterRange;
+//    protected int n;
+//    protected long time[];
+//    protected double original[];
+//    protected double repaired[];
+    private int prevNotNaN = -1;
 
     public LinearFill(RowIterator dataIterator) throws Exception {
         super(dataIterator);
@@ -35,8 +41,38 @@ public class LinearFill extends ValueFill {
 
     @Override
     public void fill() {
-        // TODO
+        // 默认等间隔的插值
+        for(int i = 0; i < original.length; i++){
+            if(!Double.isNaN(original[i])){
+                double k = 0;
+                if(prevNotNaN > 0){
+                    k = original[i] - original[prevNotNaN];
+                    k /= i - prevNotNaN;
+                    //System.out.print(k);
+                }
+                int t = prevNotNaN + 1;
+                while(t < i){
+                    repaired[t] = original[i] + k * (t - i);
+                    t++;
+                }
+                repaired[i] = original[i];
+                prevNotNaN = i;
+            }
+        }
+        if(prevNotNaN < original.length - 1 && prevNotNaN >= 0){
+            int t = prevNotNaN;
+            while(t <= original.length - 1){
+                repaired[t] = original[prevNotNaN];
+                t++;
+            }
+        }
     }
+
+//    public static void main(String args[]) throws Exception {
+//        ValueFill vf = new LinearFill("./temp.csv");
+//        vf.fill();
+//        System.out.print(vf.repaired[0]);
+//    }
 
 //    @Override
 //    public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
