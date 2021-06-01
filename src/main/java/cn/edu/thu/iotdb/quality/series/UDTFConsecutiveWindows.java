@@ -23,7 +23,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  *
  * @author Wang Haoyu
  */
-public class UDTFFixedLenContSeries implements UDTF {
+public class UDTFConsecutiveWindows implements UDTF {
 
     private static final int MAXLEN = 128;
     private long gap, len;
@@ -33,18 +33,23 @@ public class UDTFFixedLenContSeries implements UDTF {
 
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
-        validator.validate(x -> (long) x > 0, "gap has to be greater than 0.", validator.getParameters().getLongOrDefault("gap", 1))
-                .validate(x -> (long) x > 0, "length has to be greater than 0.", validator.getParameters().getLong("length"));
+        validator
+                .validate(x -> (long) x > 0,
+                        "gap should be a time period whose unit is ms, s, m, h.",
+                        Util.parseTime(validator.getParameters().getStringOrDefault("gap", "1ms")))
+                .validate(x -> (long) x > 0,
+                        "length should be a time period whose unit is ms, s, m, h.",
+                        Util.parseTime(validator.getParameters().getString("length")));
     }
 
     @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
         configurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.INT32);
-        gap = parameters.getLongOrDefault("gap", 0);
-        len = parameters.getLong("length");
+        gap = Util.parseTime(parameters.getStringOrDefault("gap", "0ms"));
+        len = Util.parseTime(parameters.getString("length"));
         first = last = -gap;
-        count = 0;
+        count = gap == 0 ? 0 : (int) (len / gap + 1);
     }
 
     @Override

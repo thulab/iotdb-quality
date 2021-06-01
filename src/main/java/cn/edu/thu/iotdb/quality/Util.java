@@ -238,6 +238,7 @@ public class Util {
 
     /**
      * 计算序列的众数
+     *
      * @param values 序列
      * @return 众数
      */
@@ -255,6 +256,27 @@ public class Util {
             }
         }
         return key;
+    }
+
+    public static long parseTime(String s) {
+        long unit = 0;
+        s = s.toLowerCase();
+        s = s.replaceAll(" ", "");
+        if (s.endsWith("ms")) {
+            unit = 1;
+            s = s.substring(0, s.length() - 2);
+        } else if (s.endsWith("s")) {
+            unit = 1000;
+            s = s.substring(0, s.length() - 1);
+        } else if (s.endsWith("m")) {
+            unit = 60000;
+            s = s.substring(0, s.length() - 1);
+        } else if (s.endsWith("h")) {
+            unit = 3600000;
+            s = s.substring(0, s.length() - 1);
+        }
+        double v = Double.parseDouble(s);
+        return (long) (unit * v);
     }
 
 }

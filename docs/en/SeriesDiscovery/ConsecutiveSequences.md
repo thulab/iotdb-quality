@@ -1,33 +1,32 @@
 # ConsecutiveSequences
 
-## 函数简介
+## Usage
 
-本函数用于在多维严格等间隔数据中发现局部最长连续子序列。
+This function is used to find locally longest consecutive subsequences in strictly equispaced multidimensional data.
 
-严格等间隔数据是指数据的时间间隔是严格相等的，允许存在数据缺失（包括行缺失和值缺失），但不允许存在数据冗余和时间戳偏移。
+Strictly equispaced data is the data whose time intervals are strictly equal. Missing data, including missing rows and missing values, is allowed in it, while data redundancy and timestamp drift is not allowed.
 
-连续子序列是指严格按照标准时间间隔等距排布，不存在任何数据缺失的子序列。如果某个连续子序列不是任何连续子序列的真子序列，那么它是局部最长的。
+Consecutive subsequence is the subsequence that is strictly equispaced with the standard time interval without any missing data. If a consecutive subsequence is not a proper subsequence of any consecutive subsequence, it is locally longest.
 
+**Name:** CONSECUTIVESEQUENCES
 
-**函数名：** CONSECUTIVESEQUENCES
+**Input Series:** Support multiple input series. The type is arbitrary but the data is strictly equispaced.
 
-**输入序列：** 支持多个输入序列，类型可以是任意的，但要满足严格等间隔的要求。
+**Parameters:** 
 
-**参数：**
++ `gap`: The standard time interval which is a positive number with an unit. The unit is 'ms' for millisecond, 's' for second, 'm' for minute and 'h' for hour. By default, it will be estimated by the mode of time intervals.
 
-+ `gap`：标准时间间隔，是一个有单位的正数。目前支持四种单位，分别是'ms'（毫秒）、's'（秒）、'm'（分钟）和'h'（小时）。在缺省情况下，函数会利用众数估计标准时间间隔。
+**Output Series:** Output a single series. The type is INT32. Each data point in the output series corresponds to a locally longest consecutive subsequence. The output timestamp is the starting timestamp of the subsequence and the output value is the number of data points in the subsequence.
 
-**输出序列：** 输出单个序列，类型为INT32。输出序列中的每一个数据点对应一个局部最长连续子序列，时间戳为子序列的起始时刻，值为子序列包含的数据点个数。
+**Note:** For input series that is not strictly equispaced, there is no guarantee on the output.
 
-**提示：** 对于不符合要求的输入，本函数不对输出做任何保证。
+## Examples
 
-## 使用示例
+### Manually Specify the Standard Time Interval
 
-### 手动指定标准时间间隔
+It's able to manually specify the standard time interval by the parameter `gap`. It's notable that false parameter leads to false output.
 
-本函数可以通过`gap`参数手动指定标准时间间隔。需要注意的是，错误的参数设置会导致输出产生严重错误。
-
-输入序列：
+Input series: 
 
 ```
 +-----------------------------+---------------+---------------+
@@ -46,13 +45,13 @@
 +-----------------------------+---------------+---------------+
 ```
 
-用于查询的SQL语句：
+SQL for query: 
 
 ```sql
 select consecutivesequences(s1,s2,'gap'='5m') from root.test.d1
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+------------------------------------------------------------------+
@@ -65,18 +64,17 @@ select consecutivesequences(s1,s2,'gap'='5m') from root.test.d1
 ```
 
 
+### Automatically Estimate the Standard Time Interval
 
-### 自动估计标准时间间隔
+When `gap` is default, this function estimates the standard time interval by the mode of time intervals and gets the same results. Therefore, this usage is more recommended.
 
-当`gap`参数缺省时，本函数可以利用众数估计标准时间间隔，得到同样的结果。因此，这种用法更受推荐。
-
-输入序列同上，用于查询的SQL语句如下：
+Input series is the same as above, the SQL for query is shown below:
 
 ```sql
 select consecutivesequences(s1,s2) from root.test.d1
 ```
 
-输出序列：
+Output series:
 ```
 +-----------------------------+------------------------------------------------------+
 |                         Time|consecutivesequences(root.test.d1.s1, root.test.d1.s2)|

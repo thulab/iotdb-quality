@@ -34,15 +34,15 @@ public class UDTFConsecutiveSequences implements UDTF {
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
         validator.validate(x -> (long) x > 0,
-                "gap has to be greater than 0.",
-                validator.getParameters().getLongOrDefault("gap", 1));
+                "gap should be a time period whose unit is ms, s, m, h.",
+                Util.parseTime(validator.getParameters().getStringOrDefault("gap", "1ms")));
     }
 
     @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
         configurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.INT32);
-        gap = parameters.getLongOrDefault("gap", 0);
+        gap = Util.parseTime(parameters.getStringOrDefault("gap", "0ms"));
         first = last = -gap;
         count = 0;
     }

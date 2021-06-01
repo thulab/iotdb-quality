@@ -36,9 +36,15 @@ pass=root
 
 # Data Matching
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function dtw as 'cn.edu.thu.iotdb.quality.dmatch.UDAFDtw'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pearson as 'cn.edu.thu.iotdb.quality.dmatch.UDAFPearson'"
 
 # Anomaly Detection
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ksigma as 'cn.edu.thu.iotdb.quality.anomaly.UDTFKSigma'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function range as 'cn.edu.thu.iotdb.quality.anomaly.UDTFRange'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function LOF as 'cn.edu.thu.iotdb.quality.anomaly.UDTFLOF'"
+
+# Series Discovery
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivesequences as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveSequences'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivewindows as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveWindows'"
+
