@@ -143,11 +143,13 @@ public class UDTFLOF implements UDTF{
         else if(method.equals("series")){
             int size=rowWindow.windowSize()-windowsize+1;
             Double[][] knn =new Double[size][windowsize];
-            long[] timestamp =new long[rowWindow.windowSize()-windowsize+1];
+            long[] timestamp =new long[size];
             Double temp;
             int i=0;
             while (i < rowWindow.windowSize()) {
-                timestamp[i] = rowWindow.getRow(i).getTime();
+                if(i<size) {
+                    timestamp[i] = rowWindow.getRow(i).getTime();
+                }
                 if(!rowWindow.getRow(i).isNull(0)){
                     temp=Util.getValueAsDouble(rowWindow.getRow(i),0);
                     for (int p = 0; p < windowsize; p++) {
@@ -160,7 +162,6 @@ public class UDTFLOF implements UDTF{
                     }
                 }
                 else{
-                    i--;
                     size--;
                 }
                 i++;
