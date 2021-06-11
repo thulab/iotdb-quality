@@ -10,7 +10,6 @@ This function is used to detect density anomaly of time series. According to k-t
 
 + `method`:assign a detection method. The default value is "default", when input data has multiple dimensions. The alternative is "series", when a input series will be transformed to high dimension.
 + `k`:use the k-th distance to calculate lof. Default value is 3.
-+  `threshold`:sets of values of lof larger than this threshold will be recognized as outlier. Lof larger than 1 indicates density near the set of value is below nearby sets, which is likely to be an outlier. Default value is 1.
 +  `window`: size of window to split origin data points. Default value is 10000.
 +  `windowsize`:dimension that will be transformed into when method is "series".  The default value is 5.
 
