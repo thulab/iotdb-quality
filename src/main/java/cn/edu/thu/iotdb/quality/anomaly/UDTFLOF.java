@@ -15,7 +15,7 @@ public class UDTFLOF implements UDTF{
     private double threshold;
     private int k;
     private int dim;
-    private String method;
+    private String method="default";
     private int windowsize;
     int Partition(Double[][] A,int left,int right){
         Double key=A[left][1];
@@ -104,20 +104,21 @@ public class UDTFLOF implements UDTF{
                 .setOutputDataType(udfParameters.getDataType(0));
         this.k = udfParameters.getIntOrDefault("k", 3);
         //this.threshold = udfParameters.getDoubleOrDefault("threshold",1);
-        dim=udfParameters.getPaths().size();
-        method=udfParameters.getStringOrDefault("method","default");
-        windowsize=udfParameters.getIntOrDefault("windowsize",5);
+        this.dim=udfParameters.getPaths().size();
+        this.method=udfParameters.getStringOrDefault("method","default");
+        this.windowsize=udfParameters.getIntOrDefault("windowsize",5);
     }
 
     @Override
     public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
-        if(method.equals("default")) {
+        if(this.method.equals("default")) {
             int size=rowWindow.windowSize();
-            Double[][] knn =new Double[rowWindow.windowSize()][dim];
-            long[] timestamp =new long[rowWindow.windowSize()];
+            Double[][] knn =new Double[size][dim];
+            long[] timestamp =new long[size];
             int i=0;
-            while (i < size) {
-                timestamp[i] = rowWindow.getRow(i).getTime();
+            int row=0;
+            while (row < rowWindow.windowSize()) {
+                timestamp[i] = rowWindow.getRow(row).getTime();
                 for (int j = 0; j < dim; j++) {
                     if (!rowWindow.getRow(i).isNull(j)) {
                         knn[i][j] = Util.getValueAsDouble(rowWindow.getRow(i), j);
@@ -128,6 +129,7 @@ public class UDTFLOF implements UDTF{
                     }
                 }
                 i++;
+                row++;
             }
             double[] lof = new double[size];
             if (size > k) {
@@ -140,16 +142,15 @@ public class UDTFLOF implements UDTF{
                 }
             }
         }
-        else if(method.equals("series")){
+        else if(this.method.equals("series")){
             int size=rowWindow.windowSize()-windowsize+1;
             Double[][] knn =new Double[size][windowsize];
-            long[] timestamp =new long[size];
+            long[] timestamp =new long[rowWindow.windowSize()];
             Double temp;
             int i=0;
-            while (i < rowWindow.windowSize()) {
-                if(i<size) {
-                    timestamp[i] = rowWindow.getRow(i).getTime();
-                }
+            int row=0;
+            while (row < rowWindow.windowSize()) {
+                timestamp[i] = rowWindow.getRow(row).getTime();
                 if(!rowWindow.getRow(i).isNull(0)){
                     temp=Util.getValueAsDouble(rowWindow.getRow(i),0);
                     for (int p = 0; p < windowsize; p++) {
@@ -162,9 +163,11 @@ public class UDTFLOF implements UDTF{
                     }
                 }
                 else{
+                    i--;
                     size--;
                 }
                 i++;
+                row++;
             }
             double[] lof = new double[size];
             if (size > k) {
