@@ -120,7 +120,7 @@ public class UDTFLOF implements UDTF{
             while (row < rowWindow.windowSize()) {
                 timestamp[i] = rowWindow.getRow(row).getTime();
                 for (int j = 0; j < dim; j++) {
-                    if (!rowWindow.getRow(i).isNull(j)) {
+                    if (!rowWindow.getRow(row).isNull(j)) {
                         knn[i][j] = Util.getValueAsDouble(rowWindow.getRow(i), j);
                     } else {
                         i--;
@@ -144,39 +144,40 @@ public class UDTFLOF implements UDTF{
         }
         else if(this.method.equals("series")){
             int size=rowWindow.windowSize()-windowsize+1;
-            Double[][] knn =new Double[size][windowsize];
-            long[] timestamp =new long[rowWindow.windowSize()];
-            Double temp;
-            int i=0;
-            int row=0;
-            while (row < rowWindow.windowSize()) {
-                timestamp[i] = rowWindow.getRow(row).getTime();
-                if(!rowWindow.getRow(i).isNull(0)){
-                    temp=Util.getValueAsDouble(rowWindow.getRow(i),0);
-                    for (int p = 0; p < windowsize; p++) {
-                        if(i - p < 0){
-                            break;
+            if (size > 0) {
+                Double[][] knn = new Double[size][windowsize];
+                long[] timestamp = new long[rowWindow.windowSize()];
+                Double temp;
+                int i = 0;
+                int row = 0;
+                while (row < rowWindow.windowSize()) {
+                    timestamp[i] = rowWindow.getRow(row).getTime();
+                    if (!rowWindow.getRow(row).isNull(0)) {
+                        temp = Util.getValueAsDouble(rowWindow.getRow(row), 0);
+                        for (int p = 0; p < windowsize; p++) {
+                            if (i - p < 0) {
+                                break;
+                            }
+                            if (i - p < size) {
+                                knn[i - p][p] = temp;
+                            }
                         }
-                        if (i - p < size) {
-                            knn[i - p][p] = temp;
-                        }
+                    } else {
+                        i--;
+                        size--;
                     }
+                    i++;
+                    row++;
                 }
-                else{
-                    i--;
-                    size--;
-                }
-                i++;
-                row++;
-            }
-            double[] lof = new double[size];
-            if (size > k) {
-                for (int m = 0; m < size; m++) {
-                    lof[m] = getLOF(knn, knn[m], size);
+                double[] lof = new double[size];
+                if (size > k) {
+                    for (int m = 0; m < size; m++) {
+                        lof[m] = getLOF(knn, knn[m], size);
                 /*if (lof[m] > threshold) {
                     collector.putDouble(timestamp[m], lof[m]);
                 }*/
-                    collector.putDouble(timestamp[m], lof[m]);
+                        collector.putDouble(timestamp[m], lof[m]);
+                    }
                 }
             }
         }
