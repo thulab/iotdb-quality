@@ -18,6 +18,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function median as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMedian'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function percentile as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function resample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFResample'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function sample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSample'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function skew as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSkew'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function spread as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSpread'"

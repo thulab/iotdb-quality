@@ -14,7 +14,7 @@ Consecutive subsequence is the subsequence that is strictly equispaced with the 
 
 **Parameters:** 
 
-+ `gap`: The standard time interval which is a positive number with an unit. The unit is 'ms' for millisecond, 's' for second, 'm' for minute and 'h' for hour. By default, it will be estimated by the mode of time intervals.
++ `gap`: The standard time interval which is a positive number with an unit. The unit is 'ms' for millisecond, 's' for second, 'm' for minute, 'h' for hour and 'd' for day. By default, it will be estimated by the mode of time intervals.
 
 **Output Series:** Output a single series. The type is INT32. Each data point in the output series corresponds to a locally longest consecutive subsequence. The output timestamp is the starting timestamp of the subsequence and the output value is the number of data points in the subsequence.
 
