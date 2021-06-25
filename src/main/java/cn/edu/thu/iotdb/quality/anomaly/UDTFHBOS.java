@@ -47,15 +47,15 @@ public class UDTFHBOS implements UDTF {
         }
         double value = Util.getValueAsDouble(row);
         if (Double.isFinite(value)) {
-            int id = Math.min(Math.max((int) Math.floor((value - start) / gap), 0), count - 1);
-            bucket[id]++;
+            //int id = Math.min(Math.max((int) Math.floor((value - start) / gap), 0), count - 1);
+            //bucket[id]++;
         }
     }
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
         for (int i = 0; i < count; i++) {
-            collector.putInt(i, bucket[i]);
+            //collector.putInt(i, bucket[i]);
         }
     }
 }
