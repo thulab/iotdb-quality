@@ -149,6 +149,8 @@ public class Screen extends ValueRepair {
 
     public static void main(String[] args) throws Exception {
         Screen screen = new Screen("temp.csv");
+        screen.setSmax(0.001);
+        screen.setSmin(-0.001);
         screen.repair();
         for (int i = 0; i < screen.n; i++) {
             System.out.println(screen.time[i] + " " + screen.repaired[i]);

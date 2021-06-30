@@ -269,10 +269,13 @@ public class Util {
             unit = 1000;
             s = s.substring(0, s.length() - 1);
         } else if (s.endsWith("m")) {
-            unit = 60000;
+            unit = 60 * 1000;
             s = s.substring(0, s.length() - 1);
         } else if (s.endsWith("h")) {
-            unit = 3600000;
+            unit = 60 * 60 * 1000;
+            s = s.substring(0, s.length() - 1);
+        } else if (s.endsWith("d")) {
+            unit = 24 * 60 * 60 * 1000;
             s = s.substring(0, s.length() - 1);
         }
         double v = Double.parseDouble(s);
