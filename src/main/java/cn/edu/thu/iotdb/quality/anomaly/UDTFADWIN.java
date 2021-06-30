@@ -503,6 +503,7 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 	}
 	public void setW(int W0){}
 	private double delta;
+	private String output;
 	@Override
 	public void validate(UDFParameterValidator validator) throws Exception {
 		validator.validateInputSeriesDataType(0,
@@ -516,12 +517,15 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 		udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy())
 				.setOutputDataType(TSDataType.INT32);
 		this.delta=udfParameters.getDoubleOrDefault("delta",0.01);
-		this.mintClock=udfParameters.getIntOrDefault("clock",32);
+		this.output=udfParameters.getStringOrDefault("output","drift");
 	}
 	@Override
 	public void transform(Row row, PointCollector collector) throws Exception {
 		if(setInput(Util.getValueAsDouble(row),delta)){
 			collector.putInt(row.getTime(),1);
+		}
+		else if(output.equalsIgnoreCase("all")){
+			collector.putInt(row.getTime(),0);
 		}
 	}
 	@Override
