@@ -1,24 +1,5 @@
 package cn.edu.thu.iotdb.quality.anomaly;
-/*
- *    Adwin.java
- *    Copyright (C) 2008 UPC-Barcelona Tech, Catalonia
- *    @author Albert Bifet
- *
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with this program; if not, write to the Free Software
- *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
-//import moa.core.SizeOf;
+
 import cn.edu.thu.iotdb.quality.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -253,7 +234,7 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 	public static final double DELTA=.002; //.1;
 	private static final int mintMinimLongitudWindow=10; //10
 	private double mdbldelta=.002; //.1;
-	private int mintTime=0;
+	private int number =0;
 	private int mintClock=32;
 	private double mdblWidth=0; // Mean of Width = mdblWidth/Number of items
 	//BUCKET
@@ -279,7 +260,7 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 	public void setClock(int intClock){mintClock=intClock;}
 	public int getClock(){return mintClock;}
 	public boolean getWarning(){return false;}
-	public boolean getDetect(){return (Detect==mintTime);}
+	public boolean getDetect(){return (Detect== number);}
 	public int getNumberDetections(){return numberDetections;}
 	public double getTotal(){return TOTAL;}
 	public double getEstimation(){return TOTAL/WIDTH;}
@@ -387,13 +368,13 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 		boolean blnChange=false;
 		boolean blnExit=false;
 		ListItem cursor;
-		mintTime++;
+		number++;
 
 		//1,2)Increment window in one element
 		insertElement(intEntrada);
 		blnBucketDeleted=false;
 		//3)Reduce  window
-		if(mintTime % mintClock==0 && getWidth() > mintMinimLongitudWindow ){
+		if(number % mintClock==0 && getWidth() > mintMinimLongitudWindow ){
 			   boolean blnReduceWidth= true; // Diference
 
 			   while(blnReduceWidth) // Diference
@@ -430,15 +411,15 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 						//if(
 								blnCutexpression(n0,n1,u0,u1,v0,v1,absvalue,delta) ){
 						blnBucketDeleted=true;
-						Detect=mintTime;
+						Detect= number;
 
 						if (Detect==0) {
-							Detect=mintTime;
+							Detect= number;
 							//blnFirst=true;
 							//blnWarning=true;
 						}
 						else if (DetectTwice==0) {
-							DetectTwice=mintTime;
+							DetectTwice= number;
 							//blnDetect=true;
 						}
 						blnReduceWidth= true; // Diference
@@ -504,6 +485,7 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 	public void setW(int W0){}
 	private double delta;
 	private String output;
+	private int windowsize;
 	@Override
 	public void validate(UDFParameterValidator validator) throws Exception {
 		validator.validateInputSeriesDataType(0,
@@ -518,6 +500,8 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 				.setOutputDataType(TSDataType.INT32);
 		this.delta=udfParameters.getDoubleOrDefault("delta",0.01);
 		this.output=udfParameters.getStringOrDefault("output","drift");
+		this.windowsize=udfParameters.getIntOrDefault("windowsize",32);
+		mintClock=windowsize;
 	}
 	@Override
 	public void transform(Row row, PointCollector collector) throws Exception {
