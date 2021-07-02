@@ -235,9 +235,9 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 		 */
 	}
 
-	public static final double DELTA=.1; //.1;
+	//public static final double DELTA=.1; //.1;
 	private static int mintMinimLongitudWindow=10; //10
-	private double mdbldelta=.1; //.1;
+	private double mdbldelta; //.1;
 	private int number =0;
 	private int mintClock=32;
 	private double mdblWidth=0; // Mean of Width = mdblWidth/Number of items
@@ -431,7 +431,9 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 						ret_k=n0;
 						if (getWidth()>0) { //Reduce width of the window
 							//while (n0>0)  // Diference NEGATIVE
-								n0-=deleteElement();
+							int remove_number=deleteElement();
+								n0-=remove_number;
+
 						blnExit=true;
 						break;
 						}
@@ -444,11 +446,11 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 
 		mdblWidth+=getWidth();
 		if (blnChange) numberDetections++;
-		return ret_k;
+		return blnChange?WIDTH-ret_k:-1;
 	}
 	private boolean blnCutexpression(int n0,int n1,double u0,double u1,double v0,double v1,double absvalue,double delta){
 			int n=getWidth();
-            double dd = Math.log(2*Math.log(n)/delta);     // -- ull perque el ln n va al numerador.
+            double dd = Math.log(2*Math.log(n)/delta);
             // Formula Gener 2008
             double v= getVariance();
             double m= ((double)1/((n0-mintMinWinLength+1)))+ ((double)1/((n1-mintMinWinLength+1)));
@@ -460,7 +462,7 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 
 	public UDTFADWIN()
 	{
-		mdbldelta=DELTA;
+		mdbldelta=delta;
 		initBuckets();
 		Detect=0;
 		numberDetections=0;
@@ -477,7 +479,7 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 	}
 	public UDTFADWIN(int cl)
 	{
-		mdbldelta=DELTA;
+		mdbldelta=delta;
 		initBuckets();
 		Detect=0;
 		numberDetections=0;
@@ -491,6 +493,8 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 	private double delta;
 	private String output;
 	private int windowsize;
+	private int minmiumwindow;
+	private int count=-1;
 	@Override
 	public void validate(UDFParameterValidator validator) throws Exception {
 		validator.validateInputSeriesDataType(0,
@@ -505,8 +509,10 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 				.setOutputDataType(TSDataType.INT32);
 		this.delta=udfParameters.getDoubleOrDefault("delta",0.01);
 		//this.output=udfParameters.getStringOrDefault("output","drift");
-		this.windowsize=udfParameters.getIntOrDefault("windowsize",32);
+		this.windowsize=udfParameters.getIntOrDefault("windowsize",200);
+		this.minmiumwindow=udfParameters.getIntOrDefault("subwindow",50);
 		mintMinimLongitudWindow=windowsize;
+		mintMinWinLength=minmiumwindow-2;
 	}
 	ArrayList<Long> timelist = new ArrayList<>();
 	ArrayList<Integer> labellist = new ArrayList<>();
@@ -514,17 +520,13 @@ public class UDTFADWIN implements UDTF{ //extends Estimator {
 	public void transform(Row row, PointCollector collector) throws Exception {
 		timelist.add(row.getTime());
 		labellist.add(0);
-		if(timelist.size()>windowsize){
-			timelist.remove(0);
-			labellist.remove(0);
-		}
+		count++;
 		int k=setInput(Util.getValueAsDouble(row),delta);
 		if(k>0){
-			/*if(output.equalsIgnoreCase("all"))
-				collector.putInt(row.getTime(), 0);*/
-			if(labellist.get(k)==0)
-				collector.putInt(timelist.get(k), 1);
-			labellist.set(k, 1);
+			//collector.putInt(row.getTime(),1);
+			if(labellist.get(count-k)==0)
+				collector.putInt(timelist.get(count-k), 1);
+			labellist.set(count-k, 1);
 		}
 /*		else if(output.equalsIgnoreCase("all")){
 			collector.putInt(row.getTime(),0);
