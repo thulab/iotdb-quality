@@ -34,13 +34,20 @@ public class Resampler {
     private final String aggregator;//用于聚合的算法名称
     private final String interpolator;//用于插值的算法名称
     private long currentTime;//当前窗口的起始时间，窗口左闭右开
-    private boolean first = true;//是否是第一次处理waitList
+    private long startTime, endTime;//重采样的开始时间（包含）和结束时间（不包含）
+    private boolean outer = true;//是否使用外插法
 
     public Resampler(long newPeriod, String aggregator, String interpolator) {
+        this(newPeriod, aggregator, interpolator, -1, -1);
+    }
+
+    public Resampler(long newPeriod, String aggregator, String interpolator, long startTime, long endTime) {
         this.newPeriod = newPeriod;
         this.aggregator = aggregator;
         this.interpolator = interpolator;
-        this.currentTime = -1;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.currentTime = this.startTime;
     }
 
     /**
@@ -50,7 +57,7 @@ public class Resampler {
      * @param value 值
      */
     public void insert(long time, double value) {
-        if (Double.isNaN(value)) {//跳过值为NAN的数据
+        if (Double.isNaN(value) || (startTime > 0 && time < startTime) || (endTime > 0 && time >= endTime)) {//跳过值为NAN的数据和不在范围内的数据
             return;
         }
         if (currentTime < 0) {//初始化窗口
@@ -87,46 +94,35 @@ public class Resampler {
      * 强制对所有缓存数据进行处理
      */
     public void flush() {
-        if (currentTime > 0) {//处理输入0个数据点的情况
+        do {//第一次执行，处理最后一个窗口内的数据                
             downSample();
-            upSample();
-            //输出source中最后一个元素
-            int n = source.getSize();
-            if (n > 0) {
-                SourceDataPoint p = source.get(n - 1);
-                if (p.out) {
-                    timeBuffer.push(p.time);
-                    valueBuffer.push(p.value);
-                }
-            }
-        }
+            currentTime += newPeriod;
+        } while (endTime >= currentTime);
+        outer = true;
+        upSample();
     }
 
     /**
      * 上采样，利用插值算法处理值为空的点，并将处理完成的点输出
      */
     private void upSample() {
-        if (source.getSize() > 2 || (first && source.getSize() == 2)) {//常态
-            first = false;
+        if (source.getSize() > 2 || (outer && source.getSize() == 2)) {//常态           
             if (source.getSize() > 2) {
                 source.pop();
             }
-            //将source的第0个数据点输出 
-            SourceDataPoint p = source.get(0);
-            if (p.out) {
-                timeBuffer.push(p.time);
-                valueBuffer.push(p.value);
-            }
-            //对waitList中的点进行内插
+            //对waitList中的点进行插值
             while (!waitList.isEmpty()) {
                 long t = waitList.getHead();
-                if (source.get(1).time < t) {//内插法需要的后面的数据点不足，留待之后处理
+                if (!outer && source.get(1).time < t) {//内插法需要的后面的数据点不足，留待之后处理
                     break;
                 }
-                timeBuffer.push(t);
-                valueBuffer.push(interpolate(t));//使用内插法进行填补
+                if (endTime < 0 || t < endTime) {//超过endTime的不予输出
+                    timeBuffer.push(t);
+                    valueBuffer.push(interpolate(t));//进行插值填补
+                }
                 waitList.pop();
             }
+            outer = false;
         }
     }
 
@@ -137,22 +133,14 @@ public class Resampler {
         if (timeWindow.size() >= 2) {
             //聚合，将结果和时间戳加入source
             double result = aggregate();
-            source.push(new SourceDataPoint(currentTime, result, true));
-            timeWindow.clear();
-            valueWindow.clear();
+            source.push(new SourceDataPoint(currentTime, result));
         } else if (timeWindow.size() == 1) {
-            if (timeWindow.get(0) == currentTime) {
-                //如果窗口内唯一点正好位于窗口起始时刻，则该点需要被输出
-                source.push(new SourceDataPoint(timeWindow.get(0), valueWindow.get(0), true));
-            } else {
-                source.push(new SourceDataPoint(timeWindow.get(0), valueWindow.get(0), false));
-                waitList.push(currentTime);
-            }
-            timeWindow.clear();
-            valueWindow.clear();
-        } else {
-            waitList.push(currentTime);
+            //将唯一的数据点加入source
+            source.push(new SourceDataPoint(timeWindow.get(0), valueWindow.get(0)));
         }
+        timeWindow.clear();
+        valueWindow.clear();
+        waitList.push(currentTime);
     }
 
     /**
@@ -194,16 +182,29 @@ public class Resampler {
      * @return 对应的值
      */
     private double interpolate(long t) {
+        if (t == source.get(1).time) {
+            return source.get(1).value;
+        } else if (t == source.get(0).time) {
+            return source.get(0).value;
+        }
         double ret = Double.NaN;
         switch (interpolator) {
             case "nan":
                 ret = Double.NaN;
                 break;
             case "ffill":
-                ret = source.get(0).value;
+                if (t >= source.get(1).time) {
+                    ret = source.get(1).value;
+                } else if (t >= source.get(0).time) {
+                    ret = source.get(0).value;
+                }
                 break;
             case "bfill":
-                ret = source.get(1).value;
+                if (t <= source.get(0).time) {
+                    ret = source.get(0).value;
+                } else if (t <= source.get(1).time) {
+                    ret = source.get(1).value;
+                }
                 break;
             case "linear":
                 ret = source.get(0).value * (source.get(1).time - t) + source.get(1).value * (t - source.get(0).time);
@@ -254,21 +255,21 @@ public class Resampler {
 
         long time;//时间戳
         double value;//值
-        boolean out;//是否需要被输出
 
-        public SourceDataPoint(long time, double value, boolean out) {
+        public SourceDataPoint(long time, double value) {
             this.time = time;
             this.value = value;
-            this.out = out;
         }
 
     }
 
     public static void main(String[] args) throws FileNotFoundException, ParseException {
-        Resampler resampler = new Resampler(60000, "mean", "linear");
+        Resampler resampler = new Resampler(60000 * 60 * 24, "mean", "linear");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        resampler.currentTime = format.parse("2021-06-08 00:00:00").getTime();
+        resampler.endTime = format.parse("2021-07-01 00:00:00").getTime();
         resampler.insert("resample.csv");
         resampler.flush();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         while (resampler.hasNext()) {
             System.out.print(format.format(new Date(resampler.getOutTime())));
             System.out.println(" , " + resampler.getOutValue());
