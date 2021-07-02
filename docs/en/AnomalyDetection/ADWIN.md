@@ -13,13 +13,13 @@ Learning from Time-Changing Data with Adaptive Windowing, A Bifetet al., 2005
 **Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
 + `delta`:a threshold to distinguish concept drifts. See the δ defined in the paper. Default value is 0.01.
-+ `output`:output all points when set to "all". Otherwise only output anomalies.
++ `windowsize`:the size of window to detect. Should be larger than 2
 
 **Output Series:** Output a single series. The type is INT32. 1 for anomaly, and 0 for others.
 
 ## Examples
 
-### Using default parameters
+### Assigning parameters
 
 Input series:
 
@@ -73,16 +73,16 @@ Input series:
 SQL for query: 
 
 ```sql
-select adwin(s1) from root.test
+select adwin(s1,"windowsize"="30","delta"="0.01") from root.test
 ```
 
 Output series:
 
 ```
-+-----------------------------+-------------------+
-|                         Time|adwin(root.test.s1)|
-+-----------------------------+-------------------+
-|1970-01-01T08:00:03.100+08:00|                  1|
-+-----------------------------+-------------------+
++-----------------------------+------------------------------------------------------+
+|                         Time|adwin(root.test.s1, "windowsize"="30", "delta"="0.01")|
++-----------------------------+------------------------------------------------------+
+|1970-01-01T08:00:02.100+08:00|                                                     1|
++-----------------------------+------------------------------------------------------+
 ```
 
