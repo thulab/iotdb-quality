@@ -1,5 +1,6 @@
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import com.csvreader.CsvReader;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -11,13 +12,15 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import cn.edu.thu.iotdb.quality.LinearRegression;
 import cn.edu.thu.iotdb.quality.Util;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class Segment implements UDTF {
 
-    private double calculate_error(double[] x1, double[] x2){
+    private double calculate_error(double[] x1, double[] x2) {
         double[] x= ArrayUtils.addAll(x1,x2);
         int l=x.length;
         double[] y=new double[l];
@@ -28,7 +31,7 @@ public class Segment implements UDTF {
         return linearFit.getMAbsE();
     }
 
-    private ArrayList<double[]> bottom_up(double[] value, double max_error){
+    private ArrayList<double[]> bottom_up(double[] value, double max_error) {
         ArrayList<double[]> seg_ts=new ArrayList<>();
         if(value.length<=2){
             ArrayList<double[]> ret=new ArrayList<>();
@@ -36,7 +39,7 @@ public class Segment implements UDTF {
             return ret;
         }
         for(int i=0;i<value.length;i+=2){
-            seg_ts.set(i/2, Arrays.copyOfRange(value,i,i+2));
+            seg_ts.add(Arrays.copyOfRange(value,i,i+2));
         }
         double[] merge_cost = new double[seg_ts.size()-1];
         for (int i=0;i<seg_ts.size()-1;i++){
@@ -46,19 +49,21 @@ public class Segment implements UDTF {
             int index=ArrayUtils.indexOf(merge_cost,Arrays.stream(merge_cost).min().getAsDouble());
             seg_ts.set(index, ArrayUtils.addAll(seg_ts.get(index),seg_ts.get(index+1)));
             seg_ts.remove(index+1);
-            ArrayUtils.remove(merge_cost,index);
+            merge_cost=ArrayUtils.clone(ArrayUtils.remove(merge_cost,index));
             if(seg_ts.size()==1){
                 break;
             }
             if(index+1<seg_ts.size()){
                 merge_cost[index]=calculate_error(seg_ts.get(index), seg_ts.get(index + 1));
+            }
+            if(index>0){
                 merge_cost[index-1]=calculate_error(seg_ts.get(index - 1), seg_ts.get(index));
             }
         }
         return  seg_ts;
     }
 
-    private double[] best_line(double max_error, double[] input_df, double[] w, int start_idx, double upper_bound){
+    private double[] best_line(double max_error, double[] input_df, double[] w, int start_idx, double upper_bound) {
         double error=0.0;
         int idx=start_idx+w.length;
         double[] S_prev=w.clone();
@@ -76,14 +81,14 @@ public class Segment implements UDTF {
             if (error<=max_error){
                 S_prev=S.clone();
             }
-            if(S_prev.length>upper_bound||input_df[idx]==0){
+            if(S_prev.length>upper_bound||idx>=input_df.length){
                 break;
             }
         }
         return  S_prev;
     }
 
-    private double[] approximated_segment(double[] in_seq){
+    private double[] approximated_segment(double[] in_seq) {
         if(in_seq.length<=2){
 
             return in_seq;
@@ -94,14 +99,14 @@ public class Segment implements UDTF {
         }
         double[] approximated_values=new LinearRegression(times,in_seq).getYhead();
 
-        double[] new_seg=new double[5];
+        double[] new_seg=new double[2];
         new_seg[0]=approximated_values[0];
         new_seg[1]=approximated_values[approximated_values.length-2];
 
         return  new_seg;
     }
 
-    private ArrayList<double[]> swab(double[] input_df, double max_error, int seg_num, int in_window_size){
+    private ArrayList<double[]> swab(double[] input_df, double max_error, int seg_num, int in_window_size) throws Exception{
         int cur_nr=0;
         int window_size=in_window_size;
         int w_nr=cur_nr+window_size;
@@ -139,7 +144,7 @@ public class Segment implements UDTF {
         return seg_ts;
     }
 
-    private ArrayList<double[]> swab_alg(double[] df, long[] timestamp, double max_error, int windowsize, double thr_steady, double thr_steep){
+    private ArrayList<double[]> swab_alg(double[] df, long[] timestamp, double max_error, int windowsize) throws Exception {
         // double error_bound=(Arrays.stream(timestamp).max().getAsLong()-Arrays.stream(timestamp).min().getAsLong())*max_error;
         double error_bound=max_error;
         ArrayList<double[]> res_df1=swab(df,error_bound,10,windowsize);
@@ -149,8 +154,8 @@ public class Segment implements UDTF {
     private int window_size;
     private double max_error;
     private String method;
-    private ArrayList<Long> timestamp=new ArrayList<>();
-    private ArrayList<Double> value=new ArrayList<>();
+    private static ArrayList<Long> timestamp=new ArrayList<>();
+    private static ArrayList<Double> value=new ArrayList<>();
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
         validator.validateInputSeriesDataType(0,
@@ -181,7 +186,7 @@ public class Segment implements UDTF {
     public void terminate(PointCollector collector) throws Exception {
         long[] ts = timestamp.stream().mapToLong(Long::valueOf).toArray();
         double[] v=value.stream().mapToDouble(Double::valueOf).toArray();
-        ArrayList<double[]> seg=swab_alg(v,ts,max_error,window_size,0.1,1.75);
+        ArrayList<double[]> seg=swab_alg(v,ts,max_error,window_size);
         int index=0;
         for (double[] doubles : seg) {
             collector.putDouble(ts[index], doubles[0]);
