@@ -21,6 +21,8 @@ which supports Max, Min, First, Last, Mean and Median.
 + `every`: The frequency of resampling, which is a positive number with an unit. The unit is 'ms' for millisecond, 's' for second, 'm' for minute, 'h' for hour and 'd' for day. This parameter cannot be lacked.
 + `interp`: The interpolation method of up-sampling, which is 'NaN', 'FFill', 'BFill' or 'Linear'. By default, NaN is used.
 + `aggr`: The aggregation method of down-sampling, which is 'Max', 'Min', 'First', 'Last', 'Mean' or 'Median'. By default, Mean is used. 
++ `start`: The start time (inclusive) of resampling with the format 'yyyy-MM-dd HH:mm:ss'. By default, it is the timestamp of the first valid data point.
++ `end`: The end time (exclusive) of resampling with the format 'yyyy-MM-dd HH:mm:ss'. By default, it is the timestamp of the last valid data point.
 
 **Output Series:** Output a single series. The type is DOUBLE. It is strictly equispaced with the frequency `every`.
 
@@ -94,4 +96,31 @@ Output series:
 |2021-03-06T16:30:00.000+08:00|                                                     3.5|
 |2021-03-06T17:00:00.000+08:00|                                      3.4100000858306885|
 +-----------------------------+--------------------------------------------------------+
+```
+
+
+
+### Specify the time period
+
+The time period of resampling can be specified with `start` and `end`.
+The period outside the actual time range will be interpolated.
+
+Input series is the same as above, the SQL for query is shown below:
+
+```sql
+select resample(s1,'every'='30m','start'='2021-03-06 15:00:00') from root.test.d1
+```
+
+Output series:
+
+```
++-----------------------------+-----------------------------------------------------------------------+
+|                         Time|resample(root.test.d1.s1, "every"="30m", "start"="2021-03-06 15:00:00")|
++-----------------------------+-----------------------------------------------------------------------+
+|2021-03-06T15:00:00.000+08:00|                                                                    NaN|
+|2021-03-06T15:30:00.000+08:00|                                                                    NaN|
+|2021-03-06T16:00:00.000+08:00|                                                      3.309999942779541|
+|2021-03-06T16:30:00.000+08:00|                                                     3.5049999952316284|
+|2021-03-06T17:00:00.000+08:00|                                                     3.4100000858306885|
++-----------------------------+-----------------------------------------------------------------------+
 ```

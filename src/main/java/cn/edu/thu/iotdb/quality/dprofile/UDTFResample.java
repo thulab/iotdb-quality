@@ -6,6 +6,7 @@
 package cn.edu.thu.iotdb.quality.dprofile;
 
 import cn.edu.thu.iotdb.quality.Util;
+import java.text.SimpleDateFormat;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -36,6 +37,17 @@ public class UDTFResample implements UDTF {
                 .validate(x -> "nan".equals(x) || "ffill".equals(x) || "bfill".equals(x) || "linear".equals(x),
                         "aggr should be min, max, mean, median, first, last.",
                         validator.getParameters().getStringOrDefault("interp", "nan").toLowerCase());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (validator.getParameters().hasAttribute("start")) {
+            validator.validate(x -> (long) x > 0,
+                    "start should conform to the format yyyy-MM-dd HH:mm:ss.",
+                    format.parse(validator.getParameters().getString("start")).getTime());
+        }
+        if (validator.getParameters().hasAttribute("end")) {
+            validator.validate(x -> (long) x > 0,
+                    "end should conform to the format yyyy-MM-dd HH:mm:ss.",
+                    format.parse(validator.getParameters().getString("end")).getTime());
+        }
     }
 
     @Override
@@ -45,7 +57,15 @@ public class UDTFResample implements UDTF {
         long newPeriod = Util.parseTime(udfp.getString("every"));
         String aggregator = udfp.getStringOrDefault("aggr", "mean").toLowerCase();
         String interpolator = udfp.getStringOrDefault("interp", "nan").toLowerCase();
-        resampler = new Resampler(newPeriod, aggregator, interpolator);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long startTime = -1, endTime = -1;
+        if (udfp.hasAttribute("start")) {
+            startTime = format.parse(udfp.getString("start")).getTime();
+        }
+        if (udfp.hasAttribute("end")) {
+            endTime = format.parse(udfp.getString("end")).getTime();
+        }
+        resampler = new Resampler(newPeriod, aggregator, interpolator, startTime, endTime);
     }
 
     @Override
