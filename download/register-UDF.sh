@@ -45,6 +45,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ksigma as 'cn.edu.thu.iotdb.quality.anomaly.UDTFKSigma'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function range as 'cn.edu.thu.iotdb.quality.anomaly.UDTFRange'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function LOF as 'cn.edu.thu.iotdb.quality.anomaly.UDTFLOF'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ADWIN as 'cn.edu.thu.iotdb.quality.anomaly.UDTFADWIN'"
 
 # Series Discovery
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivesequences as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveSequences'"

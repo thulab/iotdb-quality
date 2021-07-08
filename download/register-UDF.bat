@@ -47,7 +47,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function ksigma as 'cn.edu.thu.iotdb.quality.anomaly.UDTFKSigma'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function range as 'cn.edu.thu.iotdb.quality.anomaly.UDTFRange'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function LOF as 'cn.edu.thu.iotdb.quality.anomaly.UDTFLOF'"
-
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function ADWIN as 'cn.edu.thu.iotdb.quality.anomaly.UDTFADWIN'"
 
 @REM Series Discovery
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function consecutivesequences as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveSequences'"
