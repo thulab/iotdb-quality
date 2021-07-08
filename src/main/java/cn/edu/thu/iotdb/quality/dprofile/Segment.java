@@ -20,12 +20,12 @@ import java.util.Arrays;
 
 public class Segment implements UDTF {
 
-    private double calculate_error(double[] x1, double[] x2) {
-        double[] x= ArrayUtils.addAll(x1,x2);
-        int l=x.length;
-        double[] y=new double[l];
+    private double calculate_error(double[] y1, double[] y2) {
+        double[] y= ArrayUtils.addAll(y1,y2);
+        int l=y.length;
+        double[] x=new double[l];
         for(int i=0;i<l;i++){
-            y[i]=(double) i;
+            x[i]=(double) i;
         }
         LinearRegression linearFit= new LinearRegression(x,y);
         return linearFit.getMAbsE();

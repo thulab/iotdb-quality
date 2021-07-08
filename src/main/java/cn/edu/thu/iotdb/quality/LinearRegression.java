@@ -15,37 +15,37 @@ public class LinearRegression {
         n=x.length;
         e=new double[n];
         yhead=new double[n];
-        double sumx= Arrays.stream(x).sum();
-        double sumy= Arrays.stream(y).sum();
-        double sumx2 = 0.0;
+        sumx= Arrays.stream(x).sum();
+        sumy= Arrays.stream(y).sum();
+        sumx2 = 0.0;
         for(int i=0;i<n;i++){
             sumx2+=x[i]*x[i];
         }
-        double xbar = sumx / n;
-        double ybar = sumy / n;
+        xbar = sumx / n;
+        ybar = sumy / n;
         // second pass: compute summary statistics
-        double xxbar = 0.0, yybar = 0.0, xybar = 0.0;
+        xxbar = 0.0; yybar = 0.0; xybar = 0.0;
         for (int i = 0; i < n; i++) {
             xxbar += (x[i] - xbar) * (x[i] - xbar);
             yybar += (y[i] - ybar) * (y[i] - ybar);
             xybar += (x[i] - xbar) * (y[i] - ybar);
         }
-        double beta1 = xybar / xxbar;
-        double beta0 = ybar - beta1 * xbar;
+        beta1 = xybar / xxbar;
+        beta0 = ybar - beta1 * xbar;
         // analyze results
         int df = n - 2;
-        double rss = 0.0;      // residual sum of squares
-        double ssr = 0.0;      // regression sum of squares
+        rss = 0.0;      // residual sum of squares
+        ssr = 0.0;      // regression sum of squares
         for (int i = 0; i < n; i++) {
             yhead[i] = beta1*x[i] + beta0;
-            e[i]=yhead[i]-x[i];
+            e[i]=yhead[i]-y[i];
             rss += (yhead[i] - y[i]) * (yhead[i] - y[i]);
             ssr += (yhead[i] - ybar) * (yhead[i] - ybar);
         }
-        double R2    = ssr / yybar;
-        double svar  = rss / df;
-        double svar1 = svar / xxbar;
-        double svar0 = svar/n + xbar*xbar*svar1;
+        R2    = ssr / yybar;
+        svar  = rss / df;
+        svar1 = svar / xxbar;
+        svar0 = svar/n + xbar*xbar*svar1;
     }
     public double getMSE(){
         return rss/n;
