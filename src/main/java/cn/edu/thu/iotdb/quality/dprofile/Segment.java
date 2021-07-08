@@ -140,7 +140,8 @@ public class Segment implements UDTF {
     }
 
     private ArrayList<double[]> swab_alg(double[] df, long[] timestamp, double max_error, int windowsize, double thr_steady, double thr_steep){
-        double error_bound=(Arrays.stream(timestamp).max().getAsLong()-Arrays.stream(timestamp).min().getAsLong())*max_error;
+        // double error_bound=(Arrays.stream(timestamp).max().getAsLong()-Arrays.stream(timestamp).min().getAsLong())*max_error;
+        double error_bound=max_error;
         ArrayList<double[]> res_df1=swab(df,error_bound,10,windowsize);
         return res_df1;
     }
