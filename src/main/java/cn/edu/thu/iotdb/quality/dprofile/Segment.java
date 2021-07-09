@@ -191,17 +191,20 @@ public class Segment implements UDTF {
         else if(method.equals("swab")){
             seg=swab_alg(v,ts,max_error,window_size);
         }
-
+        ArrayList<double[]> res=new ArrayList<>();
+        for(double[] doubles:seg){
+            res.add(approximated_segment(doubles));
+        }
         int index=0;
         if(output.equals("first"))
         {
-            for (double[] doubles : seg) {
+            for (double[] doubles : res) {
                 collector.putDouble(ts[index], doubles[0]);
                 index += doubles.length;
             }
         }
         else if(output.equals("all")){
-            for (double[] doubles : seg) {
+            for (double[] doubles : res) {
                 for (double aDouble : doubles) {
                     collector.putDouble(ts[index], aDouble);
                     index++;
