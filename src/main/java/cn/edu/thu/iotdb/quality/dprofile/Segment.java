@@ -35,8 +35,16 @@ public class Segment implements UDTF {
             ret.add(value);
             return ret;
         }
-        for(int i=0;i<value.length;i+=2){
-            seg_ts.add(Arrays.copyOfRange(value,i,i+2));
+        if(value.length%2==0){
+            for(int i=0;i<value.length;i+=2){
+                seg_ts.add(Arrays.copyOfRange(value,i,i+2));
+            }
+        }
+        else{
+            for(int i=0;i<value.length-2;i+=2){
+                seg_ts.add(Arrays.copyOfRange(value,i,i+2));
+            }
+            seg_ts.add(Arrays.copyOfRange(value,value.length-3,value.length));
         }
         double[] merge_cost = new double[seg_ts.size()-1];
         for (int i=0;i<seg_ts.size()-1;i++){
