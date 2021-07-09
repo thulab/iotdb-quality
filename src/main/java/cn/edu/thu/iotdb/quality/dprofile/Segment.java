@@ -41,7 +41,7 @@ public class Segment implements UDTF {
             }
         }
         else{
-            for(int i=0;i<value.length-2;i+=2){
+            for(int i=0;i<value.length-3;i+=2){
                 seg_ts.add(Arrays.copyOfRange(value,i,i+2));
             }
             seg_ts.add(Arrays.copyOfRange(value,value.length-3,value.length));
