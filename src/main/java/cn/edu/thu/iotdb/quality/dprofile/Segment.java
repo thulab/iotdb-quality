@@ -13,6 +13,7 @@ import cn.edu.thu.iotdb.quality.LinearRegression;
 import cn.edu.thu.iotdb.quality.Util;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 
 public class Segment implements UDTF {
 
@@ -148,6 +149,7 @@ public class Segment implements UDTF {
     private int window_size;
     private double max_error;
     private String method;
+    private String output;
     private static ArrayList<Long> timestamp=new ArrayList<>();
     private static ArrayList<Double> value=new ArrayList<>();
     @Override
@@ -167,6 +169,8 @@ public class Segment implements UDTF {
         this.max_error=udfParameters.getDoubleOrDefault("error",0.1);
         this.method=udfParameters.getStringOrDefault("method","bottom-up");
         this.method=this.method.toLowerCase();
+        this.output=udfParameters.getStringOrDefault("output","first");
+        this.output=this.output.toLowerCase();
     }
 
     @Override
@@ -189,9 +193,20 @@ public class Segment implements UDTF {
         }
 
         int index=0;
-        for (double[] doubles : seg) {
-            collector.putDouble(ts[index], doubles[0]);
-            index += doubles.length;
+        if(output.equals("first"))
+        {
+            for (double[] doubles : seg) {
+                collector.putDouble(ts[index], doubles[0]);
+                index += doubles.length;
+            }
+        }
+        else if(output.equals("all")){
+            for (double[] doubles : seg) {
+                for (double aDouble : doubles) {
+                    collector.putDouble(ts[index], aDouble);
+                    index++;
+                }
+            }
         }
     }
 }

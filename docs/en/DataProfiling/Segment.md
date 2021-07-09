@@ -1,26 +1,26 @@
 # Segment
 
-## 函数简介
+## Usage
 
-本函数按照数据的线性变化趋势将数据划分为多个子序列，返回分段直线拟合后的子序列首值或所有拟合值。
+This function is used to segment a time series into subsequences according to linear trend, and returns linear fitted values of first values in each subsequence or every data point.
 
-**函数名：** SEGMENT
+**Name:** SEGMENT
 
-**输入序列：** 仅支持单个输入序列，类型为 INT32 / INT64 / FLOAT / DOUBLE
+**Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-**输出序列：** 输出单个序列，类型为DOUBLE。
+**Output Series:** Output a single series. The type is DOUBLE. 
 
-**提示：** 函数默认所有数据等时间间隔分布。函数读取所有数据，若原始数据过多，请先进行降采样处理。拟合采用自底向上方法，子序列的尾值可能会被认作子序列首值输出。
+**Note:** This function treat input series as equal-interval sampled. All data are loaded, so downsample input series first if there are too many data points.
 
-**参数：**
+**Parameters:** 
 
-`output`："all"输出所有拟合值；"first"输出子序列起点拟合值。默认为"first"。
+`output` :"all" to output all fitted points; "first" to output first fitted points in each subsequence.
 
-`error`：判定存在线性趋势的误差允许阈值。误差的定义为子序列进行线性拟合的误差的绝对值的均值。默认为0.1.
+`error`: error allowed at linear regression. It is defined as mean absolute error of a subsequence. 
 
-## 使用示例
+## Examples
 
-输入序列：
+Input series:
 
 ```
 +-----------------------------+------------+
@@ -69,13 +69,13 @@
 +-----------------------------+------------+
 ```
 
-用于查询的SQL语句：
+SQL for query:
 
 ```sql
-select segment(s1,"error"="0.1") from root.test
+select segment(s1, "error"="0.1") from root.test
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+------------------------------------+
