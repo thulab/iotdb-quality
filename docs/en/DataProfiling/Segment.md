@@ -8,15 +8,15 @@ This function is used to segment a time series into subsequences according to li
 
 **Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-**Output Series:** Output a single series. The type is DOUBLE. 
-
-**Note:** This function treat input series as equal-interval sampled. All data are loaded, so downsample input series first if there are too many data points.
-
 **Parameters:** 
 
 `output` :"all" to output all fitted points; "first" to output first fitted points in each subsequence.
 
 `error`: error allowed at linear regression. It is defined as mean absolute error of a subsequence. 
+
+**Output Series:** Output a single series. The type is DOUBLE. 
+
+**Note:** This function treat input series as equal-interval sampled. All data are loaded, so downsample input series first if there are too many data points.
 
 ## Examples
 
