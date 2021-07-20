@@ -50,13 +50,23 @@ public class ScreenFill extends ValueFill{
                 // 发现缺失点后，标记为startIndex
                 int startIndex = currentIndex;
                 long fillTime = time[currentIndex];
-                // 构造缺失点之后w长度的时间窗口，或提前发现下一个缺失点
+                // 构造缺失点之后w长度的时间窗口
+                int nextIndex = -1;
                 currentIndex++;
-                while (currentIndex < n && fillTime + w >= time[currentIndex] && !Double.isNaN(original[currentIndex])) {
+                while (currentIndex < n && fillTime + w >= time[currentIndex]) {
                     ans.add(Pair.of(time[currentIndex], original[currentIndex]));
+                    if (Double.isNaN(original[currentIndex]) && nextIndex == -1) {
+                        nextIndex = currentIndex;
+                    }
                     currentIndex++;
                 }
                 local(ans, startIndex);
+                if (nextIndex > 0) {
+                    while (currentIndex > nextIndex) {
+                        ans.remove(currentIndex-1);
+                        currentIndex--;
+                    }
+                }
             } else {
                 currentIndex++;
             }
@@ -73,14 +83,23 @@ public class ScreenFill extends ValueFill{
         while (index + m + 1 < list.size() && list.get(index + m + 1).getLeft() <= list.get(index).getLeft() + w) {
             m++;
         }
-        double x[] = new double[2 * m + 1];
-        x[0] = list.get(index).getRight();
+        int count = 0;
         for (int i = 1; i <= m; i++) {
-            x[i] = list.get(index + i).getRight() + smin * (list.get(index).getLeft() - list.get(index + i).getLeft());
-            x[i + m] = list.get(index + i).getRight() + smax * (list.get(index).getLeft() - list.get(index + i).getLeft());
+            if (!Double.isNaN(list.get(index + i).getRight())) {
+                count++;
+            }
+        }
+        double x[] = new double[2 * count];
+        int temp_count = 0;
+        for (int i = 1; i <= m; i++) {
+            if (!Double.isNaN(list.get(index + i).getRight())) {
+                x[temp_count] = list.get(index + i).getRight() + smin * (list.get(index).getLeft() - list.get(index + i).getLeft());
+                x[temp_count + count] = list.get(index + i).getRight() + smax * (list.get(index).getLeft() - list.get(index + i).getLeft());
+                temp_count++;
+            }
         }
         Arrays.sort(x);
-        return x[m];
+        return x[count];
     }
 
     private double getRepairedValue(ArrayList<Pair<Long, Double>> list, int index, double mid) {
