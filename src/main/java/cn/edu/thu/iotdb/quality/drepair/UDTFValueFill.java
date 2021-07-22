@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cn.edu.thu.iotdb.quality.drepair;
 
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
-import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
@@ -46,6 +40,10 @@ public class UDTFValueFill implements UDTF {
         }
         else if("ar".equalsIgnoreCase(method)){
             vf = new ARFill(rowWindow.getRowIterator());
+        } else if ("screen".equalsIgnoreCase(method)) {
+            vf = new ScreenFill(rowWindow.getRowIterator());
+        } else if ("likelihood".equalsIgnoreCase(method)) {
+            vf = new LikelihoodFill(rowWindow.getRowIterator());
         }
         else {
             throw new Exception("Illegal method");

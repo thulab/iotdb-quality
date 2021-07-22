@@ -2,12 +2,13 @@ package cn.edu.thu.iotdb.quality.drepair;
 
 
 import cn.edu.thu.iotdb.quality.Util;
+import org.apache.iotdb.db.query.udf.api.access.Row;
+import org.apache.iotdb.db.query.udf.api.access.RowIterator;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
-import org.apache.iotdb.db.query.udf.api.access.Row;
-import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 
 
 /**
@@ -47,7 +48,7 @@ public abstract class ValueFill {
     }
     public ValueFill(String filename) throws Exception {
         Scanner sc = new Scanner(new File(filename));
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         sc.useDelimiter("\\s*(,|\\r|\\n)\\s*");//设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
         sc.nextLine();
         ArrayList<Long> timeList = new ArrayList<>();

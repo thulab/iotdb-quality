@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class Segment implements UDTF {
+public class UDTFSegment implements UDTF {
 
     private double calculate_error(double[] y1, double[] y2) {
         double[] y= ArrayUtils.addAll(y1,y2);

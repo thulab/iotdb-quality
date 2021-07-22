@@ -35,6 +35,7 @@ pass=root
 # Data Repairing
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function timestamprepair as 'cn.edu.thu.iotdb.quality.drepair.UDTFTimestampRepair'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function valuerepair as 'cn.edu.thu.iotdb.quality.drepair.UDTFValueRepair'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function valuefill as 'cn.edu.thu.iotdb.quality.drepair.UDTFValueFill'"
 
 # Data Matching
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
