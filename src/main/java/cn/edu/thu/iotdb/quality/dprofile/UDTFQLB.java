@@ -13,7 +13,7 @@ import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 
 // correlation calculation copied from SelfCorrelation
-public class UDAFQLB implements UDTF {
+public class UDTFQLB implements UDTF {
 
     private DoubleArrayList valueArrayList = new DoubleArrayList();
     private int m=0;
@@ -50,12 +50,11 @@ public class UDAFQLB implements UDTF {
             }
             correlation = correlation / n;
             collector.putDouble(n + shift, correlation);
-            qlb+=correlation*correlation/(n-shift);
+            qlb+=correlation*correlation/(n-shift)*n*(n-2);
+            ChiSquaredDistribution qlbdist=new ChiSquaredDistribution(shift);
+            double qlbprob=1.0-qlbdist.cumulativeProbability(qlb);
+            collector.putDouble(shift, qlbprob);
         }
-        qlb*=n*(n+2);
-        ChiSquaredDistribution qlbdist=new ChiSquaredDistribution(m);
-        double qlbprob=qlbdist.cumulativeProbability(1.0-qlb);
-        collector.putDouble(m, qlbprob);
     }
 
     @Override
