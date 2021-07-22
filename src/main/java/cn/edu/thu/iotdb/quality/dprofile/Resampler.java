@@ -264,11 +264,15 @@ public class Resampler {
     }
 
     public static void main(String[] args) throws FileNotFoundException, ParseException {
-        Resampler resampler = new Resampler(60000 * 60 * 24, "mean", "linear");
+        Resampler resampler = new Resampler(1000 * 60 * 60 * 24, "median", "linear");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        resampler.currentTime = format.parse("2021-06-08 00:00:00").getTime();
-        resampler.endTime = format.parse("2021-07-01 00:00:00").getTime();
+        resampler.currentTime = format.parse("2021-06-19T12:00:00").getTime();
+        resampler.endTime = format.parse("2021-06-19T15:00:00").getTime();
+//        resampler.endTime = 20000;
         resampler.insert("resample.csv");
+//        for (int i=0; i< 10; i++){
+//            resampler.insert(i*1000, i);
+//        }
         resampler.flush();
         while (resampler.hasNext()) {
             System.out.print(format.format(new Date(resampler.getOutTime())));
