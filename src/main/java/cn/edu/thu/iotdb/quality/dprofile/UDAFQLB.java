@@ -28,12 +28,10 @@ public class UDAFQLB implements UDTF {
 
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
-        if(m>=0){
-            if (row.isNull(0)) {
-                valueArrayList.add(Double.NaN);
-            } else {
-                valueArrayList.add(Util.getValueAsDouble(row, 0));
-            }
+        if (row.isNull(0)) {
+            valueArrayList.add(Double.NaN);
+        } else {
+            valueArrayList.add(Util.getValueAsDouble(row, 0));
         }
     }
 
@@ -41,9 +39,8 @@ public class UDAFQLB implements UDTF {
     public void terminate(PointCollector collector) throws Exception {
         int n = valueArrayList.size();
         if(m<=0||m>=n){
-            m=n-1;
+            m=n-2;
         }
-
         for (int shift = 1; shift <= m; shift++) {
             double correlation = 0.0;
             for (int i = 0; i < n - shift; i++) {
