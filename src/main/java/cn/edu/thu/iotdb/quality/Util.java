@@ -203,6 +203,21 @@ public class Util {
         }
         return var;
     }
+    
+        /**
+     * 计算序列的取值变化
+     *
+     * @param origin 原始序列
+     * @return 取值变化序列
+     */
+    public static int[] variation(int origin[]) {
+        int n = origin.length;
+        int var[] = new int[n - 1];
+        for (int i = 0; i < n - 1; i++) {
+            var[i] = origin[i + 1] - origin[i];
+        }
+        return var;
+    }
 
     /**
      * 计算时间序列的速度

@@ -10,6 +10,7 @@ user=root
 pass=root
 
 # Data Profiling
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function crosscorrelation as 'cn.edu.thu.iotdb.quality.dprofile.UDTFCrossCorrelation'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function distinct as 'cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function histogram as 'cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function integral as 'cn.edu.thu.iotdb.quality.dprofile.UDAFIntegral'"
@@ -18,12 +19,14 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function median as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMedian'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function percentile as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function period as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPeriod'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function resample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFResample'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function sample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSample'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function segment as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSegment'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function selfcorrelation as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSelfCorrelation'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function skew as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSkew'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function spread as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSpread'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function stddev as 'cn.edu.thu.iotdb.quality.dprofile.UDAFStddev'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function segment as 'cn.edu.thu.iotdb.quality.dprofile.Segment'"
 
 # Data Quality
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function completeness as 'cn.edu.thu.iotdb.quality.dquality.UDTFCompleteness'"

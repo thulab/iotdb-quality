@@ -10,9 +10,9 @@ This function is used to segment a time series into subsequences according to li
 
 **Parameters:** 
 
-`output` :"all" to output all fitted points; "first" to output first fitted points in each subsequence.
++ `output` :"all" to output all fitted points; "first" to output first fitted points in each subsequence.
 
-`error`: error allowed at linear regression. It is defined as mean absolute error of a subsequence. 
++ `error`: error allowed at linear regression. It is defined as mean absolute error of a subsequence. 
 
 **Output Series:** Output a single series. The type is DOUBLE. 
 
