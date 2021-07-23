@@ -50,7 +50,7 @@ public class UDTFQLB implements UDTF {
             }
             correlation = correlation / n;
             collector.putDouble(n + shift, correlation);
-            qlb+=correlation*correlation/(n-shift)*n*(n-2);
+            qlb+=correlation*correlation/(n-shift)*n*(n+2);
             ChiSquaredDistribution qlbdist=new ChiSquaredDistribution(shift);
             double qlbprob=1.0-qlbdist.cumulativeProbability(qlb);
             collector.putDouble(shift, qlbprob);
