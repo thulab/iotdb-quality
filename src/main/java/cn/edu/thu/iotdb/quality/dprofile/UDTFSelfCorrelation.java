@@ -32,26 +32,9 @@ public class UDTFSelfCorrelation implements UDTF {
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        int length = valueArrayList.size();
-        for (int shift = 1; shift <= length; shift++) {
-            double correlation = 0.0;
-            for (int i = 0; i < shift; i++) {
-                if (Double.isFinite(valueArrayList.get(i)) && Double.isFinite(valueArrayList.get(length - shift + i))) {
-                    correlation += valueArrayList.get(i) * valueArrayList.get(length - shift + i);
-                }
-            }
-            correlation /= shift;
-            collector.putDouble(shift, correlation);
-        }
-        for (int shift = 1; shift < length; shift++) {
-            double correlation = 0.0;
-            for (int i = 0; i < length - shift; i++) {
-                if (Double.isFinite(valueArrayList.get(shift + i)) && Double.isFinite(valueArrayList.get(i))) {
-                    correlation += valueArrayList.get(shift + i) * valueArrayList.get(i);
-                }
-            }
-            correlation = correlation / length;
-            collector.putDouble(length + shift, correlation);
+        DoubleArrayList correlationArrayList = UDTFCrossCorrelation.calculateCrossCorrelation(valueArrayList, valueArrayList);
+        for (int i = 0; i < correlationArrayList.size(); i++) {
+            collector.putDouble(i, correlationArrayList.get(i));
         }
     }
 
