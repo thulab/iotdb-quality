@@ -13,6 +13,7 @@ import cn.edu.thu.iotdb.quality.LinearRegression;
 import cn.edu.thu.iotdb.quality.Util;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 
 public class UDTFSegment implements UDTF {
@@ -22,7 +23,7 @@ public class UDTFSegment implements UDTF {
         int l=y.length;
         double[] x=new double[l];
         for(int i=0;i<l;i++){
-            x[i]=(double) i;
+            x[i]= i;
         }
         LinearRegression linearFit= new LinearRegression(x,y);
         return linearFit.getMAbsE();
@@ -30,7 +31,7 @@ public class UDTFSegment implements UDTF {
 
     private ArrayList<double[]> bottom_up(double[] value, double max_error) {
         ArrayList<double[]> seg_ts=new ArrayList<>();
-        if(value.length<=2){
+        if(value.length<=3){
             ArrayList<double[]> ret=new ArrayList<>();
             ret.add(value);
             return ret;
@@ -46,26 +47,26 @@ public class UDTFSegment implements UDTF {
             }
             seg_ts.add(Arrays.copyOfRange(value,value.length-3,value.length));
         }
-        double[] merge_cost = new double[seg_ts.size()-1];
+        ArrayList<Double> merge_cost = new ArrayList<>();
         for (int i=0;i<seg_ts.size()-1;i++){
-            merge_cost[i]=calculate_error(seg_ts.get(i), seg_ts.get(i + 1));
+            merge_cost.add(calculate_error(seg_ts.get(i), seg_ts.get(i + 1)));
         }
-        while(Arrays.stream(merge_cost).min().getAsDouble()<max_error){
-            int index=ArrayUtils.indexOf(merge_cost,Arrays.stream(merge_cost).min().getAsDouble());
+        while(Collections.min(merge_cost)<max_error){
+            int index=merge_cost.indexOf(Collections.min(merge_cost));
             seg_ts.set(index, ArrayUtils.addAll(seg_ts.get(index),seg_ts.get(index+1)));
             seg_ts.remove(index+1);
-            merge_cost=ArrayUtils.clone(ArrayUtils.remove(merge_cost,index));
+            merge_cost.remove(index);
             if(seg_ts.size()==1){
                 break;
             }
             if(index+1<seg_ts.size()){
-                merge_cost[index]=calculate_error(seg_ts.get(index), seg_ts.get(index + 1));
+                merge_cost.set(index,calculate_error(seg_ts.get(index), seg_ts.get(index + 1)));
             }
             if(index>0){
-                merge_cost[index-1]=calculate_error(seg_ts.get(index - 1), seg_ts.get(index));
+                merge_cost.set(index-1,calculate_error(seg_ts.get(index - 1), seg_ts.get(index)));
             }
         }
-        return  seg_ts;
+        return seg_ts;
     }
 
     private double[] best_line(double max_error, double[] input_df, double[] w, int start_idx, double upper_bound) {
@@ -173,6 +174,8 @@ public class UDTFSegment implements UDTF {
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) throws Exception {
         udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.DOUBLE);
+        timestamp.clear();
+        value.clear();
         this.window_size=udfParameters.getIntOrDefault("window",10);
         this.max_error=udfParameters.getDoubleOrDefault("error",0.1);
         this.method=udfParameters.getStringOrDefault("method","bottom-up");
@@ -185,7 +188,6 @@ public class UDTFSegment implements UDTF {
     public void transform(Row row, PointCollector collector) throws Exception {
         timestamp.add(row.getTime());
         value.add(Util.getValueAsDouble(row));
-
     }
 
     @Override
@@ -194,9 +196,10 @@ public class UDTFSegment implements UDTF {
         double[] v=value.stream().mapToDouble(Double::valueOf).toArray();
         ArrayList<double[]> seg=new ArrayList<>();
         if(method.equals("bottom-up")){
-            seg=bottom_up(v,max_error);
+            ArrayList<double[]> temp=bottom_up(v,max_error);
+            seg.addAll(temp);
         }
-        else if(method.equals("swab")){
+        else if(method.equals("swab")){ // 未经测试
             seg=swab_alg(v,ts,max_error,window_size);
         }
         ArrayList<double[]> res=new ArrayList<>();
