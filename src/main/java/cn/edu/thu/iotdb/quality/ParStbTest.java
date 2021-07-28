@@ -3,14 +3,17 @@ package cn.edu.thu.iotdb.quality;
 import com.csvreader.CsvReader;
 import cn.edu.thu.iotdb.quality.DataStatisticsUtils;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 public class ParStbTest {
     private static double k=20.0f;
     private static String method="ksigma";
-    private static String path="D:\\yzhstbdata\\";
+    private static String path="G:\\yzhstbdata\\";
+    private static int window=288*5;
     public static void main(String[] args) throws Exception {
         String[] guoshou_1={
                 "guoshou_value_from2019-12-27to2020-01-21_7501.csv",
-                //"guoshou_value_from2019-12-27to2020-01-21_7521.csv",
+                "guoshou_value_from2019-12-27to2020-01-21_7521.csv",
                 "guoshou_value_from2019-12-27to2020-01-21_7525.csv",
                 "guoshou_value_from2019-12-27to2020-01-21_7533.csv",
                 "guoshou_value_from2019-12-27to2020-02-27_7630.csv",
@@ -127,7 +130,7 @@ public class ParStbTest {
                 "zhongxin_data_from2019-01-01to2019-01-31_8090.csv",
                 "zhongxin_data_from2019-01-01to2019-01-31_8105.csv"
         };
-        for (String filename:zhongxin_1) {
+        for (String filename:guoshou_1) {
             CsvReader csvReader=new CsvReader(path+filename,',');
             csvReader.readHeaders();
             //ArrayList<Long> timestamp=new ArrayList<>();
@@ -203,46 +206,55 @@ public class ParStbTest {
             else{
                 if(method.equalsIgnoreCase("ksigma")){
                     //for k-sigma method
-                    double sigma=DataStatisticsUtils.getStandardDevition(v);
-                    double median=DataStatisticsUtils.getMedian(v);
-                    for(int i=0;i<length;i++){
-                        if(v[i]>median+k*sigma||v[i]<median-k*sigma){//anomaly detected
-                            if(l[i]==0){
-                                FP++;
+                    for(int round=0;round*window<length;round++){
+                        double[] vtemp= Arrays.copyOfRange(v,round*window,(Math.min((round + 1) * window, length)));
+                        int[] ltemp= Arrays.copyOfRange(l,round*window,(Math.min((round + 1) * window, length)));
+                        double sigma=DataStatisticsUtils.getStandardDevition(vtemp);
+                        double median=DataStatisticsUtils.getMedian(vtemp);
+                        for(int i = 0; i<(round*window+window<length?window:length-round*window); i++){
+                            if(vtemp[i]>median+k*sigma||vtemp[i]<median-k*sigma){//anomaly detected
+                                if(ltemp[i]==0){
+                                    FP++;
+                                }
+                                else if(ltemp[i]==1){
+                                    TP++;
+                                }
                             }
-                            else if(l[i]==1){
-                                TP++;
-                            }
-                        }
-                        else {//anomaly not detected
-                            if(l[i]==0){
-                                TN++;
-                            }
-                            else if(l[i]==1){
-                                FN++;
+                            else {//anomaly not detected
+                                if(ltemp[i]==0){
+                                    TN++;
+                                }
+                                else if(ltemp[i]==1){
+                                    FN++;
+                                }
                             }
                         }
                     }
+
                 }
                 else if(method.equalsIgnoreCase("mad")){
                     //for k-MAD method
-                    double mad=DataStatisticsUtils.getMedianAbsoluteDeviation(v);
-                    double median=DataStatisticsUtils.getMedian(v);
-                    for(int i=0;i<length;i++){
-                        if(v[i]>median+k*mad||v[i]<median-k*mad){//anomaly detected
-                            if(l[i]==0){
-                                FP++;
+                    for(int round=0;round*window<length;round++){
+                        double[] vtemp= Arrays.copyOfRange(v,round*window,(Math.min((round + 1) * window, length)));
+                        int[] ltemp= Arrays.copyOfRange(l,round*window,(Math.min((round + 1) * window, length)));
+                        double mad=DataStatisticsUtils.getMedianAbsoluteDeviation(v);
+                        double median=DataStatisticsUtils.getMedian(vtemp);
+                        for(int i = 0; i<(round*window+window<length?window:length-round*window); i++){
+                            if(vtemp[i]>median+k*mad||vtemp[i]<median-k*mad){//anomaly detected
+                                if(ltemp[i]==0){
+                                    FP++;
+                                }
+                                else if(ltemp[i]==1){
+                                    TP++;
+                                }
                             }
-                            else if(l[i]==1){
-                                TP++;
-                            }
-                        }
-                        else {//anomaly not detected
-                            if(l[i]==0){
-                                TN++;
-                            }
-                            else if(l[i]==1){
-                                FN++;
+                            else {//anomaly not detected
+                                if(ltemp[i]==0){
+                                    TN++;
+                                }
+                                else if(ltemp[i]==1){
+                                    FN++;
+                                }
                             }
                         }
                     }

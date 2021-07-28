@@ -7,8 +7,8 @@ import java.util.Arrays;
 public class LinearRegression {
     double[] x,y,e,yhead;
     int n;
-    double sumx,sumy,sumx2,xbar,ybar,xxbar,yybar,xybar;
-    double beta1,beta0,df,rss,ssr,R2,svar,svar1,svar0;
+    double sumx,sumy,xbar,ybar,xxbar,yybar,xybar;
+    double beta1,beta0,rss,ssr,R2,svar,svar1,svar0;
     public LinearRegression(double[] a, double[] b) {
         x=a.clone();
         y=b.clone();
@@ -17,10 +17,6 @@ public class LinearRegression {
         yhead=new double[n];
         sumx= Arrays.stream(x).sum();
         sumy= Arrays.stream(y).sum();
-        sumx2 = 0.0;
-        for(int i=0;i<n;i++){
-            sumx2+=x[i]*x[i];
-        }
         xbar = sumx / n;
         ybar = sumy / n;
         // second pass: compute summary statistics

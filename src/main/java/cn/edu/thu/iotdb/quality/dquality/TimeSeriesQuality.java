@@ -26,10 +26,10 @@ import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 public class TimeSeriesQuality {
 
     public static final int WINDOWSIZE = 10;
+    private boolean downtime = true;//是否考虑停机异常
     private int cnt = 0;//数据点总数
     private int missCnt = 0;//缺失点个数
     private int specialCnt = 0;//特殊值点个数
-    private int nullCnt = 0;//空值点个数
     private int lateCnt = 0;//延迟点个数
     private int redundancyCnt = 0;//过密点个数
     private int valueCnt = 0;//违背取值范围约束的数据点个数
@@ -43,13 +43,9 @@ public class TimeSeriesQuality {
         while (dataIterator.hasNextRow()) {
             Row row = dataIterator.next();
             cnt++;
-            Double v = Util.getValueAsDouble(row);
+            double v = Util.getValueAsDouble(row);
             double t = Long.valueOf(row.getTime()).doubleValue();
-            if (v == null) {//对空值的处理
-                nullCnt++;
-                timeList.add(t);
-                originList.add(Double.NaN);
-            } else if (Double.isFinite(v)) {
+            if (Double.isFinite(v)) {
                 timeList.add(t);
                 originList.add(v);
             } else {//对特殊值的处理，包括NAN，INF等
@@ -144,7 +140,7 @@ public class TimeSeriesQuality {
             if (times <= 0.5) {//处理为过密点并删除
                 window.remove(1);
                 redundancyCnt++;
-            } else if (times >= 2.0 && times <= 9.0) {//排除停机
+            } else if (times >= 2.0 && (!downtime || times <= 9.0)) {//排除停机
                 //时间间隔过大，可能是数据缺失，也可能是延迟
                 int temp = 0;//在后续窗口中找到的连续过密点个数
                 for (int j = 2; j < window.size(); j++) {
@@ -218,7 +214,7 @@ public class TimeSeriesQuality {
      * @return 完整性
      */
     public double getCompleteness() {
-        return 1 - (missCnt + specialCnt + nullCnt) * 1.0 / (cnt + missCnt);
+        return 1 - (missCnt + specialCnt) * 1.0 / (cnt + missCnt);
     }
 
     /**
@@ -256,6 +252,20 @@ public class TimeSeriesQuality {
         System.out.println(tsq.getConsistency());
         System.out.println(tsq.getTimeliness());
         System.out.println(tsq.getValidity());
+    }
+
+    /**
+     * @return the downtime
+     */
+    public boolean isDowntime() {
+        return downtime;
+    }
+
+    /**
+     * @param downtime the downtime to set
+     */
+    public void setDowntime(boolean downtime) {
+        this.downtime = downtime;
     }
 
 }
