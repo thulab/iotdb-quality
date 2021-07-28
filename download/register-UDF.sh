@@ -20,6 +20,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function mode as 'cn.edu.thu.iotdb.quality.dprofile.UDAFMode'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function percentile as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function period as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPeriod'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function qlb as 'cn.edu.thu.iotdb.quality.dprofile.UDTFQLB'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function resample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFResample'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function sample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSample'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function segment as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSegment'"

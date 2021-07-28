@@ -9,7 +9,7 @@ This function is used to calculate the Validity of time series. The input series
 
 **Parameters:**
 
-+ `window`: The number of data points in each window. The number of data points in the last window may be less than it. By default, all input data belongs to the same window.
++ `window`: The size of each window. It is a positive integer or a positive number with an unit. The former is the number of data points in each window. The number of data points in the last window may be less than it. The latter is the time of the window. The unit is 'ms' for millisecond, 's' for second, 'm' for minute, 'h' for hour and 'd' for day. By default, all input data belongs to the same window.
 
 **Output Series:** Output a single series. The type is DOUBLE. The range of each value is [0,1].
 
