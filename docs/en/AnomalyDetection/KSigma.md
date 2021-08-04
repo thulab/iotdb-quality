@@ -2,13 +2,15 @@
 
 ## Usage
 
-This function is used to detect distribution anomaly of time series. According to k parameter, the function judges if a input value is an extreme value beyond k-sigma, aka distribution anomaly, and a new time series of anomaly will be output.
+This function is used to detect anomalies based on the Dynamic K-Sigma Algorithm.
+Within a sliding window, the input value with a deviation of more than k times the standard deviation from the average will be output as anomaly.
 
 **Name:** KSIGMA
 
 **Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-+ `k`:how many times to multiply on standard deviation to define extreme value.
++ `k`: How many times to multiply on standard deviation to define anomaly, the default value is 3.
++ `window`: The window size of Dynamic K-Sigma Algorithm, the default value is 10000. 
 
 **Output Series:** Output a single series. The type is same as input series.
 

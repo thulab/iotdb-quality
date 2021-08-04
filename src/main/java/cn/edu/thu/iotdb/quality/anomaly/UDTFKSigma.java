@@ -37,7 +37,7 @@ public class UDTFKSigma implements UDTF {
                 .setOutputDataType(udfParameters.getDataType(0));
         this.k = udfParameters.getDoubleOrDefault("k", 3);
         this.dataType = udfParameters.getDataType(0);
-        this.q= new Queue(10000, dataType);
+        this.q= new Queue(udfParameters.getIntOrDefault("window", 10000), dataType);
     }
 
     @Override
