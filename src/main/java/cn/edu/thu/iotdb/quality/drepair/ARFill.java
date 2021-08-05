@@ -77,7 +77,7 @@ public class ARFill extends ValueFill {
     }
 
     public static void main(String args[]) throws Exception {
-        MeanFill ar = new MeanFill("temp.csv");
+        MAFill ar = new MAFill("temp.csv");
         ar.fill();
         System.out.print("Out");
     }
