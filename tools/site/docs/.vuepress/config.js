@@ -47,7 +47,7 @@ module.exports = {
 						]
 					},
 					{ text: '下载', link: '/zh/Download.md' },
-					{ text: 'Demo', link: '/zh/InProgress/Demo.md' },
+					// { text: 'Demo', link: '/zh/InProgress/Demo.md' },
 				],
 				sidebar: {
 					'/zh/V1.0.x/': [
@@ -141,11 +141,12 @@ module.exports = {
 							],
 						},
 						{
-							title: '数据匹配 (8)',
+							title: '数据匹配 (9)',
 							children: [                                
 								'DataMatching/Cov.md',
                                 'DataMatching/CrossCorrelation.md',
 								'DataMatching/DTW.md',
+                                'DataMatching/PatternSymmetric.md',
 								'DataMatching/Pearson.md',
                                 'DataMatching/SelfCorrelation.md',
 								'DataMatching/SeriesAlign.md',
@@ -217,7 +218,7 @@ module.exports = {
 						]
 					},
 					{ text: 'Download', link: '/en/Download.md' },
-					{ text: 'Demo', link: '/en/InProgress/Demo.md' },
+					// { text: 'Demo', link: '/en/InProgress/Demo.md' },
 				],
 				sidebar: {
 					'/en/V1.0.x/': [
@@ -311,11 +312,12 @@ module.exports = {
 							],
 						},
 						{
-							title: 'Data Matching (8)',
+							title: 'Data Matching (9)',
 							children: [
                                 'DataMatching/Cov.md',
                                 'DataMatching/CrossCorrelation.md',
 								'DataMatching/DTW.md',
+                                'DataMatching/PatternSymmetric.md',
 								'DataMatching/Pearson.md',
                                 'DataMatching/SelfCorrelation.md',
 								'DataMatching/SeriesAlign.md',

@@ -11,14 +11,12 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
-import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 
-public class UDAFSymmetric implements UDTF {
+public class UDTFPatternSymmetric implements UDTF {
 
     private int window;
     private double threshold;
-    private LongArrayList timeList = new LongArrayList();
-    private DoubleArrayList symmetryList = new DoubleArrayList();
+
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
         validator.validateInputSeriesNumber(1)
@@ -27,57 +25,49 @@ public class UDAFSymmetric implements UDTF {
                         TSDataType.INT64,
                         TSDataType.FLOAT,
                         TSDataType.DOUBLE)
-                .validate(window ->  (int)window > 0 ,
+                .validate(x -> (int) x > 0,
                         "window has to be greater than 0.",
-                        validator.getParameters().getDoubleOrDefault("window", 10))
-                .validate(threshold -> (double) threshold >= 0,
+                        validator.getParameters().getIntOrDefault("window", 10))
+                .validate(x -> (double) x >= 0,
                         "threshold has to be greater than or equal to 0.",
                         validator.getParameters().getDoubleOrDefault("threshold", Double.MAX_VALUE));
     }
+
     @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
-        configurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(window,1))
-                .setOutputDataType(TSDataType.DOUBLE);
         window = parameters.getIntOrDefault("window", 10);
+        configurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy(window, 1))
+                .setOutputDataType(TSDataType.DOUBLE);
         threshold = parameters.getDoubleOrDefault("threshold", Double.MAX_VALUE);
     }
 
     @Override
     public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
+        if (rowWindow.windowSize() < window) {//序列长度太短，不予计算
+            return;
+        }
         DoubleArrayList a = new DoubleArrayList();
         int n = rowWindow.windowSize();
-        long time = 0;
-        for(int i=0;i<n;i++){
+        long time = rowWindow.getRow(0).getTime();
+        for (int i = 0; i < n; i++) {
             Row row = rowWindow.getRow(i);
-            if (i==0)
-                time = row.getTime();
-            if (row.isNull(0)) {//当出现null时，跳过这一行，同时确保getValue不会出错
-                continue;
-            }
             a.add(Util.getValueAsDouble(row, 0));
         }
         int m = a.size();
-        double[][] dp = new double[m+1][m+1];
-        for (int i=1;i<=m;i++){
+        double[][] dp = new double[m + 1][m + 1];
+        for (int i = 1; i <= m; i++) {
             dp[i][i] = 0;
-            if(i<m)
-                dp[i][i+1] = Math.pow(Math.abs(a.get(i-1)-a.get(i)),2);
-        }
-        for(int len=3;len<=m;len++){
-            for(int i=1,j=len;j<=m;j++){
-                dp[i][j] = Math.pow(Math.abs(a.get(i-1)-a.get(j-1)),2)+Math.min(Math.min(dp[i+1][j],dp[i][j-1]),dp[i+1][j-1]);
+            if (i < m) {
+                dp[i][i + 1] = Math.pow(Math.abs(a.get(i - 1) - a.get(i)), 2);
             }
         }
-        if (dp[1][m]<=threshold){
-            timeList.add(time);
-            symmetryList.add(dp[1][m]);
+        for (int len = 3; len <= m; len++) {
+            for (int i = 1, j = len; j <= m; j++) {
+                dp[i][j] = Math.pow(Math.abs(a.get(i - 1) - a.get(j - 1)), 2) + Math.min(Math.min(dp[i + 1][j], dp[i][j - 1]), dp[i + 1][j - 1]);
+            }
         }
-    }
-
-    @Override
-    public void terminate(PointCollector collector) throws Exception {
-        for (int i=0;i<timeList.size();i++){
-            collector.putDouble(timeList.get(i),symmetryList.get(i));
+        if (dp[1][m] <= threshold) {
+            collector.putDouble(time, dp[1][m]);
         }
     }
 }
