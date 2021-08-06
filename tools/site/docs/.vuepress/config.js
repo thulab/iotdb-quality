@@ -47,6 +47,7 @@ module.exports = {
 						]
 					},
 					{ text: '下载', link: '/zh/Download.md' },
+					{ text: '测试', link: '/zh/TEST.md' },
 				],
 				sidebar: {
 					'/zh/V1.0.x/': [
@@ -216,6 +217,7 @@ module.exports = {
 						]
 					},
 					{ text: 'Download', link: '/en/Download.md' },
+					{ text: 'Test', link: '/en/TEST.md' },
 				],
 				sidebar: {
 					'/en/V1.0.x/': [
