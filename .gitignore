@@ -1,7 +1,7 @@
 target/
-tools/site/docs/
-!tools/site/docs/.vuepress/
 tools/site/node_modules/
+tools/site/docs/*
+!tools/site/docs/.vuepress/
 tools/site/docs/.vuepress/theme/
 tools/site/docs/.vuepress/dist/
 tools/auto-document/*.aux
