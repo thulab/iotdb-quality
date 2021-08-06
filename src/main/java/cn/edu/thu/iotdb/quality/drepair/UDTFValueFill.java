@@ -1,6 +1,5 @@
 package cn.edu.thu.iotdb.quality.drepair;
 
-
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -11,7 +10,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 /**
  * 给所有的UDTF的填补函数设定统一的接口，方便调用。
  *
- * @author Zhang Xiaojian 
+ * @author Zhang Xiaojian
  */
 public class UDTFValueFill implements UDTF {
 
@@ -21,7 +20,7 @@ public class UDTFValueFill implements UDTF {
     public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
         udtfc.setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
                 .setOutputDataType(udfp.getDataType(0));
-        method = udfp.getStringOrDefault("method", "ffill");
+        method = udfp.getStringOrDefault("method", "linear");
 //        beforeRange = udfp.getLongOrDefault("beforeRange", Long.MAX_VALUE);
 //        afterRange = udfp.getLongOrDefault("afterRange", Long.MAX_VALUE);
     }
@@ -29,23 +28,19 @@ public class UDTFValueFill implements UDTF {
     @Override
     public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
         ValueFill vf = null;
-        if("ffill".equalsIgnoreCase(method)){
+        if ("previous".equalsIgnoreCase(method)) {
             vf = new PreviousFill(rowWindow.getRowIterator());
-        }
-        else if("linear".equalsIgnoreCase(method)){
+        } else if ("linear".equalsIgnoreCase(method)) {
             vf = new LinearFill(rowWindow.getRowIterator());
-        }
-        else if("mean".equalsIgnoreCase(method)){
+        } else if ("mean".equalsIgnoreCase(method)) {
             vf = new MeanFill(rowWindow.getRowIterator());
-        }
-        else if("ar".equalsIgnoreCase(method)){
+        } else if ("ar".equalsIgnoreCase(method)) {
             vf = new ARFill(rowWindow.getRowIterator());
         } else if ("screen".equalsIgnoreCase(method)) {
             vf = new ScreenFill(rowWindow.getRowIterator());
         } else if ("likelihood".equalsIgnoreCase(method)) {
             vf = new LikelihoodFill(rowWindow.getRowIterator());
-        }
-        else {
+        } else {
             throw new Exception("Illegal method");
         }
         vf.fill();
