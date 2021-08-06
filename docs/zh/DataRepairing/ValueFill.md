@@ -2,15 +2,15 @@
 
 ## 函数简介
 
-**函数名：** FILL
+**函数名：** ValueFill
 
 **输入序列：** 单列时序数据，类型为INT32 / INT64 / FLOAT / DOUBLE
 
 **参数：**
 
-+ `method`: “ffill"指使用前值填补方法；“linear"指使用线性填补方法；缺省情况下使用“ffill”。
++ `method`:“mean”指使用均值填补的方法； “ffill"指使用前值填补方法；“linear"指使用线性插值填补方法；“AR”指自回归的填补方法；“MA”指滑动平均的填补方法；"SCREEN"指约束填补方法；缺省情况下使用“linear”。
 
-**输出序列：** 即修复后的单维序列。
+**输出序列：** 填补后的单维序列。
 
 ## 使用示例
 ### 使用ffill方法进行修复
@@ -76,7 +76,7 @@ select valuefill(s1) from root.test.d2
 输入序列同上，用于查询的SQL语句如下：
 
 ```sql
-select valuefill(s1,'method'='linaer') from root.test.d2
+select valuefill(s1,'method'='linear') from root.test.d2
 ```
 
 输出序列：
