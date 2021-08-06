@@ -102,9 +102,8 @@ module.exports = {
 							]
 						},
 						{
-							title: '数据画像 (18)',
+							title: '数据画像 (16)',
 							children: [
-								'DataProfiling/CrossCorrelation.md',
 								'DataProfiling/Distinct.md',
 								'DataProfiling/Histogram.md',
 								'DataProfiling/Integral.md',
@@ -116,8 +115,7 @@ module.exports = {
 								'DataProfiling/QLB.md',
                                 'DataProfiling/Resample.md',
 								'DataProfiling/Sample.md',
-								'DataProfiling/Segment.md',
-								'DataProfiling/SelfCorrelation.md',
+								'DataProfiling/Segment.md',	
 								'DataProfiling/Skew.md',
 								'DataProfiling/Spread.md',
 								'DataProfiling/Stddev.md',
@@ -142,23 +140,26 @@ module.exports = {
 							],
 						},
 						{
-							title: '数据匹配 (6)',
-							children: [
+							title: '数据匹配 (8)',
+							children: [                                
 								'DataMatching/Cov.md',
+                                'DataMatching/CrossCorrelation.md',
 								'DataMatching/DTW.md',
 								'DataMatching/Pearson.md',
+                                'DataMatching/SelfCorrelation.md',
 								'DataMatching/SeriesAlign.md',
 								'DataMatching/SeriesSimilarity.md',
 								'DataMatching/ValueAlign.md',
 							],
 						},
 						{
-							title: '异常检测 (4)',
+							title: '异常检测 (5)',
 							children: [
 								'AnomalyDetection/ADWIN.md',
 								'AnomalyDetection/KSigma.md',
 								'AnomalyDetection/LOF.md',
 								'AnomalyDetection/Range.md',
+                                'AnomalyDetection/TwoSidedFilter.md'
 							],
 						},
 						{
@@ -270,9 +271,8 @@ module.exports = {
 							]
 						},
 						{
-							title: 'Data Profiling (18)',
+							title: 'Data Profiling (16)',
 							children: [
-								'DataProfiling/CrossCorrelation.md',
 								'DataProfiling/Distinct.md',
 								'DataProfiling/Histogram.md',
 								'DataProfiling/Integral.md',
@@ -285,7 +285,6 @@ module.exports = {
                                 'DataProfiling/Resample.md',
 								'DataProfiling/Sample.md',
 								'DataProfiling/Segment.md',
-								'DataProfiling/SelfCorrelation.md',
 								'DataProfiling/Skew.md',
 								'DataProfiling/Spread.md',
 								'DataProfiling/Stddev.md',
@@ -310,23 +309,26 @@ module.exports = {
 							],
 						},
 						{
-							title: 'Data Matching (6)',
+							title: 'Data Matching (8)',
 							children: [
-								'DataMatching/Cov.md',
+                                'DataMatching/Cov.md',
+                                'DataMatching/CrossCorrelation.md',
 								'DataMatching/DTW.md',
 								'DataMatching/Pearson.md',
+                                'DataMatching/SelfCorrelation.md',
 								'DataMatching/SeriesAlign.md',
 								'DataMatching/SeriesSimilarity.md',
 								'DataMatching/ValueAlign.md',
 							],
 						},
 						{
-							title: 'Anomaly Detection (4)',
+							title: 'Anomaly Detection (5)',
 							children: [
 								'AnomalyDetection/ADWIN.md',
 								'AnomalyDetection/KSigma.md',
 								'AnomalyDetection/LOF.md',
 								'AnomalyDetection/Range.md',
+                                'AnomalyDetection/TwoSidedFilter.md'
 							],
 						},
 						{

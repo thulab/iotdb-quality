@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.dprofile;
+package cn.edu.thu.iotdb.quality.dmatch;
 
 import cn.edu.thu.iotdb.quality.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
