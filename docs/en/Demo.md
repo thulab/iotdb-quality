@@ -1,12 +1,18 @@
 # Demo
 
-#### Data Profiling Demo
+
+### Data Profiling Demo
 
 link: <http://101.6.15.213:18181/#/notebook/2GBGV5NG1>
 
 
 
-#### Anomaly Detection Demo
+### Anomaly Detection Demo
 
 link: <http://101.6.15.213:18181/#/notebook/2GBRNPSCW>
 
+
+
+### Test Freely
+
+link: <http://101.6.15.213:18181/#/notebook/2GBU8G6YN>
