@@ -44,6 +44,7 @@ rm *.html
 rm -rf assets/
 rm -rf zh/
 rm -rf en/
-# Commit the cleaning
+# Commit and upload the cleaning
 git add -A
 git commit -m "Clean Environment"
+git push origin master
