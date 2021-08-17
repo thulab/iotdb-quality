@@ -13,10 +13,12 @@ public class Queue {
     float[] floatValueQueueList;
     int[] intValueQueueList;
     long[] longValueQueueList;
+    double sum;
     public Queue(int len, TSDataType type) {
         MaxLen=len;
         timeQueueList=new long[MaxLen];
         datatype=type;
+        sum=0.0d;
         switch(datatype){
             case INT32:
                 intValueQueueList=new int[MaxLen];
@@ -120,15 +122,19 @@ public class Queue {
             switch(datatype){
                 case INT32:
                     intValueQueueList[rear]= Integer.parseInt(value.toString());
+                    sum+=Integer.parseInt(value.toString());
                     break;
                 case INT64:
                     longValueQueueList[rear]= Long.parseLong(value.toString());
+                    sum+=Long.parseLong(value.toString());
                     break;
                 case FLOAT:
                     floatValueQueueList[rear] = Float.parseFloat(value.toString());
+                    sum+=Float.parseFloat(value.toString());
                     break;
                 case DOUBLE:
                     doubleValueQueueList[rear] = Double.parseDouble(value.toString());
+                    sum+=Double.parseDouble(value.toString());
                     break;
             }
         }
@@ -136,8 +142,9 @@ public class Queue {
             System.out.println("ERROR:Queue is Full");
         }
     }
-    public void pop() {
+    public void pop() throws Exception {
         if(!isEmpty()){
+            sum-=queueFrontValue();
             front=(front+1)%MaxLen;
         } else {
             System.out.println("ERROR:Queue is Empty");
@@ -152,6 +159,7 @@ public class Queue {
     public int getMaxLen(){
         return  MaxLen;
     }
+    public double getSum() {return sum;}
     public int getLength(){
         if(rear>=front){
             return rear-front;
