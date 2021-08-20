@@ -20,3 +20,4 @@ tools/auto-document/marktex/texparser/__pycache__
 .idea/
 *.iml
 src/main/java/cn/edu/thu/iotdb/quality/dprofile/SegmentTest.java
+.DS_Store
