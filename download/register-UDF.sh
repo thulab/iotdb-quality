@@ -31,7 +31,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function zscore as 'cn.edu.thu.iotdb.quality.dprofile.UDTFZScore'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function spline as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSpline'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function movingaverage as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMovingAverage'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPartialAutoCorrelation'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'cn.edu.thu.iotdb.quality.dprofile.UDTFPartialAutoCorrelation'"
 
 
 # Data Quality
