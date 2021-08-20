@@ -50,7 +50,7 @@ public class UDTFPartialAutoCorrelation implements UDTF {
             }
         }
         RealMatrix a = new Array2DRowRealMatrix(R,true);
-        RealVector b = new ArrayRealVector(Arrays.copyOfRange(r,1,r.length-1),true);
+        RealVector b = new ArrayRealVector(Arrays.copyOfRange(r,1,r.length),true);
         DecompositionSolver solver = new LUDecomposition(a).getSolver();
         RealVector rho = solver.solve(b);
         /*

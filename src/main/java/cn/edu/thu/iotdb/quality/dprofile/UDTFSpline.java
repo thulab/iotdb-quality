@@ -50,7 +50,7 @@ public class UDTFSpline implements UDTF{
             double[] y= ArrayUtils.toPrimitive(yDouble.toArray(new Double[0]));
             psf=asi.interpolate(x,y);
             for(int i=0;i<sample_points;i++){
-                int x_approx= (int) Math.ceil((x[0]*(sample_points-1-i)+x[yDouble.size()-1]*(i))/(sample_points-1)+0.5);
+                int x_approx= (int) Math.floor((x[0]*(sample_points-1-i)+x[yDouble.size()-1]*(i))/(sample_points-1)+0.5);
                 double yhead=psf.value(x_approx);
                 collector.putDouble(minimum_timestamp+(long)x_approx,yhead);
             }
