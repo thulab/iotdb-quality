@@ -15,8 +15,8 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
     流式转换需用户提供均值和标准差，全局转换则不需要
  */
 public class UDTFZScore implements UDTF{
-    ArrayList<Double> value;
-    ArrayList<Long> timestamp;
+    ArrayList<Double> value=new ArrayList<>();
+    ArrayList<Long> timestamp=new ArrayList<>();
     String method="batch";
     double avg=0.0d;
     double sd=0.0d;

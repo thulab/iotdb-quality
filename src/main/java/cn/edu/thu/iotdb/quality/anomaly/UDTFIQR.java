@@ -16,8 +16,8 @@ import com.google.common.math.Quantiles;
     流式转换需用户提供Q1与Q3，全局转换则不需要
  */
 public class UDTFIQR implements UDTF{
-    ArrayList<Double> value;
-    ArrayList<Long> timestamp;
+    ArrayList<Double> value=new ArrayList<>();
+    ArrayList<Long> timestamp=new ArrayList<>();
     String method="batch";
     double q1=0.0d;
     double q3=0.0d;
@@ -58,7 +58,7 @@ public class UDTFIQR implements UDTF{
     public void terminate(PointCollector collector) throws Exception {
         if (method.equalsIgnoreCase("batch")){
             q1 = Quantiles.quartiles().index(1).compute(value);
-            q3 = Quantiles.quartiles().index(1).compute(value);
+            q3 = Quantiles.quartiles().index(3).compute(value);
             iqr = q3 - q1;
         }
         for(int i=0;i<value.size();i++){
