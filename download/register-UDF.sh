@@ -31,6 +31,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function zscore as 'cn.edu.thu.iotdb.quality.dprofile.UDTFZScore'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function spline as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSpline'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function movingaverage as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMovingAverage'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPartialAutoCorrelation'"
 
 
 # Data Quality
@@ -53,7 +54,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function patternsymmetric as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPatternSymmetric'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pearson as 'cn.edu.thu.iotdb.quality.dmatch.UDAFPearson'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function selfcorrelation as 'cn.edu.thu.iotdb.quality.dmatch.UDTFSelfCorrelation'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPartialAutoCorrelation'"
+
 
 # Anomaly Detection
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ADWIN as 'cn.edu.thu.iotdb.quality.anomaly.UDTFADWIN'"

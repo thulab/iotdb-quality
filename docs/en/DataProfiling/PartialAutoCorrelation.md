@@ -1,22 +1,22 @@
-## 函数简介
+# PartialAutoCorrelation
 
-本函数通过求解Yule-Walker方程，计算序列的偏自相关系数。
+## Usage
 
-**函数名：** PACF
+This function is used to calculate partial autocorrelation of input series by solving Yule-Walker equation.
 
-**输入序列：** 仅支持单个输入序列，类型为 INT32 / INT64 / FLOAT / DOUBLE。
+**Name:** PACF
 
-**参数：**
+**Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-+ `lag`：最大滞后阶数。默认值为$\min(10\log_{10}n,n-1)$​，$n$​表示数据点个数。​
++ `lag`: Maximum lag of pacf to calculate. The default value is $\min(10\log_{10}n,n-1)$, where $n$ is the number of data points.
 
-**输出序列**：输出单个序列，类型为DOUBLE。
+**Output Series:** Output a single series. The type is DOUBLE.
 
-## 使用示例
+## Examples
 
-### 指定滞后阶数
+### Assigning maximum lag
 
-输入序列：
+Input series:
 
 ```
 +-----------------------------+------------+
@@ -46,13 +46,13 @@
 Total line number = 18066
 ```
 
-用于查询的SQL语句：
+SQL for query: 
 
 ```sql
 select pacf(s1, "lag"="5") from root.test
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+-----------------------------+

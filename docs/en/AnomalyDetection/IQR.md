@@ -1,28 +1,26 @@
 # IQR
 
-## 函数简介
+## Usage
 
-本函数用于检验超出上下四分位数1.5倍IQR的数据分布异常。
+This function is used to detect anomalies based on IQR. Points distributing beyond 1.5 times IQR are selected.
 
-**函数名：** IQR
+**Name:** IQR
 
-**输入序列：** 仅支持单个输入序列，类型为 INT32 / INT64 / FLOAT / DOUBLE。
+**Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-**参数：**
++ `method`: When set to "batch", anomaly test is conducted after importing all data points; when set to "stream", it is required to provide upper and lower quantiles. The default method is "batch".
++ `q1`: The lower quantile when method is set to "stream".
++ `q3`: The upper quantile when method is set to "stream".
 
-+ `method`：若设置为"batch"，则将数据全部读入后检测；若设置为"stream"，则需用户提供上下四分位数进行流式检测。默认为"batch"。
-+ `q1`：使用流式计算时的下四分位数。
-+ `q3`：使用流式计算时的上四分位数。
+**Output Series:** Output a single series. The type is DOUBLE.
 
-**输出序列**：输出单个序列，类型为DOUBLE。
+**Note:** $IQR=Q_3-Q_1$​
 
-**说明**：$IQR=Q_3-Q_1$
+## Examples
 
-## 使用示例
+### Batch computing
 
-### 全数据计算
-
-输入序列：
+Input series:
 
 ```
 +-----------------------------+------------+
@@ -51,13 +49,13 @@
 +-----------------------------+------------+
 ```
 
-用于查询的SQL语句：
+SQL for query: 
 
 ```sql
 select iqr(s1) from root.test
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+-----------------+

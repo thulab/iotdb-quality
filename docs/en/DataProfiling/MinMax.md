@@ -1,26 +1,24 @@
 # MinMax
 
-## 函数简介
+## Usage
 
-本函数将输入序列使用min-max方法进行标准化。最小值归一至0，最大值归一至1.
+This function is used to standardize the input series with min-max. Minimum value is transformed to 0; maximum value is transformed to 1.
 
-**函数名：** MINMAX
+**Name:** MINMAX
 
-**输入序列：** 仅支持单个输入序列，类型为 INT32 / INT64 / FLOAT / DOUBLE。
+**Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-**参数：**
++ `method`: When set to "batch", anomaly test is conducted after importing all data points; when set to "stream", it is required to provide minimum and maximum values. The default method is "batch".
++ `min`: The maximum value when method is set to "stream".
++ `max`: The minimum value when method is set to "stream".
 
-+ `method`：若设置为"batch"，则将数据全部读入后转换；若设置为"stream"，则需用户提供最大值及最小值进行流式计算转换。默认为"batch"。
-+ `min`：使用流式计算时的最小值。
-+ `max`：使用流式计算时的最大值。
+**Output Series:** Output a single series. The type is DOUBLE.
 
-**输出序列**：输出单个序列，类型为DOUBLE。
+## Examples
 
-## 使用示例
+### Batch computing
 
-### 全数据计算
-
-输入序列：
+Input series:
 
 ```
 +-----------------------------+------------+
@@ -49,13 +47,13 @@
 +-----------------------------+------------+
 ```
 
-用于查询的SQL语句：
+SQL for query: 
 
 ```sql
 select minmax(s1) from root.test
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+--------------------+

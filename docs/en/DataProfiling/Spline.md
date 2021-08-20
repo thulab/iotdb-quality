@@ -1,26 +1,24 @@
 # Spline
 
-## 函数简介
+## Usage
 
-本函数提供对原始序列进行三次样条曲线拟合后的插值重采样。
+This function is used to calculate cubic spline interpolation of input series.
 
-**函数名：** SPLINE
+**Name:** SPLINE
 
-**输入序列：** 仅支持单个输入序列，类型为 INT32 / INT64 / FLOAT / DOUBLE。
+**Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-**参数：**
++ `points`: Number of resampling points.
 
-+ `points`：重采样个数。
+**Output Series:** Output a single series. The type is DOUBLE.
 
-**输出序列**：输出单个序列，类型为DOUBLE。
+**Note**: Output series retains the first and last timestamps of input series. Interpolation points are selected at equal intervals. The function tries to calculate only when there are no less than 4 points in input series.
 
-**提示**：输出序列保留输入序列的首尾值，等时间间隔采样。仅当输入点个数不少于4个时才计算插值。
+## Examples
 
-## 使用示例
+### Assigning number of interpolation points
 
-### 指定插值个数
-
-输入序列：
+Input series:
 
 ```
 +-----------------------------+------------+
@@ -39,13 +37,13 @@
 +-----------------------------+------------+
 ```
 
-用于查询的SQL语句：
+SQL for query: 
 
 ```sql
 select spline(s1, "points"="151") from root.test
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+------------------------------------+
