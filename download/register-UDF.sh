@@ -27,6 +27,11 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function skew as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSkew'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function spread as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSpread'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function stddev as 'cn.edu.thu.iotdb.quality.dprofile.UDAFStddev'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function minmax as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMinMax'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function zscore as 'cn.edu.thu.iotdb.quality.dprofile.UDTFZScore'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function spline as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSpline'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function movingaverage as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMovingAverage'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'cn.edu.thu.iotdb.quality.dprofile.UDTFPartialAutoCorrelation'"
 
 
 # Data Quality
@@ -57,11 +62,14 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function LOF as 'cn.edu.thu.iotdb.quality.anomaly.UDTFLOF'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function range as 'cn.edu.thu.iotdb.quality.anomaly.UDTFRange'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function twosidedfilter as 'cn.edu.thu.iotdb.quality.anomaly.UDTFTwoSidedFilter'"
-
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function iqr as 'cn.edu.thu.iotdb.quality.anomaly.UDTFIQR'"
 
 # Frequency Domain
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function FFT as 'cn.edu.thu.iotdb.quality.frequency.UDTFFFT'"
-
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function conv as 'cn.edu.thu.iotdb.quality.frequency.UDTFConv'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function deconv as 'cn.edu.thu.iotdb.quality.frequency.UDTFDeconv'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function lowpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFLowPass'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function highpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFHighPass'"
 
 # Series Discovery
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivesequences as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveSequences'"

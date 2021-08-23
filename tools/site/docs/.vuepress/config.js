@@ -103,14 +103,17 @@ module.exports = {
 							]
 						},
 						{
-							title: '数据画像 (16)',
+							title: '数据画像 (21)',
 							children: [
 								'DataProfiling/Distinct.md',
 								'DataProfiling/Histogram.md',
 								'DataProfiling/Integral.md',
 								'DataProfiling/Mad.md',
 								'DataProfiling/Median.md',
+                                'DataProfiling/MinMax.md',
 								'DataProfiling/Mode.md',
+                                'DataProfiling/MovingAverage.md',
+                                'DataProfiling/PACF.md',
 								'DataProfiling/Percentile.md',
 								'DataProfiling/Period.md',
 								'DataProfiling/QLB.md',
@@ -118,9 +121,11 @@ module.exports = {
 								'DataProfiling/Sample.md',
 								'DataProfiling/Segment.md',	
 								'DataProfiling/Skew.md',
+                                'DataProfiling/Spline.md',
 								'DataProfiling/Spread.md',
 								'DataProfiling/Stddev.md',
                                 'DataProfiling/TimeWeightedAvg.md',
+                                'DataProfiling/ZScore.md',
 							],
 						},
 						{
@@ -155,9 +160,10 @@ module.exports = {
 							],
 						},
 						{
-							title: '异常检测 (5)',
+							title: '异常检测 (6)',
 							children: [
 								'AnomalyDetection/ADWIN.md',
+                                'AnomalyDetection/IQR.md',
 								'AnomalyDetection/KSigma.md',
 								'AnomalyDetection/LOF.md',
 								'AnomalyDetection/Range.md',
@@ -165,12 +171,13 @@ module.exports = {
 							],
 						},
 						{
-							title: '频域相关 (4)',
+							title: '频域相关 (5)',
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
 								'Frequency/FFT.md',
-								'Frequency/Filter.md',
+								'Frequency/HighPass.md',
+                                'Frequency/LowPass.md',
 							],
 						},
 						{
@@ -274,24 +281,29 @@ module.exports = {
 							]
 						},
 						{
-							title: 'Data Profiling (16)',
+							title: 'Data Profiling (21)',
 							children: [
 								'DataProfiling/Distinct.md',
 								'DataProfiling/Histogram.md',
 								'DataProfiling/Integral.md',
 								'DataProfiling/Mad.md',
 								'DataProfiling/Median.md',
+                                'DataProfiling/MinMax.md',
 								'DataProfiling/Mode.md',
+                                'DataProfiling/MovingAverage.md',
+                                'DataProfiling/PACF.md',
 								'DataProfiling/Percentile.md',
 								'DataProfiling/Period.md',
 								'DataProfiling/QLB.md',
                                 'DataProfiling/Resample.md',
 								'DataProfiling/Sample.md',
-								'DataProfiling/Segment.md',
+								'DataProfiling/Segment.md',	
 								'DataProfiling/Skew.md',
+                                'DataProfiling/Spline.md',
 								'DataProfiling/Spread.md',
 								'DataProfiling/Stddev.md',
                                 'DataProfiling/TimeWeightedAvg.md',
+                                'DataProfiling/ZScore.md',
 							],
 						},
 						{
@@ -326,9 +338,10 @@ module.exports = {
 							],
 						},
 						{
-							title: 'Anomaly Detection (5)',
+							title: 'Anomaly Detection (6)',
 							children: [
 								'AnomalyDetection/ADWIN.md',
+                                'AnomalyDetection/IQR.md',
 								'AnomalyDetection/KSigma.md',
 								'AnomalyDetection/LOF.md',
 								'AnomalyDetection/Range.md',
@@ -336,12 +349,13 @@ module.exports = {
 							],
 						},
 						{
-							title: 'Frequency Domain (4)',
+							title: 'Frequency Domain (5)',
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
 								'Frequency/FFT.md',
-								'Frequency/Filter.md',
+								'Frequency/HighPass.md',
+                                'Frequency/LowPass.md',
 							],
 						},
 						{

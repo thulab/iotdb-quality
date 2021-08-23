@@ -11,17 +11,17 @@
 \cover{cover.jpg}
 
 % 使用XeLatex编译时，item前面的圆点可能无法显示，下面的代码可以解决该问题
-\makeatletter
-\def\pgfutil@insertatbegincurrentpagefrombox#1{%
-  \edef\pgf@temp{\the\wd\pgfutil@abb}%
-  \global\setbox\pgfutil@abb\hbox{%
-    \unhbox\pgfutil@abb%
-    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
-    #1%
-    \hskip\dimexpr-2in-2\hoffset\relax% new
-  }%
-}
-\makeatother
+%\makeatletter
+%\def\pgfutil@insertatbegincurrentpagefrombox#1{%
+%  \edef\pgf@temp{\the\wd\pgfutil@abb}%
+%  \global\setbox\pgfutil@abb\hbox{%
+%    \unhbox\pgfutil@abb%
+%    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
+%    #1%
+%    \hskip\dimexpr-2in-2\hoffset\relax% new
+%  }%
+%}
+%\makeatother
 
 % 本文档命令
 \renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
@@ -63,18 +63,22 @@
 \input{output_zh/Integral.tex}
 \input{output_zh/Mad.tex}
 \input{output_zh/Median.tex}
+\input{output_zh/MinMax.tex}
 \input{output_zh/Mode.tex}
+\input{output_zh/MovingAverage.tex}
+\input{output_zh/PACF.tex}
 \input{output_zh/Percentile.tex}
 \input{output_zh/Period.tex}
 \input{output_zh/QLB.tex}
 \input{output_zh/Resample.tex}
 \input{output_zh/Sample.tex}
 \input{output_zh/Segment.tex}
-
 \input{output_zh/Skew.tex}
+\input{output_zh/Spline.tex}
 \input{output_zh/Spread.tex}
 \input{output_zh/Stddev.tex}
 \input{output_zh/TimeWeightedAvg.tex}
+\input{output_zh/ZScore.tex}
 
 \chapter{数据质量}
 \input{output_zh/Completeness.tex}
@@ -83,7 +87,7 @@
 \input{output_zh/Validity.tex}
 
 \chapter{数据修复}
-\input{output_zh/Fill.tex}
+\input{output_zh/ValueFill.tex}
 \input{output_zh/TimestampRepair.tex}
 \input{output_zh/ValueRepair.tex}
 
@@ -102,6 +106,7 @@
 
 \chapter{异常检测}
 \input{output_zh/ADWIN.tex}
+\input{output_zh/IQR.tex}
 \input{output_zh/KSigma.tex}
 \input{output_zh/LOF.tex}
 \input{output_zh/Range.tex}
@@ -112,7 +117,9 @@
 \input{output_zh/Conv.tex}
 \input{output_zh/Deconv.tex}
 \input{output_zh/FFT.tex}
-\input{output_zh/Filter.tex}
+\input{output_zh/HighPass.tex}
+\input{output_zh/LowPass.tex}
+
 
 \chapter{序列发现}
 \input{output_zh/ConsecutiveSequences.tex}

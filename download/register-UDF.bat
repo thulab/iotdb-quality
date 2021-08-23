@@ -26,6 +26,11 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function skew as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSkew'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function spread as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSpread'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function stddev as 'cn.edu.thu.iotdb.quality.dprofile.UDAFStddev'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function minmax as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMinMax'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function zscore as 'cn.edu.thu.iotdb.quality.dprofile.UDTFZScore'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function spline as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSpline'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function movingaverage as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMovingAverage'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function pacf as 'cn.edu.thu.iotdb.quality.dprofile.UDTFPartialAutoCorrelation'"
 
 
 @REM Data Quality
@@ -51,15 +56,21 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 
 
 @REM Anomaly Detection
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function ADWIN as 'cn.edu.thu.iotdb.quality.anomaly.UDTFADWIN'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function adwin as 'cn.edu.thu.iotdb.quality.anomaly.UDTFADWIN'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function ksigma as 'cn.edu.thu.iotdb.quality.anomaly.UDTFKSigma'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function LOF as 'cn.edu.thu.iotdb.quality.anomaly.UDTFLOF'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function lof as 'cn.edu.thu.iotdb.quality.anomaly.UDTFLOF'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function range as 'cn.edu.thu.iotdb.quality.anomaly.UDTFRange'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function iqr as 'cn.edu.thu.iotdb.quality.anomaly.UDTFIQR'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function twosidedfilter as 'cn.edu.thu.iotdb.quality.anomaly.UDTFTwoSidedFilter'"
 
 
 @REM Frequency Domain
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function FFT as 'cn.edu.thu.iotdb.quality.frequency.UDTFFFT'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function conv as 'cn.edu.thu.iotdb.quality.frequency.UDTFConv'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function deconv as 'cn.edu.thu.iotdb.quality.frequency.UDTFDeconv'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function lowpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFLowPass'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function highpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFHighPass'"
+
 
 
 @REM Series Discovery
