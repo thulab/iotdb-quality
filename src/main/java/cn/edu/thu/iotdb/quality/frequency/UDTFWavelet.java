@@ -169,7 +169,7 @@ public class UDTFWavelet implements UDTF {
         configurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.DOUBLE);
         String s= parameters.getString("coef");
-        String method=parameters.getString("method");
+        String method=parameters.getStringOrDefault("method","");
         // 常见滤波器的系数设置
         if(method.equalsIgnoreCase("Haar")){
             cc=new double[]{1/Math.sqrt(2),1/Math.sqrt(2)};

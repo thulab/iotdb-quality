@@ -70,7 +70,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function deconv as 'cn.edu.thu.iotdb.quality.frequency.UDTFDeconv'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function lowpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFLowPass'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function highpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFHighPass'"
-
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function wavelet as 'cn.edu.thu.iotdb.quality.frequency.UDTFWavelet'"
 
 
 @REM Series Discovery
