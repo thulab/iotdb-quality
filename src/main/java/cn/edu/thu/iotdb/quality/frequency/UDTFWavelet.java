@@ -35,8 +35,8 @@ public class UDTFWavelet implements UDTF {
      */
     private double[] workspace = new double[1024];
 
-    private ArrayList<Long> timestamp;
-    private ArrayList<Double> value;
+    private ArrayList<Long> timestamp=new ArrayList<>();
+    private ArrayList<Double> value=new ArrayList<>();
 
     public static boolean isPower2(int x) {
         return x > 0 && (x & (x - 1)) == 0;
@@ -55,7 +55,7 @@ public class UDTFWavelet implements UDTF {
      * @param a the signal vector.
      * @param n the length of vector.
      */
-    void forward(Double[] a, int n) {
+    void forward(double[] a, int n) {
         if (n < ncof) {
             return;
         }
@@ -124,7 +124,7 @@ public class UDTFWavelet implements UDTF {
      * Discrete wavelet transform.
      * @param a the signal vector.
      */
-    public void waveletTransform(Double[] a) {
+    public void waveletTransform(double[] a) {
         int n = a.length;
 
         if (!isPower2(n)) {
@@ -169,17 +169,38 @@ public class UDTFWavelet implements UDTF {
         configurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.DOUBLE);
         String s= parameters.getString("coef");
-        String[] coefString=s.split(",");
-        ncof=coefString.length;
+        String method=parameters.getString("method");
+        // 常见滤波器的系数设置
+        if(method.equalsIgnoreCase("Haar")){
+            cc=new double[]{1/Math.sqrt(2),1/Math.sqrt(2)};
+        }
+        else if(method.equalsIgnoreCase("DB4")){
+            cc=new double[]{0.4829629131445341,0.8365163037378077,0.2241438680420134,-0.1294095225512603};
+        }
+        else if(method.equalsIgnoreCase("DB6")){
+            cc=new double[]{0.3326705529500825,0.8068915093110924,0.4598775021184914,-0.1350110200102546,-0.0854412738820267,0.0352262918857095};
+        }
+        else if(method.equalsIgnoreCase("DB8")){
+            cc=new double[]{0.2303778133088964,0.7148465705529154,0.6308807679398587,-0.0279837694168599,-0.1870348117190931,0.0308413818355607,0.0328830116668852,-0.0105974017850690};
+        }
+        else{
+            String[] coefString=s.split(",");
+            ncof=coefString.length;
+            cc=new double[ncof];
+            for (int i=0;i<ncof;i++){
+                cc[i]=Double.parseDouble(coefString[i]);
+            }
+        }
+        ncof=cc.length;
         ioff = joff = -(ncof >> 1);
-        cc=new double[ncof];
         cr=new double[ncof];
         double sig=-1.0;
         for (int i=0;i<ncof;i++){
-            cc[i]=Double.parseDouble(coefString[i]);
             cr[ncof-1-i]=sig*cc[i];
             sig=-sig;
         }
+        timestamp.clear();
+        value.clear();
     }
     @Override
     public void transform(Row row, PointCollector pointCollector) throws Exception{
@@ -188,9 +209,9 @@ public class UDTFWavelet implements UDTF {
     }
     @Override
     public void terminate(PointCollector pointCollector) throws Exception{
-        Double[] r=value.toArray(new Double[0]);
+        double[] r=value.stream().mapToDouble(Double::valueOf).toArray();
         waveletTransform(r);
-        for(int i=0;i<ncof;i++){
+        for(int i=0;i<r.length;i++){
             pointCollector.putDouble(timestamp.get(i),r[i]);
         }
     }
