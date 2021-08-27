@@ -171,13 +171,14 @@ module.exports = {
 							],
 						},
 						{
-							title: '频域相关 (5)',
+							title: '频域相关 (6)',
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
 								'Frequency/FFT.md',
 								'Frequency/HighPass.md',
                                 'Frequency/LowPass.md',
+								'Frequency/Wavelet.md'
 							],
 						},
 						{
@@ -349,13 +350,14 @@ module.exports = {
 							],
 						},
 						{
-							title: 'Frequency Domain (5)',
+							title: 'Frequency Domain (6)',
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
 								'Frequency/FFT.md',
 								'Frequency/HighPass.md',
                                 'Frequency/LowPass.md',
+								'Frequency/Wavelet.md'
 							],
 						},
 						{

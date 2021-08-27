@@ -11,17 +11,17 @@
 \cover{cover.jpg}
 
 % 使用XeLatex编译时，item前面的圆点可能无法显示，下面的代码可以解决该问题
-%\makeatletter
-%\def\pgfutil@insertatbegincurrentpagefrombox#1{%
-%  \edef\pgf@temp{\the\wd\pgfutil@abb}%
-%  \global\setbox\pgfutil@abb\hbox{%
-%    \unhbox\pgfutil@abb%
-%    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
-%    #1%
-%    \hskip\dimexpr-2in-2\hoffset\relax% new
-%  }%
-%}
-%\makeatother
+\makeatletter
+\def\pgfutil@insertatbegincurrentpagefrombox#1{%
+  \edef\pgf@temp{\the\wd\pgfutil@abb}%
+  \global\setbox\pgfutil@abb\hbox{%
+    \unhbox\pgfutil@abb%
+    \hskip\dimexpr2in-2\hoffset-\pgf@temp\relax% changed
+    #1%
+    \hskip\dimexpr-2in-2\hoffset\relax% new
+  }%
+}
+\makeatother
 
 % 本文档命令
 \newlength\tablewidth
@@ -116,7 +116,7 @@
 \input{output_en/FFT.tex}
 \input{output_en/HighPass.tex}
 \input{output_en/LowPass.tex}
-
+\input{output_en/Wavelet.tex}
 
 \chapter{Series Discovery}
 \input{output_en/ConsecutiveSequences.tex}
