@@ -15,34 +15,34 @@ public class Queue {
     long[] longValueQueueList;
     double sum;
     public Queue(int len, TSDataType type) {
-        MaxLen=len;
-        timeQueueList=new long[MaxLen+1];
+        MaxLen=len+1;
+        timeQueueList=new long[MaxLen];
         datatype=type;
         sum=0.0d;
         switch(datatype){
             case INT32:
-                intValueQueueList=new int[MaxLen+1];
+                intValueQueueList=new int[MaxLen];
                 //longValueQueueList=new long[1];
                 //floatValueQueueList=new float[1];
                 //doubleValueQueueList=new double[1];
                 break;
             case INT64:
                 //intValueQueueList=new int[1];
-                longValueQueueList=new long[MaxLen+1];
+                longValueQueueList=new long[MaxLen];
                 //floatValueQueueList=new float[1];
                 //doubleValueQueueList=new double[1];
                 break;
             case FLOAT:
                 //intValueQueueList=new int[1];
                 //longValueQueueList=new long[1];
-                floatValueQueueList=new float[MaxLen+1];
+                floatValueQueueList=new float[MaxLen];
                 //doubleValueQueueList=new double[1];
                 break;
             case DOUBLE:
                 //intValueQueueList=new int[1];
                 //longValueQueueList=new long[1];
                 //floatValueQueueList=new float[1];
-                doubleValueQueueList=new double[MaxLen+1];
+                doubleValueQueueList=new double[MaxLen];
                 break;
         }
         front=0;
@@ -165,7 +165,7 @@ public class Queue {
             return rear-front;
         }
         else{
-            return MaxLen-(front-rear)+1;
+            return MaxLen-(front-rear);
         }
     }
 }
