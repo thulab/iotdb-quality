@@ -20,6 +20,10 @@ public class UDTFDWT implements UDTF {
      */
     private int ncof;
     /**
+    * 执行分解的层数，应保证每次变换的向量长度不小于ncof
+     */
+    private int layer;
+    /**
      * Centering.
      */
     private int ioff;
@@ -74,8 +78,8 @@ public class UDTFDWT implements UDTF {
             int ni = i + 1 + nmod + ioff;
             int nj = i + 1 + nmod + joff;
             for (int k = 0; k < ncof; k++) {
-                int jf = n1 & (ni + k + 1);
-                int jr = n1 & (nj + k + 1);
+                int jf = n1 & (ni + k);
+                int jr = n1 & (nj + k);
                 workspace[ii] += cc[k] * a[jf];
                 workspace[ii + nh] += cr[k] * a[jr];
             }
@@ -110,8 +114,8 @@ public class UDTFDWT implements UDTF {
             int ni = i + 1 + nmod + ioff;
             int nj = i + 1 + nmod + joff;
             for (int k = 0; k < ncof; k++) {
-                int jf = n1 & (ni + k + 1);
-                int jr = n1 & (nj + k + 1);
+                int jf = n1 & (ni + k);
+                int jr = n1 & (nj + k);
                 workspace[jf] += cc[k] * ai;
                 workspace[jr] += cr[k] * ai1;
             }
@@ -134,14 +138,20 @@ public class UDTFDWT implements UDTF {
         if (n < ncof) {
             throw new IllegalArgumentException("The data vector size is less than wavelet coefficient size.");
         }
-
-        for (int nn = n; nn >= ncof; nn >>= 1) {
+        int nn=n;
+        for (int i=0;i<layer;i++) {
+            if(nn<ncof){
+                break;
+            }
             forward(a, nn);
+            n>>=1;
         }
     }
 
     /**
      * Inverse discrete wavelet transform.
+     * 这个逆变换默认小波系数已经分解到了最后一级，即最后一层只有1个数
+     * 修改可参照waveletTransform函数
      * @param a the signal vector.
      */
     public void inverse(double[] a) {
@@ -170,6 +180,7 @@ public class UDTFDWT implements UDTF {
                 .setOutputDataType(TSDataType.DOUBLE);
         String s= parameters.getString("coef");
         String method=parameters.getStringOrDefault("method","");
+        layer=parameters.getIntOrDefault("layer",1);
         // 常见滤波器的系数设置
         if(method.equalsIgnoreCase("Haar")){
             cc=new double[]{1/Math.sqrt(2),1/Math.sqrt(2)};
