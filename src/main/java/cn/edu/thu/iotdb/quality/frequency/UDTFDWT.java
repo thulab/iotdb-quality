@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 // 输入必须是2的整数次幂个点，视为等距采样
-public class UDTFWavelet implements UDTF {
+public class UDTFDWT implements UDTF {
     /**
      * The number of coefficients.
      */
