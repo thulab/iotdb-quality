@@ -71,6 +71,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function lowpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFLowPass'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function highpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFHighPass'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function dwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFDWT'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function idwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFIDWT'"
 
 
 @REM Series Discovery
