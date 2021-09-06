@@ -71,6 +71,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function lowpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFLowPass'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function highpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFHighPass'"
 /sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function dwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFDWT'"
+/sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function idwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFIDWT'"
 
 # Series Discovery
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivesequences as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveSequences'"

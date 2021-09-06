@@ -5,22 +5,20 @@ import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
-import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-// 输入必须是2的整数次幂个点，视为等距采样
-public class UDTFDWT implements UDTF {
+// 输入应当是DWT变换后的结果，或者是结果经过特定处理后的序列
+public class UDTFIDWT implements UDTF {
     /**
      * The number of coefficients.
      */
     private int ncof;
     /**
-    * 执行分解的层数，应保证每次变换的向量长度不小于ncof
+     * 执行分解的层数，应保证每次变换的向量长度不小于ncof
      */
     private int layer;
     /**
@@ -89,10 +87,48 @@ public class UDTFDWT implements UDTF {
     }
 
     /**
-     * Discrete wavelet transform.
+     * Applies the inverse wavelet filter to a signal vector a[0, n-1].
+     * @param a the signal vector.
+     * @param n the length of vector.
+     */
+    void backward(double[] a, int n) {
+        if (n < ncof) {
+            return;
+        }
+
+        if (n > workspace.length) {
+            workspace = new double[n];
+        } else {
+            Arrays.fill(workspace, 0, n, 0.0);
+        }
+
+        int nmod = ncof * n;
+        int n1 = n - 1;
+        int nh = n >> 1;
+
+        for (int ii = 0, i = 0; i < n; i += 2, ii++) {
+            double ai = a[ii];
+            double ai1 = a[ii + nh];
+            int ni = i + 1 + nmod + ioff;
+            int nj = i + 1 + nmod + joff;
+            for (int k = 0; k < ncof; k++) {
+                int jf = n1 & (ni + k);
+                int jr = n1 & (nj + k);
+                workspace[jf] += cc[k] * ai;
+                workspace[jr] += cr[k] * ai1;
+            }
+        }
+
+        System.arraycopy(workspace, 0, a, 0, n);
+    }
+
+    /**
+     * Inverse discrete wavelet transform.
+     * 这个逆变换默认小波系数已经分解到了最后一级，即最后一层只有1个数
+     * 修改可参照waveletTransform函数
      * @param a the signal vector.
      */
-    public void waveletTransform(double[] a) {
+    public void inverse(double[] a) {
         int n = a.length;
 
         if (!isPower2(n)) {
@@ -103,12 +139,15 @@ public class UDTFDWT implements UDTF {
             throw new IllegalArgumentException("The data vector size is less than wavelet coefficient size.");
         }
         int nn=n;
+        for(int i=0;i<layer-1;i++){
+            nn=n/2;
+        }
         for (int i=0;i<layer;i++) {
-            if(nn<ncof){
+            if(nn>n){
                 break;
             }
-            forward(a, nn);
-            n>>=1;
+            backward(a, nn);
+            n<<=1;
         }
     }
 
@@ -162,10 +201,9 @@ public class UDTFDWT implements UDTF {
     @Override
     public void terminate(PointCollector pointCollector) throws Exception{
         double[] r=value.stream().mapToDouble(Double::valueOf).toArray();
-        waveletTransform(r);
+        inverse(r);
         for(int i=0;i<r.length;i++){
             pointCollector.putDouble(timestamp.get(i),r[i]);
         }
     }
 }
-
