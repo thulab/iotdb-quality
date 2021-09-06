@@ -175,10 +175,10 @@ module.exports = {
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
+								'Frequency/DWT.md',
 								'Frequency/FFT.md',
 								'Frequency/HighPass.md',
                                 'Frequency/LowPass.md',
-								'Frequency/Wavelet.md'
 							],
 						},
 						{
@@ -354,10 +354,10 @@ module.exports = {
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
+								'Frequency/DWT.md',
 								'Frequency/FFT.md',
 								'Frequency/HighPass.md',
                                 'Frequency/LowPass.md',
-								'Frequency/Wavelet.md'
 							],
 						},
 						{
