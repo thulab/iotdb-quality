@@ -77,3 +77,9 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivesequences as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveSequences'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivewindows as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveWindows'"
 
+# String Processing
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function split as 'cn.edu.thu.iotdb.quality.string.UDTFSplit'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexmatch as 'cn.edu.thu.iotdb.quality.series.UDTFRegexMatch'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function replace as 'cn.edu.thu.iotdb.quality.series.UDTFReplace'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexreplace as 'cn.edu.thu.iotdb.quality.series.UDTFRegexReplace'"
+
