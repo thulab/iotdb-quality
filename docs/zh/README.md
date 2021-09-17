@@ -9,7 +9,7 @@
 1. 下载包含全部依赖的jar包和注册脚本；
 2. 将jar包复制到IoTDB程序目录的`ext\udf`目录下；
 3. 运行`sbin\start-server.bat`（在Windows下）或`sbin\start-server.sh`（在Linux或MacOS下）以启动IoTDB服务器；
-4. 将注册脚本复制到IoTDB的程序目录下，并运行注册脚本以注册UDF。
+4. 将注册脚本复制到IoTDB的程序目录下（与`sbin`目录同级的根目录下），修改脚本中的参数（如果需要）并运行注册脚本以注册UDF。
 
 ## 联系我们
 

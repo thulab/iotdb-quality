@@ -25,7 +25,8 @@ import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 public class UDTFFFT implements UDTF {
 
     private String result;
-    private DoubleArrayList list = new DoubleArrayList();
+    private boolean compress;
+    private final DoubleArrayList list = new DoubleArrayList();
 
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
@@ -44,6 +45,7 @@ public class UDTFFFT implements UDTF {
         configurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.DOUBLE);
         this.result = parameters.getStringOrDefault("result", "abs");
+        this.compress = parameters.getBooleanOrDefault("compress", false);
     }
 
     @Override
@@ -65,6 +67,19 @@ public class UDTFFFT implements UDTF {
             a[2 * i + 1] = 0;
         }
         fft.complexForward(a);
+        if (compress) {
+            outputCompressed(collector, a);
+        } else {
+            outputUncompressed(collector, a);
+        }
+    }
+
+    private void outputCompressed(PointCollector collector, double a[]) {
+        int n = a.length / 2;
+    }
+
+    private void outputUncompressed(PointCollector collector, double a[]) throws Exception {
+        int n = a.length / 2;
         for (int i = 0; i < n; i++) {
             double ans = 0;
             switch (result) {

@@ -9,6 +9,7 @@
 @set user=root
 @set pass=root
 
+
 @REM Data Profiling
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function distinct as 'cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function histogram as 'cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram'"
@@ -20,7 +21,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function percentile as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function period as 'cn.edu.thu.iotdb.quality.dprofile.UDAFPeriod'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function qlb as 'cn.edu.thu.iotdb.quality.dprofile.UDTFQLB'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function resample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFResample'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function re_sample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFResample'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function sample as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSample'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function segment as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSegment'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function skew as 'cn.edu.thu.iotdb.quality.dprofile.UDAFSkew'"
