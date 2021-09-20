@@ -171,13 +171,14 @@ module.exports = {
 							],
 						},
 						{
-							title: '频域相关 (6)',
+							title: '频域相关 (7)',
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
 								'Frequency/DWT.md',
 								'Frequency/FFT.md',
 								'Frequency/HighPass.md',
+								'Frequency/IFFT.md',
                                 'Frequency/LowPass.md',
 							],
 						},
@@ -186,6 +187,15 @@ module.exports = {
 							children: [
 								'SeriesDiscovery/ConsecutiveSequences.md',
 								'SeriesDiscovery/ConsecutiveWindows.md',
+							],
+						},
+						{
+							title: '字符串处理 (4)',
+							children: [
+								'StringProcessing/RegexMatch.md',
+								'StringProcessing/RegexReplace.md',
+								'StringProcessing/Replace.md',
+								'StringProcessing/Split.md',
 							],
 						},
 						{
@@ -350,13 +360,14 @@ module.exports = {
 							],
 						},
 						{
-							title: 'Frequency Domain (6)',
+							title: 'Frequency Domain (7)',
 							children: [
 								'Frequency/Conv.md',
 								'Frequency/Deconv.md',
 								'Frequency/DWT.md',
 								'Frequency/FFT.md',
 								'Frequency/HighPass.md',
+								'Frequency/IFFT.md',
                                 'Frequency/LowPass.md',
 							],
 						},
@@ -365,6 +376,15 @@ module.exports = {
 							children: [
 								'SeriesDiscovery/ConsecutiveSequences.md',
 								'SeriesDiscovery/ConsecutiveWindows.md',
+							],
+						},
+						{
+							title: 'String Processing (4)',
+							children: [
+								'StringProcessing/RegexMatch.md',
+								'StringProcessing/RegexReplace.md',
+								'StringProcessing/Replace.md',
+								'StringProcessing/Split.md',
 							],
 						},
 						{

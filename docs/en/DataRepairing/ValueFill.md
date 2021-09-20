@@ -77,7 +77,7 @@ Output series:
 
 When `method` is "previous", previous method is used.
 
-Input series is the same as above, the SQL for query is shown below：
+Input series is the same as above, the SQL for query is shown below:
 
 ```sql
 select valuefill(s1,"method"="previous") from root.test.d2

@@ -73,6 +73,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function highpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFHighPass'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function dwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFDWT'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function idwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFIDWT'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function ifft as 'cn.edu.thu.iotdb.quality.frequency.UDTFIFFT'"
 
 
 @REM Series Discovery
@@ -81,6 +82,6 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 
 @REM String Processing
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function split as 'cn.edu.thu.iotdb.quality.string.UDTFSplit'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function regexmatch as 'cn.edu.thu.iotdb.quality.series.UDTFRegexMatch'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function replace as 'cn.edu.thu.iotdb.quality.series.UDTFReplace'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function regexreplace as 'cn.edu.thu.iotdb.quality.series.UDTFRegexReplace'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function regexmatch as 'cn.edu.thu.iotdb.quality.string.UDTFRegexMatch'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function replace as 'cn.edu.thu.iotdb.quality.string.UDTFReplace'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function regexreplace as 'cn.edu.thu.iotdb.quality.string.UDTFRegexReplace'"

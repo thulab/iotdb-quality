@@ -2,7 +2,7 @@
 
 ## Usage
 
-This function is used to calculate Ljung-Box statistics $Q_{LB}$​ for time series, and convert it  to p value.
+This function is used to calculate Ljung-Box statistics $Q_{LB}$ for time series, and convert it to p value.
 
 **Name:** QLB
 
@@ -14,7 +14,7 @@ This function is used to calculate Ljung-Box statistics $Q_{LB}$​ for time ser
 
 **Output Series:** Output a single series. The type is DOUBLE. The output series is p value, and timestamp means lag.
 
-**Note:** If you want to calculate Ljung-Box statistics $Q_{LB}$ instead of p value​, you may use AutoCorrelation function.
+**Note:** If you want to calculate Ljung-Box statistics $Q_{LB}$ instead of p value, you may use AutoCorrelation function.
 
 ## Examples
 

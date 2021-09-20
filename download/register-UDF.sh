@@ -72,6 +72,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function highpass as 'cn.edu.thu.iotdb.quality.frequency.UDTFHighPass'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function dwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFDWT'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function idwt as 'cn.edu.thu.iotdb.quality.frequency.UDTFIDWT'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ifft as 'cn.edu.thu.iotdb.quality.frequency.UDTFIFFT'"
 
 # Series Discovery
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivesequences as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveSequences'"
@@ -79,7 +80,7 @@ pass=root
 
 # String Processing
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function split as 'cn.edu.thu.iotdb.quality.string.UDTFSplit'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexmatch as 'cn.edu.thu.iotdb.quality.series.UDTFRegexMatch'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function replace as 'cn.edu.thu.iotdb.quality.series.UDTFReplace'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexreplace as 'cn.edu.thu.iotdb.quality.series.UDTFRegexReplace'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexmatch as 'cn.edu.thu.iotdb.quality.string.UDTFRegexMatch'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function replace as 'cn.edu.thu.iotdb.quality.string.UDTFReplace'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexreplace as 'cn.edu.thu.iotdb.quality.string.UDTFRegexReplace'"
 

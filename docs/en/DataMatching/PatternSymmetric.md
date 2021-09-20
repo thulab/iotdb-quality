@@ -8,7 +8,7 @@ The smaller the degree, the more symmetrical the series is.
 
 **Name:** PATTERNSYMMETRIC
 
-**Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE。
+**Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE
 
 **Parameter:**
 

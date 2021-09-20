@@ -35,7 +35,8 @@ def show_files(path, all_files):
 
 
 if __name__ == "__main__": 
-    
+
+
     ## 中文文档
     fs = show_files('../../docs/zh',[])
     for f in fs:

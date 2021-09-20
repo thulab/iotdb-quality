@@ -11,6 +11,8 @@ This function is used to calculate the fast Fourier transform (FFT) of a numeric
 
 + `type`: The type of FFT, which is 'uniform' (by default) or 'nonuniform'. If the value is 'uniform', the timestamps will be ignored and all data points will be regarded as equidistant. Thus, the equidistant fast Fourier transform algorithm will be applied. If the value is 'nonuniform' (TODO), the non-equidistant fast Fourier transform algorithm will be applied based on timestamps.
 + `result`: The result of FFT, which is 'real', 'imag', 'abs' or 'angle', corresponding to the real part, imaginary part, magnitude and phase angle. By default, the magnitude will be output. 
++ `compress`: The parameter of compression, which is within (0,1]. It is the reserved energy ratio of lossy compression. By default, there is no compression. 
+
 
 **Output:** Output a single series. The type is DOUBLE. The length is the same as the input. The timestamps starting from 0 only indicate the order.
 
@@ -88,3 +90,33 @@ Output series:
 ```
 
 Note: The input is $y=sin(2\pi t/4)+2sin(2\pi t/5)$ with a length of 20. Thus, there are peaks in $k=4$ and $k=5$ of the output.
+
+### Uniform FFT with Compression
+
+Input series is the same as above, the SQL for query is shown below:
+
+```sql
+select fft(s1, 'result'='real', 'compress'='0.99'), fft(s1, 'result'='imag','compress'='0.99') from root.test.d1
+```
+
+Output series:
+
+```
++-----------------------------+----------------------+----------------------+
+|                         Time|  fft(root.test.d1.s1,|  fft(root.test.d1.s1,|
+|                             |      "result"="real",|      "result"="imag",|
+|                             |    "compress"="0.99")|    "compress"="0.99")|
++-----------------------------+----------------------+----------------------+
+|1970-01-01T08:00:00.000+08:00|                   0.0|                   0.0|
+|1970-01-01T08:00:00.001+08:00| -3.932894010461041E-9| 1.2104201863039066E-8|
+|1970-01-01T08:00:00.002+08:00|-1.4021739447490164E-7| 1.9299268669082926E-7|
+|1970-01-01T08:00:00.003+08:00| -7.057291240286645E-8|  5.127422242345858E-8|
+|1970-01-01T08:00:00.004+08:00|    19.021130288047125|    -6.180339875198807|
+|1970-01-01T08:00:00.005+08:00|     9.999999850988388| 3.501852745067114E-16|
+|1970-01-01T08:00:00.019+08:00| -3.932894898639461E-9|-1.2104202549376264E-8|
++-----------------------------+----------------------+----------------------+
+```
+
+Note: Based on the conjugation of the Fourier transform result, only the first half of the compression result is reserved.
+According to the given parameter, data points are reserved from low frequency to high frequency until the reserved energy ratio exceeds it.
+The last data point is reserved to indicate the length of the series.

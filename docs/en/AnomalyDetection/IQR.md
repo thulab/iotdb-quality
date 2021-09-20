@@ -14,7 +14,7 @@ This function is used to detect anomalies based on IQR. Points distributing beyo
 
 **Output Series:** Output a single series. The type is DOUBLE.
 
-**Note:** $IQR=Q_3-Q_1$​
+**Note:** $IQR=Q_3-Q_1$
 
 ## Examples
 

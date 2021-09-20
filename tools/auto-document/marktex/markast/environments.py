@@ -261,7 +261,14 @@ class Code(Environ):
         """去掉上下的 ``` 然后将 lang 额外进行记录"""
 
         self.children_flag = re.match(self.RE, self.inner[0]).group(1)
-        self.children.extend(self.inner[1:-1])
+        for i in range(1,len(self.inner)-1):
+            self.children.append(self.lineprocess(self.inner[i])) # 对每一行都进行预处理
+        # print(self.inner)
+    
+    def lineprocess(self, line):
+        """对行内部的$进行处理，替换为$\$$ """
+        # print(1)
+        return line.replace("$", "$\$$")
 
     @property
     def language(self):
@@ -285,7 +292,7 @@ class Code(Environ):
                '\\end{{{name}}}'.format(name=pchain,
                                         flag=self.children_flag,
                                         content='\n'.join(
-                                            str(i) for i in self.children))
+                                            self.lineprocess(str(i)) for i in self.children))
 
 
 @regist_func(registed_env)

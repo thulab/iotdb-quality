@@ -12,7 +12,7 @@ The function is used to filter anomalies of a numeric time series based on two-s
 
 **Parameter:**
 
-- `len`: The size of the window，which is a positibe integer. By default, it's 5. When `len`=3, the algorithm detects forward window and backward window with length 3 and calculates the outlierness of the current point.
+- `len`: The size of the window, which is a positive integer. By default, it's 5. When `len`=3, the algorithm detects forward window and backward window with length 3 and calculates the outlierness of the current point.
 
 - `threshold`: The threshold of outlierness, which is a floating number in (0,1). By default, it's 0.3. The strict standard of detecting anomalies is in proportion to the threshold.
 

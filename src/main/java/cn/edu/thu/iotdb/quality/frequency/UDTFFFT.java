@@ -7,7 +7,6 @@ package cn.edu.thu.iotdb.quality.frequency;
 
 import cn.edu.thu.iotdb.quality.Util;
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
-import java.util.Arrays;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -23,11 +22,12 @@ import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
  * @author Wang Haoyu
  */
 public class UDTFFFT implements UDTF {
-
+    
     private String result;
-    private boolean compress;
+    private boolean compressed;
+    private double compressRate;
     private final DoubleArrayList list = new DoubleArrayList();
-
+    
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
         validator.validateInputSeriesNumber(1)
@@ -37,17 +37,21 @@ public class UDTFFFT implements UDTF {
                         validator.getParameters().getStringOrDefault("type", "uniform"))
                 .validate(x -> "real".equalsIgnoreCase((String) x) || "imag".equalsIgnoreCase((String) x) || "abs".equalsIgnoreCase((String) x) || "angle".equalsIgnoreCase((String) x),
                         "Result should be 'real', 'imag', 'abs' or 'angle'.",
-                        validator.getParameters().getStringOrDefault("result", "abs"));
+                        validator.getParameters().getStringOrDefault("result", "abs"))
+                .validate(x -> (double) x > 0 && (double) x <= 1,
+                        "Compress should be within (0,1].",
+                        validator.getParameters().getDoubleOrDefault("compress", 1));
     }
-
+    
     @Override
     public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
         configurations.setAccessStrategy(new RowByRowAccessStrategy())
                 .setOutputDataType(TSDataType.DOUBLE);
         this.result = parameters.getStringOrDefault("result", "abs");
-        this.compress = parameters.getBooleanOrDefault("compress", false);
+        this.compressed = parameters.hasAttribute("compress");
+        this.compressRate = parameters.getDoubleOrDefault("compress", 1);
     }
-
+    
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
         double v = Util.getValueAsDouble(row);
@@ -55,7 +59,7 @@ public class UDTFFFT implements UDTF {
             list.add(v);
         }
     }
-
+    
     @Override
     public void terminate(PointCollector collector) throws Exception {
         int n = list.size();
@@ -67,39 +71,61 @@ public class UDTFFFT implements UDTF {
             a[2 * i + 1] = 0;
         }
         fft.complexForward(a);
-        if (compress) {
+        if (compressed) {
             outputCompressed(collector, a);
         } else {
             outputUncompressed(collector, a);
         }
     }
-
-    private void outputCompressed(PointCollector collector, double a[]) {
+    
+    private void outputCompressed(PointCollector collector, double a[]) throws Exception {
         int n = a.length / 2;
+        //计算总能量
+        double sum = 0;
+        for (int i = 0; i < n; i++) {
+            sum += a[2 * i] * a[2 * i] + a[2 * i + 1] * a[2 * i + 1];
+        }
+        //压缩
+        double temp = a[0] * a[0] + a[1] * a[1];
+        add(collector, a, 0);
+        for (int i = 1; i <= n / 2; i++) {
+            add(collector, a, i);
+            temp += (a[2 * i] * a[2 * i] + a[2 * i + 1] * a[2 * i + 1]) * 2;
+            if (temp > compressRate * sum) {
+                System.out.println(i);
+                break;
+            }
+        }
+        //尾部标记，表示长度
+        add(collector, a, n - 1);
     }
-
+    
+    private void add(PointCollector collector, double a[], int i) throws Exception {
+        double ans = 0;
+        switch (result) {
+            case "real":
+                ans = a[i * 2];
+                break;
+            case "imag":
+                ans = a[i * 2 + 1];
+                break;
+            case "abs":
+                ans = Math.sqrt(a[i * 2] * a[i * 2] + a[2 * i + 1] * a[2 * i + 1]);
+                break;
+            case "angle":
+                ans = Math.atan2(a[2 * i + 1], a[2 * i]);
+                break;
+            default:
+                throw new Exception("It's impossible");
+        }
+        collector.putDouble(i, ans);
+    }
+    
     private void outputUncompressed(PointCollector collector, double a[]) throws Exception {
         int n = a.length / 2;
         for (int i = 0; i < n; i++) {
-            double ans = 0;
-            switch (result) {
-                case "real":
-                    ans = a[i * 2];
-                    break;
-                case "imag":
-                    ans = a[i * 2 + 1];
-                    break;
-                case "abs":
-                    ans = Math.sqrt(a[i * 2] * a[i * 2] + a[2 * i + 1] * a[2 * i + 1]);
-                    break;
-                case "angle":
-                    ans = Math.atan2(a[2 * i + 1], a[2 * i]);
-                    break;
-                default:
-                    throw new Exception("It's impossible");
-            }
-            collector.putDouble(i, ans);
+            add(collector, a, i);
         }
     }
-
+    
 }
