@@ -1,7 +1,6 @@
-package cn.edu.thu.iotdb.quality.dmatch;
+package cn.edu.thu.iotdb.quality.dprofile;
 
 import cn.edu.thu.iotdb.quality.Util;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.math3.linear.*;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
