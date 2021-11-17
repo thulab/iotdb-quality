@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality;
+package cn.edu.thu.iotdb.quality.util;
 
 import org.apache.commons.math3.analysis.function.Abs;
 

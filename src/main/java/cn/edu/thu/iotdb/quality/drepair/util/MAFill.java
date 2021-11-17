@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.drepair;
+package cn.edu.thu.iotdb.quality.drepair.util;
 
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 
-import cn.edu.thu.iotdb.quality.Util;
+import cn.edu.thu.iotdb.quality.util.Util;
 
 public class WindowDetect {
 

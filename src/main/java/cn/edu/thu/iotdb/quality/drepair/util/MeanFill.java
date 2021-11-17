@@ -1,8 +1,8 @@
-package cn.edu.thu.iotdb.quality.drepair;
+package cn.edu.thu.iotdb.quality.drepair.util;
 
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 
-public class MeanFill extends ValueFill{
+public class MeanFill extends ValueFill {
     public MeanFill(RowIterator dataIterator) throws Exception {
         super(dataIterator);
         calMeanAndVar();

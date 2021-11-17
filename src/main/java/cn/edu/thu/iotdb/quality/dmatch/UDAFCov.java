@@ -5,7 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.dmatch;
 
-import cn.edu.thu.iotdb.quality.Util;
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;

@@ -5,11 +5,9 @@
  */
 package cn.edu.thu.iotdb.quality.anomaly;
 
-import cn.edu.thu.iotdb.quality.LongCircularQueue;
-import cn.edu.thu.iotdb.quality.BooleanCircularQueue;
-import cn.edu.thu.iotdb.quality.DoubleCircularQueue;
-import java.io.File;
-import java.io.FileNotFoundException;
+import cn.edu.thu.iotdb.quality.util.LongCircularQueue;
+import cn.edu.thu.iotdb.quality.util.BooleanCircularQueue;
+import cn.edu.thu.iotdb.quality.util.DoubleCircularQueue;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 
 /**

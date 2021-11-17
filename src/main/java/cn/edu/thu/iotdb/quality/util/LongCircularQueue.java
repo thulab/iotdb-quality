@@ -3,27 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.iotdb.quality;
+package cn.edu.thu.iotdb.quality.util;
 
 /**
- * 存放原始类型boolean的循环队列
+ * 存放原始类型long的循环队列
  *
  * @author Wang Haoyu
  */
-public class BooleanCircularQueue {
+public class LongCircularQueue {
 
     private static int INITCAP = 64;
 
     private int head, tail, size, minLen;
-    private boolean [] data;
+    private long[] data;
 
-    public BooleanCircularQueue(int capacity) {
+    public LongCircularQueue(int capacity) {
         head = tail = size = 0;
-        data = new boolean[capacity];
+        data = new long[capacity];
         minLen = Math.max(INITCAP, capacity);
     }
 
-    public BooleanCircularQueue() {
+    public LongCircularQueue() {
         this(INITCAP);
     }
 
@@ -32,7 +32,7 @@ public class BooleanCircularQueue {
      *
      * @param value 准备加入的元素
      */
-    public void push(boolean value) {
+    public void push(long value) {
         //先判断队列是否满了，满了要扩容
         if (isFull()) {
             resize(data.length * 2);
@@ -48,11 +48,11 @@ public class BooleanCircularQueue {
      *
      * @return 队头元素
      */
-    public boolean pop() {
+    public long pop() {
         if (isEmpty()) {
             throw new IllegalArgumentException("Error: Queue is Empty!");
         }
-        boolean ret = data[head];
+        long ret = data[head];
         //head以循环的方式向后移一位
         head = (head + 1) % data.length;
         size--;
@@ -68,11 +68,11 @@ public class BooleanCircularQueue {
      *
      * @return 队头元素
      */
-    public boolean getHead() {
+    public long getHead() {
         if (isEmpty()) {
             throw new IllegalArgumentException("Error: Queue is Empty!");
         }
-        boolean ret = data[head];
+        long ret = data[head];
         return ret;
     }
 
@@ -100,7 +100,7 @@ public class BooleanCircularQueue {
      * @param newLength 新的数组大小
      */
     private void resize(int newLength) {
-        boolean[] newData = new boolean[newLength];
+        long[] newData = new long[newLength];
         //遍历循环队列的一种方式
         for (int i = 0; i < size; i++) {
             newData[i] = data[(head + i) % data.length];
@@ -116,7 +116,7 @@ public class BooleanCircularQueue {
      * @param index 索引
      * @return 指定索引的元素
      */
-    public boolean get(int index) {
+    public long get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }

@@ -5,12 +5,8 @@
  */
 package cn.edu.thu.iotdb.quality.dquality;
 
-import cn.edu.thu.iotdb.quality.NoNumberException;
-import cn.edu.thu.iotdb.quality.Util;
+import cn.edu.thu.iotdb.quality.util.Util;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;

@@ -5,7 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.frequency;
 
-import cn.edu.thu.iotdb.quality.Util;
+import cn.edu.thu.iotdb.quality.util.Util;
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 import java.text.SimpleDateFormat;
 import org.apache.iotdb.db.query.udf.api.UDTF;
@@ -18,7 +18,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
-import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 
 /**
  *

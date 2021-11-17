@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.iotdb.quality;
+package cn.edu.thu.iotdb.quality.util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;

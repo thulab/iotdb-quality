@@ -9,7 +9,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import static cn.edu.thu.iotdb.quality.Util.getValueAsDouble;
+import static cn.edu.thu.iotdb.quality.util.Util.getValueAsDouble;
 
 /**
  * calculate the integral or the area under the curve of input series $unit$ is

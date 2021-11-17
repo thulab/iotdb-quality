@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.dprofile;
+package cn.edu.thu.iotdb.quality.dprofile.util;
 
 import org.eclipse.collections.impl.map.mutable.UnifiedMap;
 

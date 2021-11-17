@@ -1,6 +1,8 @@
 package cn.edu.thu.iotdb.quality.dprofile;
 
-import cn.edu.thu.iotdb.quality.Util;
+import cn.edu.thu.iotdb.quality.dprofile.util.ExactOrderStatistics;
+import cn.edu.thu.iotdb.quality.dprofile.util.MADSketch;
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;

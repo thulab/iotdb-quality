@@ -3,27 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.iotdb.quality;
+package cn.edu.thu.iotdb.quality.util;
 
 /**
- * 存放原始类型long的循环队列
+ * 存放引用类型的循环队列
  *
  * @author Wang Haoyu
  */
-public class LongCircularQueue {
+public class CircularQueue<E> {
 
     private static int INITCAP = 64;
 
     private int head, tail, size, minLen;
-    private long[] data;
+    private E[] data;
 
-    public LongCircularQueue(int capacity) {
+    public CircularQueue(int capacity) {
         head = tail = size = 0;
-        data = new long[capacity];
+        data = (E[]) new Object[capacity];
         minLen = Math.max(INITCAP, capacity);
     }
 
-    public LongCircularQueue() {
+    public CircularQueue() {
         this(INITCAP);
     }
 
@@ -32,7 +32,7 @@ public class LongCircularQueue {
      *
      * @param value 准备加入的元素
      */
-    public void push(long value) {
+    public void push(E value) {
         //先判断队列是否满了，满了要扩容
         if (isFull()) {
             resize(data.length * 2);
@@ -48,11 +48,11 @@ public class LongCircularQueue {
      *
      * @return 队头元素
      */
-    public long pop() {
+    public E pop() {
         if (isEmpty()) {
             throw new IllegalArgumentException("Error: Queue is Empty!");
         }
-        long ret = data[head];
+        E ret = data[head];
         //head以循环的方式向后移一位
         head = (head + 1) % data.length;
         size--;
@@ -68,11 +68,11 @@ public class LongCircularQueue {
      *
      * @return 队头元素
      */
-    public long getHead() {
+    public E getHead() {
         if (isEmpty()) {
             throw new IllegalArgumentException("Error: Queue is Empty!");
         }
-        long ret = data[head];
+        E ret = data[head];
         return ret;
     }
 
@@ -100,7 +100,7 @@ public class LongCircularQueue {
      * @param newLength 新的数组大小
      */
     private void resize(int newLength) {
-        long[] newData = new long[newLength];
+        E[] newData = (E[]) new Object[newLength];
         //遍历循环队列的一种方式
         for (int i = 0; i < size; i++) {
             newData[i] = data[(head + i) % data.length];
@@ -116,7 +116,7 @@ public class LongCircularQueue {
      * @param index 索引
      * @return 指定索引的元素
      */
-    public long get(int index) {
+    public E get(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }

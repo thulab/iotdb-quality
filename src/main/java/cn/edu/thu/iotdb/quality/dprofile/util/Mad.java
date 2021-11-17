@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.dprofile;
+package cn.edu.thu.iotdb.quality.dprofile.util;
 
 public class Mad {
     public final double result;

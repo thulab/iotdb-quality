@@ -1,6 +1,6 @@
-package cn.edu.thu.iotdb.quality.drepair;
+package cn.edu.thu.iotdb.quality.drepair.util;
 
-import cn.edu.thu.iotdb.quality.Util;
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 
 // Reference to Screen.java
-public class ScreenFill extends ValueFill{
+public class ScreenFill extends ValueFill {
 
     private double smin, smax;
     private double w;

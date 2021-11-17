@@ -5,10 +5,8 @@
  */
 package cn.edu.thu.iotdb.quality.anomaly;
 
-import cn.edu.thu.iotdb.quality.Util;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import cn.edu.thu.iotdb.quality.util.Util;
+
 import java.util.ArrayList;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.apache.iotdb.db.query.udf.api.access.Row;

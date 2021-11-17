@@ -5,9 +5,9 @@
  */
 package cn.edu.thu.iotdb.quality.dprofile;
 
-import cn.edu.thu.iotdb.quality.CircularQueue;
-import cn.edu.thu.iotdb.quality.DoubleCircularQueue;
-import cn.edu.thu.iotdb.quality.LongCircularQueue;
+import cn.edu.thu.iotdb.quality.util.CircularQueue;
+import cn.edu.thu.iotdb.quality.util.DoubleCircularQueue;
+import cn.edu.thu.iotdb.quality.util.LongCircularQueue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
