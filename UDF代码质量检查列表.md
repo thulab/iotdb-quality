@@ -62,7 +62,16 @@ http://iotdb.apache.org/zh/UserGuide/Master/Advanced-Features/UDF-User-Defined-F
 
 #### 1.注释
 
-​	使用Annotation插件为所有函数添加英语注释，UDF直接调用的5个函数除外。
+​	使用如下模板：
+
+```
+/**
+*@ClassName     ${NAME}
+*@Description   TODO
+*@Author
+*@Version       
+*/
+```
 
 #### 2.命名
 
