@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
+ * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,10 @@ import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @ClassName UDTFRegexReplace @Description This function replaces substring according to regex
+ * parameter from an input series. @Author thulab @Version 1.0.0
+ */
 public class UDTFRegexReplace implements UDTF {
 
   private String regex;
@@ -37,6 +41,26 @@ public class UDTFRegexReplace implements UDTF {
   private int limit;
   private int offset;
   private boolean reverse;
+
+  @Override
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+        .validateInputSeriesNumber(1)
+        .validateInputSeriesDataType(0, TSDataType.TEXT)
+        .validate(
+            regex -> ((String) regex).length() > 0,
+            "regex should not be empty",
+            validator.getParameters().getString("regex"))
+        .validate(
+            limit -> (int) limit >= -1,
+            "limit has to be -1 for replacing all matches or non-negative integers for limited"
+                + " times.",
+            validator.getParameters().getIntOrDefault("limit", -1))
+        .validate(
+            offset -> (int) offset >= 0,
+            "offset has to be non-negative to skip first several matches.",
+            validator.getParameters().getIntOrDefault("offset", 0));
+  }
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -108,25 +132,5 @@ public class UDTFRegexReplace implements UDTF {
               .concat(suffix);
     }
     collector.putString(row.getTime(), result);
-  }
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(0, TSDataType.TEXT)
-        .validate(
-            regex -> ((String) regex).length() > 0,
-            "regex should not be empty",
-            validator.getParameters().getString("regex"))
-        .validate(
-            limit -> (int) limit >= -1,
-            "limit has to be -1 for replacing all matches or non-negative integers for limited"
-                + " times.",
-            validator.getParameters().getIntOrDefault("limit", -1))
-        .validate(
-            offset -> (int) offset >= 0,
-            "offset has to be non-negative to skip first several matches.",
-            validator.getParameters().getIntOrDefault("offset", 0));
   }
 }

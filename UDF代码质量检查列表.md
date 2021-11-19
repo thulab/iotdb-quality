@@ -20,7 +20,15 @@ http://www.apache.org/legal/resolved.html#category-x
 
 ​	b)UDF参数均提供默认值，即使用`parameters.getDoubleOrDefalut()`等函数获得用户输入参数；
 
-​	c)UDF参数使用小写英文单词或词组。存在流式计算与块式计算选择的，统一使用`"compute"="batch"|"stream"`；其它计算方法选择参数使用`"method"`。
+​	c)UDF参数使用小写英文单词或词组。
+
+​	存在流式计算与块式计算选择的，统一使用`"compute"="batch"|"stream"`；
+
+​	其它计算方法选择参数使用`"method"`；
+
+​	窗口长度参数使用`"window"`；
+
+​	单个阈值参数使用`"threshold"`。
 
 ##### ii.命名规范
 
@@ -46,7 +54,16 @@ http://iotdb.apache.org/zh/UserGuide/Master/Advanced-Features/UDF-User-Defined-F
 
 ##### ii. `validate()`
 
-​	根据用户手册和设计文档，确保该函数验证数据类型合规。验证数值类型数据时，对非数值输入抛出`util.NoNumberException`。对不合法参数抛出`util.IllegalParameterException`。
+​	根据用户手册和设计文档，确保该函数验证数据类型合规。验证数值类型数据时，对非数值输入抛出`util.NoNumberException`。对不合法参数使用
+
+```
+validator.validate(
+	x -> (int) x > 0,
+	"window has to be greater than 0.",
+	validator.getParameters().getIntOrDefault("window", 10))
+```
+
+形式抛出参数异常。
 
 ##### iii. `beforeStart()`
 
@@ -71,7 +88,7 @@ http://iotdb.apache.org/zh/UserGuide/Master/Advanced-Features/UDF-User-Defined-F
 *@ClassName     ${NAME}
 *@Description   TODO
 *@Author
-*@Version       
+*@Version
 */
 ```
 

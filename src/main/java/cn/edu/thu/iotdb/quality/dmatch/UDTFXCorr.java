@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
+ * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,42 +24,18 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+import cn.edu.thu.iotdb.quality.dmatch.util.CrossCorrelation;
 import cn.edu.thu.iotdb.quality.util.Util;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-public class UDTFCrossCorrelation implements UDTF {
+/**
+ * @ClassName UDTFXCorr @Description This function calculates DTW distance between two input
+ * series. @Author thulab @Version 1.0.0
+ */
+public class UDTFXCorr implements UDTF {
 
   private DoubleArrayList valueArrayList0 = new DoubleArrayList();
   private DoubleArrayList valueArrayList1 = new DoubleArrayList();
-
-  public static DoubleArrayList calculateCrossCorrelation(
-      DoubleArrayList valueArrayList1, DoubleArrayList valueArrayList2) {
-    DoubleArrayList correlationArrayList = new DoubleArrayList();
-    int length = valueArrayList1.size();
-    for (int shift = 1; shift <= length; shift++) {
-      double correlation = 0.0;
-      for (int i = 0; i < shift; i++) {
-        if (Double.isFinite(valueArrayList1.get(i))
-            && Double.isFinite(valueArrayList2.get(length - shift + i))) {
-          correlation += valueArrayList1.get(i) * valueArrayList2.get(length - shift + i);
-        }
-      }
-      correlation /= shift;
-      correlationArrayList.add(correlation);
-    }
-    for (int shift = 1; shift < length; shift++) {
-      double correlation = 0.0;
-      for (int i = 0; i < length - shift; i++) {
-        if (Double.isFinite(valueArrayList1.get(shift + i))
-            && Double.isFinite(valueArrayList2.get(i))) {
-          correlation += valueArrayList1.get(shift + i) * valueArrayList2.get(i);
-        }
-      }
-      correlation = correlation / length;
-      correlationArrayList.add(correlation);
-    }
-    return correlationArrayList;
-  }
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -67,6 +43,8 @@ public class UDTFCrossCorrelation implements UDTF {
     udtfConfigurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
+    valueArrayList0.clear();
+    valueArrayList1.clear();
   }
 
   @Override
@@ -83,7 +61,7 @@ public class UDTFCrossCorrelation implements UDTF {
   @Override
   public void terminate(PointCollector collector) throws Exception {
     DoubleArrayList correlationArrayList =
-        calculateCrossCorrelation(valueArrayList0, valueArrayList1);
+        CrossCorrelation.calculateCrossCorrelation(valueArrayList0, valueArrayList1);
     for (int i = 0; i < correlationArrayList.size(); i++) {
       collector.putDouble(i, correlationArrayList.get(i));
     }

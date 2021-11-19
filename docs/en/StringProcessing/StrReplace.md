@@ -1,26 +1,27 @@
 # StrReplace
 
-## 函数简介
+## Usage
 
-本函数用于将文本中的子串替换为指定的字符串。
+The function is used to replace the specific substring with given string.
 
-**函数名：** STRREPLACE
+**Name:** STRREPLACE
 
-**输入序列：** 仅支持单个输入序列，类型为 TEXT。
+**Input Series:** Only support a single input series. The data type is TEXT.
 
-**参数：**
+**Parameter:**
 
-+ `target`: 需要替换的字符子串
-+ `replace`: 替换后的字符串。
-+ `limit`: 替换次数，大于等于-1的整数，默认为-1表示所有匹配的子串都会被替换。
-+ `offset`: 需要跳过的匹配次数，即前`offset`次匹配到的字符子串并不会被替换，默认为0。
-+ `reverse`: 是否需要反向计数，默认为false即按照从左向右的次序。
++ `target`: The target substring to be replaced.
++ `replace`: The string to be put on.
++ `limit`: The number of matches to be replaced which should be an integer no less than -1, 
+  default to -1 which means all matches will be replaced.
++ `offset`: The number of matches to be skipped, which means the first `offset` matches will not be replaced, default to 0.
++ `reverse`: Whether to count all the matches reversely, default to 'false'.
 
-**输出序列：** 输出单个序列，类型为TEXT。
+**Output Series:** Output a single series. The type is TEXT.
 
-## 使用示例
+## Examples
 
-输入序列：
+Input series:
 
 ```
 +-----------------------------+---------------+
@@ -34,13 +35,13 @@
 +-----------------------------+---------------+
 ```
 
-用于查询的SQL语句：
+SQL for query:
 
 ```sql
 select strreplace(s1, "target"=",", "replace"="/", "limit"="2") from root.test.d1
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+-----------------------------------------+
@@ -55,13 +56,13 @@ select strreplace(s1, "target"=",", "replace"="/", "limit"="2") from root.test.d
 +-----------------------------+-----------------------------------------+
 ```
 
-另一个用于查询的SQL语句：
+Another SQL for query:
 
 ```sql
 select strreplace(s1, "target"=",", "replace"="/", "limit"="1", "offset"="1", "reverse"="true") from root.test.d1
 ```
 
-输出序列：
+Output series:
 
 ```
 +-----------------------------+-----------------------------------------------------+

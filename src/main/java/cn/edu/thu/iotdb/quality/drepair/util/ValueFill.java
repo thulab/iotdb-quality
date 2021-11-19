@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
+ * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,8 +91,7 @@ public abstract class ValueFill {
   /** @return the filled */
   public double[] getFilled() {
     return repaired;
-  }
-  ;
+  };
 
   public void calMeanAndVar() {
     for (double v : original) {

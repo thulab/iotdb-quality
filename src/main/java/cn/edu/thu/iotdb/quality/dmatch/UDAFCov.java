@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
+ * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,11 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
  */
 package cn.edu.thu.iotdb.quality.dmatch;
 
@@ -31,7 +26,10 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.util.Util;
 
-/** @author Wang Haoyu */
+/**
+ * @ClassName UDAFCov @Description This function calculates Covariance between two input
+ * series. @Author Wang Haoyu @Version 1.0.0
+ */
 public class UDAFCov implements UDTF {
 
   private long count = 0;
@@ -55,16 +53,20 @@ public class UDAFCov implements UDTF {
     configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
+    count = 0;
+    sum_x = 0;
+    sum_y = 0;
+    sum_xy = 0;
   }
 
   @Override
   public void transform(Row row, PointCollector collector) throws Exception {
-    if (row.isNull(0) || row.isNull(1)) { // 当出现null时，跳过这一行，同时确保getValue不会出错
+    if (row.isNull(0) || row.isNull(1)) { // skip null rows
       return;
     }
     double x = Util.getValueAsDouble(row, 0);
     double y = Util.getValueAsDouble(row, 1);
-    if (Double.isFinite(x) && Double.isFinite(y)) { // 当出现NaN等时，跳过这一行
+    if (Double.isFinite(x) && Double.isFinite(y)) { // skip NaN rows
       count++;
       sum_x += x;
       sum_y += y;
@@ -74,7 +76,7 @@ public class UDAFCov implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    if (count > 0) { // 只有当有效行数大于等于1时，总体协方差才有意义
+    if (count > 0) { // calculate Cov only when there is more than 1 point
       double cov = (sum_xy - sum_x * sum_y / count) / count;
       collector.putDouble(0, cov);
     } else {

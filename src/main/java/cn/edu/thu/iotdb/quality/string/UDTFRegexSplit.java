@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
+ * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,11 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-public class UDTFSplit implements UDTF {
+/**
+ * @ClassName UDTFRegexSplit @Description This function splits string from an input series according
+ * to given regex. @Author thulab @Version 1.0.0
+ */
+public class UDTFRegexSplit implements UDTF {
 
   private String regex;
   private int index;

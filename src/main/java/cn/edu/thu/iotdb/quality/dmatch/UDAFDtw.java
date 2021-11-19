@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
+ * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,10 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import cn.edu.thu.iotdb.quality.util.Util;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
+/**
+ * @ClassName UDAFDtw @Description This function calculates DTW distance between two input
+ * series. @Author thulab @Version 1.0.0
+ */
 public class UDAFDtw implements UDTF {
 
   private double[][] dp;

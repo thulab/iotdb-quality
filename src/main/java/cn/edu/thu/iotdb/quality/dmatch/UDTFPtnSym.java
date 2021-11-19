@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
+ * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,11 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import cn.edu.thu.iotdb.quality.util.Util;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-public class UDTFPatternSymmetric implements UDTF {
+/**
+ * @ClassName UDTFPtnSym @Description This function finds symmetric patterns in a series according
+ * to DTW distance. @Author thulab @Version 1.0.0
+ */
+public class UDTFPtnSym implements UDTF {
 
   private int window;
   private double threshold;
@@ -41,11 +45,11 @@ public class UDTFPatternSymmetric implements UDTF {
             0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE)
         .validate(
             x -> (int) x > 0,
-            "window has to be greater than 0.",
+            "window has to be a positive integer.",
             validator.getParameters().getIntOrDefault("window", 10))
         .validate(
-            x -> (double) x >= 0,
-            "threshold has to be greater than or equal to 0.",
+            x -> (double) x >= 0.0d,
+            "threshold has to be non-negative.",
             validator.getParameters().getDoubleOrDefault("threshold", Double.MAX_VALUE));
   }
 
@@ -61,7 +65,7 @@ public class UDTFPatternSymmetric implements UDTF {
 
   @Override
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
-    if (rowWindow.windowSize() < window) { // 序列长度太短，不予计算
+    if (rowWindow.windowSize() < window) { // skip too short series
       return;
     }
     DoubleArrayList a = new DoubleArrayList();
