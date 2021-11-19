@@ -1,10 +1,10 @@
 # Introduction
 
 ## What is IoTDB-Quality
-[Apache IoTDB](https://github.com/apache/iotdb) (Internet of Things Database) is a data management system for time series data, which can provide users specific services, such as, data collection, storage and analysis. 
+[Apache IoTDB](https://github.com/apache/iotdb) (Internet of Things Database) is a data management system for time series data, which can provide users specific services, such as, data collection, storage and analysis.
 
-For applications based on time series data, data quality is vital. 
-**IoTDB-Quality** is IoTDB User Defined Functions (UDF) about data quality, including data profiling, data quality evalution and data repairing. 
+For applications based on time series data, data quality is vital.
+**IoTDB-Quality** is IoTDB User Defined Functions (UDF) about data quality, including data profiling, data quality evalution and data repairing.
 It effectively meets the demand for data quality in the industrial field.
 
 ## Quick Start
@@ -16,4 +16,3 @@ It effectively meets the demand for data quality in the industrial field.
 ## Contact
 
 + Email: iotdb-quality@protonmail.com
-
