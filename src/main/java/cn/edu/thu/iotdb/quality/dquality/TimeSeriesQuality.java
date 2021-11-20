@@ -5,18 +5,15 @@
  */
 package cn.edu.thu.iotdb.quality.dquality;
 
-import cn.edu.thu.iotdb.quality.NoNumberException;
 import cn.edu.thu.iotdb.quality.Util;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Scanner;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * 计算时序数据质量指标的类
@@ -63,7 +60,7 @@ public class TimeSeriesQuality {
         Scanner sc = new Scanner(new File(filename));
         ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sc.useDelimiter("\\s*(,|\\r|\\n)\\s*");//设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
+        sc.useDelimiter("\\s*([,\\r\\n])\\s*");//设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
         sc.nextLine();
         while (sc.hasNext()) {
             cnt++;
@@ -126,7 +123,7 @@ public class TimeSeriesQuality {
      */
     public void timeDetect() {
         //计算时间间隔特征
-        double interval[] = Util.variation(time);
+        double[] interval = Util.variation(time);
         Median median = new Median();
         double base = median.evaluate(interval);
         //寻找时间戳异常
@@ -192,7 +189,7 @@ public class TimeSeriesQuality {
      * 返回序列中偏离中位数超过k倍绝对中位差的点的个数
      *
      * @param value 序列
-     * @param k
+     * @param k 倍数
      * @return 偏离中位数超过k倍绝对中位差的点的个数
      */
     private int findOutliers(double[] value, double k) {
@@ -200,8 +197,8 @@ public class TimeSeriesQuality {
         double mid = median.evaluate(value);
         double sigma = Util.mad(value);
         int num = 0;
-        for (int i = 0; i < value.length; i++) {
-            if (Math.abs(value[i] - mid) > k * sigma) {
+        for (double v : value) {
+            if (Math.abs(v - mid) > k * sigma) {
                 num++;
             }
         }

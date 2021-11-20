@@ -52,7 +52,7 @@ public class MultipleTimeSeriesQuality {
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("js");
 
         Scanner sc = new Scanner(new File(filename));
-        sc.useDelimiter("\\s*(,|\\r|\\n)\\s*");//设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
+        sc.useDelimiter("\\s*([,\r\\n])\\s*");//设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
         sc.nextLine();
         while (sc.hasNext()) {
             cnt++;
