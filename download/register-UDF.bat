@@ -31,6 +31,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function zscore as 'cn.edu.thu.iotdb.quality.dprofile.UDTFZScore'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function spline as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSpline'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function movingaverage as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMovingAverage'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function acf as 'cn.edu.thu.iotdb.quality.dprofile.UDTFACF'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function pacf as 'cn.edu.thu.iotdb.quality.dprofile.UDTFPartialAutoCorrelation'"
 
 
@@ -49,11 +50,10 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 
 @REM Data Matching
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function crosscorrelation as 'cn.edu.thu.iotdb.quality.dmatch.UDTFCrossCorrelation'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function xcorr as 'cn.edu.thu.iotdb.quality.dmatch.UDTFXCorr'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function dtw as 'cn.edu.thu.iotdb.quality.dmatch.UDAFDtw'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function patternsymmetric as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPatternSymmetric'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function ptnsym as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPtnSym'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function pearson as 'cn.edu.thu.iotdb.quality.dmatch.UDAFPearson'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function selfcorrelation as 'cn.edu.thu.iotdb.quality.dmatch.UDTFSelfCorrelation'"
 
 
 @REM Anomaly Detection
@@ -81,7 +81,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function consecutivewindows as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveWindows'"
 
 @REM String Processing
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function split as 'cn.edu.thu.iotdb.quality.string.UDTFSplit'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function regexsplit as 'cn.edu.thu.iotdb.quality.string.UDTFRegexSplit'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function regexmatch as 'cn.edu.thu.iotdb.quality.string.UDTFRegexMatch'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function replace as 'cn.edu.thu.iotdb.quality.string.UDTFReplace'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function strreplace as 'cn.edu.thu.iotdb.quality.string.UDTFStrReplace'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function regexreplace as 'cn.edu.thu.iotdb.quality.string.UDTFRegexReplace'"
