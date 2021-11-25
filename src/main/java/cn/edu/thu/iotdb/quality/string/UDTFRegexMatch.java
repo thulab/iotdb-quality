@@ -27,10 +27,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @ClassName UDTFRegexMatch @Description This function matches substring according to given regex
- * from an input series. @Author thulab @Version 1.0.0
- */
+// This function matches substring according to given regex from an input series.
 public class UDTFRegexMatch implements UDTF {
   private Pattern pattern;
   private int group;

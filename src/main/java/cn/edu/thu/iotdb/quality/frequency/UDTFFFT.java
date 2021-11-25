@@ -20,6 +20,7 @@
  */
 package cn.edu.thu.iotdb.quality.frequency;
 
+import org.apache.commons.math3.complex.Complex;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -28,18 +29,22 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
 
 import cn.edu.thu.iotdb.quality.util.Util;
-import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
+
+import java.util.ArrayList;
 
 /** @author Wang Haoyu */
+// This function output FFT for an input series.
 public class UDTFFFT implements UDTF {
 
   private String result;
   private boolean compressed;
   private double compressRate;
-  private final DoubleArrayList list = new DoubleArrayList();
+  private final ArrayList<Double> list = new ArrayList<>();
 
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
@@ -52,7 +57,7 @@ public class UDTFFFT implements UDTF {
                 ((String) x).equalsIgnoreCase("uniform")
                     || ((String) x).equalsIgnoreCase("nonuniform"),
             "Type should be 'uniform' or 'nonuniform'.",
-            validator.getParameters().getStringOrDefault("type", "uniform"))
+            validator.getParameters().getStringOrDefault("method", "uniform"))
         .validate(
             x ->
                 "real".equalsIgnoreCase((String) x)
@@ -76,6 +81,7 @@ public class UDTFFFT implements UDTF {
     this.result = parameters.getStringOrDefault("result", "abs");
     this.compressed = parameters.hasAttribute("compress");
     this.compressRate = parameters.getDoubleOrDefault("compress", 1);
+    list.clear();
   }
 
   @Override
@@ -88,69 +94,47 @@ public class UDTFFFT implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    int n = list.size();
-    DoubleFFT_1D fft = new DoubleFFT_1D(n);
-    // 准备数据，每个数占用两个double
-    double[] a = new double[2 * n];
-    for (int i = 0; i < n; i++) {
-      a[2 * i] = list.get(i);
-      a[2 * i + 1] = 0;
-    }
-    fft.complexForward(a);
-    if (compressed) {
-      outputCompressed(collector, a);
+    FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
+    Complex[] result = fft.transform(list.stream().mapToDouble(Double::valueOf).toArray(), TransformType.FORWARD);
+    if (compressed) {// compress the result
+      double sum = 0;
+      for (Complex complex : result) {
+        sum += complex.getReal() * complex.getReal() + complex.getImaginary() * complex.getImaginary();
+      }
+      double temp = result[0].getReal() * result[0].getReal() + result[0].getImaginary() * result[0].getImaginary();
+      collector.putDouble(0, transformToOutput(collector, result[0]));
+      for (int i = 1; i < result.length; i++) {
+        collector.putDouble(i, transformToOutput(collector, result[i]));
+        temp += (result[i].getReal() * result[i].getReal() + result[i].getImaginary() * result[i].getImaginary()) * 2;
+        if (temp > compressRate * sum) {
+          System.out.println(i);
+          if (i < result.length - 1){
+            // put the last number to show series length
+            collector.putDouble(result.length-1, transformToOutput(collector, result[result.length - 1]));
+          }
+          break;
+        }
+      }
     } else {
-      outputUncompressed(collector, a);
-    }
-  }
-
-  private void outputCompressed(PointCollector collector, double a[]) throws Exception {
-    int n = a.length / 2;
-    // 计算总能量
-    double sum = 0;
-    for (int i = 0; i < n; i++) {
-      sum += a[2 * i] * a[2 * i] + a[2 * i + 1] * a[2 * i + 1];
-    }
-    // 压缩
-    double temp = a[0] * a[0] + a[1] * a[1];
-    add(collector, a, 0);
-    for (int i = 1; i <= n / 2; i++) {
-      add(collector, a, i);
-      temp += (a[2 * i] * a[2 * i] + a[2 * i + 1] * a[2 * i + 1]) * 2;
-      if (temp > compressRate * sum) {
-        System.out.println(i);
-        break;
+      for (int i = 0; i < result.length; i++) {
+        collector.putDouble(i, transformToOutput(collector, result[i]));
       }
     }
-    // 尾部标记，表示长度
-    add(collector, a, n - 1);
   }
 
-  private void add(PointCollector collector, double a[], int i) throws Exception {
+  private double transformToOutput(PointCollector collector, Complex a) throws Exception {
     double ans = 0;
     switch (result) {
       case "real":
-        ans = a[i * 2];
-        break;
+        return a.getReal();
       case "imag":
-        ans = a[i * 2 + 1];
-        break;
+        return a.getImaginary();
       case "abs":
-        ans = Math.sqrt(a[i * 2] * a[i * 2] + a[2 * i + 1] * a[2 * i + 1]);
-        break;
+        return a.abs();
       case "angle":
-        ans = Math.atan2(a[2 * i + 1], a[2 * i]);
-        break;
+        return a.getArgument();
       default:
         throw new Exception("It's impossible");
-    }
-    collector.putDouble(i, ans);
-  }
-
-  private void outputUncompressed(PointCollector collector, double a[]) throws Exception {
-    int n = a.length / 2;
-    for (int i = 0; i < n; i++) {
-      add(collector, a, i);
     }
   }
 }

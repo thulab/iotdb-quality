@@ -30,13 +30,14 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.util.Util;
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
+import java.util.ArrayList;
 
 /** @author Wang Haoyu */
+// This function calculates deconvolution of two input series.
 public class UDTFDeconv implements UDTF {
 
-  private final DoubleArrayList list1 = new DoubleArrayList();
-  private final DoubleArrayList list2 = new DoubleArrayList();
+  private final ArrayList<Double> list1 = new ArrayList<>();
+  private final ArrayList<Double> list2 = new ArrayList<>();
   private String result;
 
   @Override
@@ -61,6 +62,8 @@ public class UDTFDeconv implements UDTF {
     configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
+    list1.clear();
+    list2.clear();
     this.result = parameters.getStringOrDefault("result", "quotient");
   }
 
@@ -76,32 +79,32 @@ public class UDTFDeconv implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    if (list2.size() == 0) { // 被零除异常
+    if (list2.size() == 0) { // Exception: divided by zero
       throw new Exception("Divided by zero.");
-    } else if (list2.size() > list1.size()) { // 除数的阶高于被除数
-      if (result.equalsIgnoreCase("quotient")) { // 商
+    } else if (list2.size() > list1.size()) { // order of divisor is larger than dividend
+      if (result.equalsIgnoreCase("quotient")) { // quotient
         collector.putDouble(0, 0);
-      } else { // 余数
+      } else { // residue
         for (int i = 0; i < list1.size(); i++) {
           collector.putDouble(i, list1.get(i));
         }
       }
-    } else { // 除数的阶低于或等于被除数
-      double q[] = new double[list1.size() - list2.size() + 1];
-      double r[] = list1.toArray();
+    } else { // order of divisor is no larger than dividend
+      double[] q = new double[list1.size() - list2.size() + 1];
+      Double[] r = list1.toArray(new Double[0]);
       int m = list2.size() - 1;
       for (int i = q.length - 1; i >= 0; i--) {
         q[i] = r[i + m] / list2.get(m);
-        r[i + m] = 0;
+        r[i + m] = 0.0D;
         for (int j = 0; j < m; j++) {
           r[i + j] -= q[i] * list2.get(j);
         }
       }
-      if (result.equalsIgnoreCase("quotient")) { // 商
+      if (result.equalsIgnoreCase("quotient")) { // quotient
         for (int i = 0; i < q.length; i++) {
           collector.putDouble(i, q[i]);
         }
-      } else { // 余数
+      } else { // residue
         for (int i = 0; i < r.length; i++) {
           collector.putDouble(i, r[i]);
         }

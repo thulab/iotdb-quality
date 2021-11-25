@@ -24,10 +24,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * @ClassName UDTFStrReplace @Description This function does limited times of replacement of
- * substring from an input series. @Author thulab @Version 1.0.0
- */
+// This function does limited times of replacement of substring from an input series.
 public class UDTFStrReplace implements UDTF {
 
   private String target;

@@ -30,13 +30,15 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.util.Util;
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
+
+import java.util.ArrayList;
 
 /** @author Wang Haoyu */
+// This function calculates convolution of two input series.
 public class UDTFConv implements UDTF {
 
-  private final DoubleArrayList list1 = new DoubleArrayList();
-  private final DoubleArrayList list2 = new DoubleArrayList();
+  private final ArrayList<Double> list1 = new ArrayList<>();
+  private final ArrayList<Double> list2 = new ArrayList<>();
 
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
@@ -54,6 +56,8 @@ public class UDTFConv implements UDTF {
     configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
+    list1.clear();
+    list2.clear();
   }
 
   @Override
@@ -68,7 +72,7 @@ public class UDTFConv implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    double ans[] = new double[list1.size() + list2.size() - 1];
+    double[] ans = new double[list1.size() + list2.size() - 1];
     for (int i = 0; i < list1.size(); i++) {
       for (int j = 0; j < list2.size(); j++) {
         ans[i + j] += list1.get(i) * list2.get(j);

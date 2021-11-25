@@ -61,7 +61,7 @@ public class UDAFDtw implements UDTF {
     int n = rowWindow.windowSize();
     for (int i = 0; i < n; i++) {
       Row row = rowWindow.getRow(i);
-      if (row.isNull(0) || row.isNull(1)) { // 当出现null时，跳过这一行，同时确保getValue不会出错
+      if (row.isNull(0) || row.isNull(1)) {
         continue;
       }
       a.add(Util.getValueAsDouble(row, 0));
