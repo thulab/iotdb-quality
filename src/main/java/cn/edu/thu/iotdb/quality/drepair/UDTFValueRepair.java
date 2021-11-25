@@ -18,8 +18,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cn.edu.thu.iotdb.quality.drepair;
 
+import cn.edu.thu.iotdb.quality.drepair.util.LsGreedy;
+import cn.edu.thu.iotdb.quality.drepair.util.Screen;
+import cn.edu.thu.iotdb.quality.drepair.util.ValueRepair;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -27,20 +31,17 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 
-import cn.edu.thu.iotdb.quality.drepair.util.LsGreedy;
-import cn.edu.thu.iotdb.quality.drepair.util.Screen;
-import cn.edu.thu.iotdb.quality.drepair.util.ValueRepair;
-
 /**
  * 用于修复时间序列异常值的UDTF：目前已支持Screen和LsGreedy
  *
  * @author Wang Haoyu
  */
 public class UDTFValueRepair implements UDTF {
-
   String method;
-  double minSpeed, maxSpeed;
-  double center, sigma;
+  double minSpeed;
+  double maxSpeed;
+  double center;
+  double sigma;
 
   @Override
   public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
@@ -57,7 +58,7 @@ public class UDTFValueRepair implements UDTF {
   @Override
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
     // 设置修复方法及参数
-    ValueRepair vr = null;
+    ValueRepair vr;
     if ("screen".equalsIgnoreCase(method)) {
       Screen screen = new Screen(rowWindow.getRowIterator());
       if (!Double.isNaN(minSpeed)) {

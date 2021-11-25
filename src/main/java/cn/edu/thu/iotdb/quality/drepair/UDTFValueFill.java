@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.drepair;
 
+import cn.edu.thu.iotdb.quality.drepair.util.*;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -22,15 +24,12 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 
-import cn.edu.thu.iotdb.quality.drepair.util.*;
-
 /**
  * 给所有的UDTF的填补函数设定统一的接口，方便调用。
  *
  * @author Zhang Xiaojian
  */
 public class UDTFValueFill implements UDTF {
-
   private String method;
 
   @Override
@@ -39,13 +38,11 @@ public class UDTFValueFill implements UDTF {
         .setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
         .setOutputDataType(udfp.getDataType(0));
     method = udfp.getStringOrDefault("method", "linear");
-    //        beforeRange = udfp.getLongOrDefault("beforeRange", Long.MAX_VALUE);
-    //        afterRange = udfp.getLongOrDefault("afterRange", Long.MAX_VALUE);
   }
 
   @Override
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
-    ValueFill vf = null;
+    ValueFill vf;
     if ("previous".equalsIgnoreCase(method)) {
       vf = new PreviousFill(rowWindow.getRowIterator());
     } else if ("linear".equalsIgnoreCase(method)) {
