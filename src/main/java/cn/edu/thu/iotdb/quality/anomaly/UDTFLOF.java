@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.anomaly;
 
+import cn.edu.thu.iotdb.quality.util.Util;
+import java.util.Arrays;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -23,10 +26,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import cn.edu.thu.iotdb.quality.util.Util;
-
-import java.util.Arrays;
 
 public class UDTFLOF implements UDTF {
   private double threshold;
@@ -39,12 +38,16 @@ public class UDTFLOF implements UDTF {
     Double key = A[left][1];
     Double key2 = A[left][0];
     while (left < right) {
-      while (left < right && A[right][1] >= key) right--;
+      while (left < right && A[right][1] >= key) {
+        right--;
+      }
       if (left < right) {
         A[left][0] = A[right][0];
         A[left][1] = A[right][1];
       }
-      while (left < right && A[left][1] <= key) left++;
+      while (left < right && A[left][1] <= key) {
+        left++;
+      }
       if (left < right) {
         A[right][0] = A[left][0];
         A[right][1] = A[left][1];
@@ -57,9 +60,13 @@ public class UDTFLOF implements UDTF {
 
   Double findKthNum(Double[][] A, int left, int right, int k) {
     int index = Partition(A, left, right);
-    if (index + 1 == k) return A[index][0];
-    else if (index + 1 < k) return findKthNum(A, index + 1, right, k);
-    else return findKthNum(A, left, index - 1, k);
+    if (index + 1 == k) {
+      return A[index][0];
+    } else if (index + 1 < k) {
+      return findKthNum(A, index + 1, right, k);
+    } else {
+      return findKthNum(A, left, index - 1, k);
+    }
   }
 
   public double getLOF(Double[][] knn, Double[] x, int length) {
