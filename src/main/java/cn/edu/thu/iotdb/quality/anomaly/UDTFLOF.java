@@ -29,43 +29,43 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 public class UDTFLOF implements UDTF {
   private double threshold;
-  private int k;
+  private int multipleK;
   private int dim;
   private String method = "default";
   private int windowSize;
 
-  int Partition(Double[][] A, int left, int right) {
-    Double key = A[left][1];
-    Double key2 = A[left][0];
+  int partition(Double[][] a, int left, int right) {
+    Double key = a[left][1];
+    Double key2 = a[left][0];
     while (left < right) {
-      while (left < right && A[right][1] >= key) {
+      while (left < right && a[right][1] >= key) {
         right--;
       }
       if (left < right) {
-        A[left][0] = A[right][0];
-        A[left][1] = A[right][1];
+        a[left][0] = a[right][0];
+        a[left][1] = a[right][1];
       }
-      while (left < right && A[left][1] <= key) {
+      while (left < right && a[left][1] <= key) {
         left++;
       }
       if (left < right) {
-        A[right][0] = A[left][0];
-        A[right][1] = A[left][1];
+        a[right][0] = a[left][0];
+        a[right][1] = a[left][1];
       }
     }
-    A[left][0] = key2;
-    A[left][1] = key;
+    a[left][0] = key2;
+    a[left][1] = key;
     return left;
   }
 
-  Double findKthNum(Double[][] A, int left, int right, int k) {
-    int index = Partition(A, left, right);
+  Double findKthNum(Double[][] a, int left, int right, int k) {
+    int index = partition(a, left, right);
     if (index + 1 == k) {
-      return A[index][0];
+      return a[index][0];
     } else if (index + 1 < k) {
-      return findKthNum(A, index + 1, right, k);
+      return findKthNum(a, index + 1, right, k);
     } else {
-      return findKthNum(A, left, index - 1, k);
+      return findKthNum(a, left, index - 1, k);
     }
   }
 
@@ -75,7 +75,7 @@ public class UDTFLOF implements UDTF {
       Double[] o = knn[i];
       sum += getLocDens(knn, o, length) / getLocDens(knn, x, length);
     }
-    return sum / k;
+    return sum / multipleK;
   }
 
   public double getLocDens(Double[][] knn, Double[] x, int length) {
@@ -86,7 +86,7 @@ public class UDTFLOF implements UDTF {
       Double[] o = knn[i];
       sum += reachDist(o, x, nnk);
     }
-    return sum / k;
+    return sum / multipleK;
   }
 
   public Double[] findKthPoint(Double[][] knn, Double[] x, int length) {
@@ -97,7 +97,7 @@ public class UDTFLOF implements UDTF {
       d[i][0] = (double) i;
       d[i][1] = dist(knn[i], x);
     }
-    index = (int) (double) (findKthNum(d, 0, length - 1, k + 1));
+    index = (int) (double) (findKthNum(d, 0, length - 1, multipleK + 1));
     return knn[index];
   }
 
@@ -106,12 +106,10 @@ public class UDTFLOF implements UDTF {
   }
 
   private double dist(Double[] nnk, Double[] x) {
-
     double sum = 0;
     for (int i = 0; i < nnk.length; i++) {
       sum += (nnk[i] - x[i]) * (nnk[i] - x[i]);
     }
-
     return Math.sqrt(sum);
   }
 
@@ -128,8 +126,7 @@ public class UDTFLOF implements UDTF {
         .setAccessStrategy(
             new SlidingSizeWindowAccessStrategy(udfParameters.getIntOrDefault("window", 10000)))
         .setOutputDataType(TSDataType.DOUBLE);
-    this.k = udfParameters.getIntOrDefault("k", 3);
-    // this.threshold = udfParameters.getDoubleOrDefault("threshold",1);
+    this.multipleK = udfParameters.getIntOrDefault("k", 3);
     this.dim = udfParameters.getPaths().size();
     this.method = udfParameters.getStringOrDefault("method", "default");
     this.windowSize = udfParameters.getIntOrDefault("windowsize", 5);
@@ -157,7 +154,7 @@ public class UDTFLOF implements UDTF {
         i++;
         row++;
       }
-      if (size > k) {
+      if (size > multipleK) {
         double[] lof = new double[size];
         for (int m = 0; m < size; m++) {
           try {
@@ -195,7 +192,7 @@ public class UDTFLOF implements UDTF {
           i++;
           row++;
         }
-        if (size > k) {
+        if (size > multipleK) {
           double[] lof = new double[size];
           for (int m = 0; m < size; m++) {
             try {
