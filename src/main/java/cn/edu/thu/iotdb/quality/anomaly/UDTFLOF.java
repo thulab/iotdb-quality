@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class UDTFLOF implements UDTF {
   private int k;
   private int dim;
   private String method = "default";
-  private int windowsize;
+  private int windowSize;
 
   int Partition(Double[][] A, int left, int right) {
     Double key = A[left][1];
@@ -125,7 +125,7 @@ public class UDTFLOF implements UDTF {
     // this.threshold = udfParameters.getDoubleOrDefault("threshold",1);
     this.dim = udfParameters.getPaths().size();
     this.method = udfParameters.getStringOrDefault("method", "default");
-    this.windowsize = udfParameters.getIntOrDefault("windowsize", 5);
+    this.windowSize = udfParameters.getIntOrDefault("windowsize", 5);
   }
 
   @Override
@@ -159,16 +159,12 @@ public class UDTFLOF implements UDTF {
           } catch (Exception e) {
             throw new Exception(e.toString() + " " + Arrays.toString(e.getStackTrace()) + " " + m);
           }
-          /*if (lof[m] > threshold) {
-              collector.putDouble(timestamp[m], lof[m]);
-          }*/
-
         }
       }
     } else if (this.method.equals("series")) {
-      int size = rowWindow.windowSize() - windowsize + 1;
+      int size = rowWindow.windowSize() - windowSize + 1;
       if (size > 0) {
-        Double[][] knn = new Double[size][windowsize];
+        Double[][] knn = new Double[size][windowSize];
         long[] timestamp = new long[rowWindow.windowSize()];
         double temp;
         int i = 0;
@@ -177,7 +173,7 @@ public class UDTFLOF implements UDTF {
           timestamp[i] = rowWindow.getRow(row).getTime();
           if (!rowWindow.getRow(row).isNull(0)) {
             temp = Util.getValueAsDouble(rowWindow.getRow(row), 0);
-            for (int p = 0; p < windowsize; p++) {
+            for (int p = 0; p < windowSize; p++) {
               if (i - p < 0) {
                 break;
               }
@@ -202,10 +198,6 @@ public class UDTFLOF implements UDTF {
               throw new Exception(
                   e.toString() + " " + Arrays.toString(e.getStackTrace()) + " " + m);
             }
-            /*if (lof[m] > threshold) {
-                collector.putDouble(timestamp[m], lof[m]);
-            }*/
-
           }
         }
       }

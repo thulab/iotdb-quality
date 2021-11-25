@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,15 +41,15 @@ public class UDTFIQR implements UDTF {
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
-      throws Exception {
+          throws Exception {
     value.clear();
     timestamp.clear();
     q1 = 0.0d;
     q3 = 0.0d;
     iqr = 0.0d;
     udtfConfigurations
-        .setAccessStrategy(new RowByRowAccessStrategy())
-        .setOutputDataType(TSDataType.DOUBLE);
+            .setAccessStrategy(new RowByRowAccessStrategy())
+            .setOutputDataType(TSDataType.DOUBLE);
     method = udfParameters.getStringOrDefault("method", "batch");
     if (method.equalsIgnoreCase("stream")) {
       q1 = udfParameters.getDouble("q1");
