@@ -19,19 +19,37 @@ import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 
 import cn.edu.thu.iotdb.quality.drepair.util.*;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+
+import java.util.Locale;
 
 /**
- * 给所有的UDTF的填补函数设定统一的接口，方便调用。
- *
  * @author Zhang Xiaojian
  */
+// This function fills NaN of input series.
 public class UDTFValueFill implements UDTF {
 
   private String method;
+
+  @Override
+  public void validate(UDFParameterValidator validator) throws Exception{
+    validator.validateInputSeriesDataType(
+            0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
+            .validate(x->
+                            ((String) x).equalsIgnoreCase("previous")||
+                                    ((String) x).equalsIgnoreCase("linear")||
+                                    ((String) x).equalsIgnoreCase("mean")||
+                                    ((String) x).equalsIgnoreCase("ar")||
+                                    ((String) x).equalsIgnoreCase("screen")||
+                                    ((String) x).equalsIgnoreCase("likelihood"),
+                    "Illegal method.",
+                    validator.getParameters().getStringOrDefault("method", "linear"));
+  }
 
   @Override
   public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
@@ -39,27 +57,33 @@ public class UDTFValueFill implements UDTF {
         .setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
         .setOutputDataType(udfp.getDataType(0));
     method = udfp.getStringOrDefault("method", "linear");
-    //        beforeRange = udfp.getLongOrDefault("beforeRange", Long.MAX_VALUE);
-    //        afterRange = udfp.getLongOrDefault("afterRange", Long.MAX_VALUE);
   }
 
   @Override
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
     ValueFill vf = null;
-    if ("previous".equalsIgnoreCase(method)) {
-      vf = new PreviousFill(rowWindow.getRowIterator());
-    } else if ("linear".equalsIgnoreCase(method)) {
-      vf = new LinearFill(rowWindow.getRowIterator());
-    } else if ("mean".equalsIgnoreCase(method)) {
-      vf = new MeanFill(rowWindow.getRowIterator());
-    } else if ("ar".equalsIgnoreCase(method)) {
-      vf = new ARFill(rowWindow.getRowIterator());
-    } else if ("screen".equalsIgnoreCase(method)) {
-      vf = new ScreenFill(rowWindow.getRowIterator());
-    } else if ("likelihood".equalsIgnoreCase(method)) {
-      vf = new LikelihoodFill(rowWindow.getRowIterator());
-    } else {
-      throw new Exception("Illegal method");
+    method = method.toLowerCase(Locale.ROOT);
+    switch (method){
+      case "previous":
+        vf = new PreviousFill(rowWindow.getRowIterator());
+        break;
+      case "linear":
+        vf = new LinearFill(rowWindow.getRowIterator());
+        break;
+      case "mean":
+        vf = new MeanFill(rowWindow.getRowIterator());
+        break;
+      case "ar":
+        vf = new ARFill(rowWindow.getRowIterator());
+        break;
+      case "screen":
+        vf = new ScreenFill(rowWindow.getRowIterator());
+        break;
+      case "likelihood":
+        vf = new LikelihoodFill(rowWindow.getRowIterator());
+        break;
+      default:
+        return;
     }
     vf.fill();
     double[] repaired = vf.getFilled();
@@ -86,7 +110,11 @@ public class UDTFValueFill implements UDTF {
         }
         break;
       default:
-        throw new Exception();
     }
+  }
+
+  @Override
+  public void terminate(PointCollector collector) throws Exception{
+
   }
 }
