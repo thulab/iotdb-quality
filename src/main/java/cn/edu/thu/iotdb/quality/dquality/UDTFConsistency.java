@@ -18,8 +18,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cn.edu.thu.iotdb.quality.dquality;
 
+import cn.edu.thu.iotdb.quality.util.NoNumberException;
+import cn.edu.thu.iotdb.quality.util.Util;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -28,13 +34,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingTimeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import cn.edu.thu.iotdb.quality.util.NoNumberException;
-import cn.edu.thu.iotdb.quality.util.Util;
-
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * 用于计算时间序列的一致性的UDTF
@@ -67,7 +66,7 @@ public class UDTFConsistency implements UDTF {
   @Override
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
     try {
-      if (rowWindow.windowSize() > TimeSeriesQuality.WINDOWSIZE) {
+      if (rowWindow.windowSize() > TimeSeriesQuality.windowSize) {
         TimeSeriesQuality tsq = new TimeSeriesQuality(rowWindow.getRowIterator());
         tsq.timeDetect();
         collector.putDouble(rowWindow.getRow(0).getTime(), tsq.getConsistency());

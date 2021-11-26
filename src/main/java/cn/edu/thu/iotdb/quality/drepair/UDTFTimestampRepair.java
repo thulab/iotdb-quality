@@ -28,7 +28,6 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 public class UDTFTimestampRepair implements UDTF {
   String intervalMethod;
-  String startPointMethod;
   int interval;
   int intervalMode;
 
