@@ -26,15 +26,13 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.dmatch.util.CrossCorrelation;
 import cn.edu.thu.iotdb.quality.util.Util;
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-/**
- * @ClassName UDTFACF @Description This function calculates auto-correlation factor of a single
- * input series. @Author thulab @Version 1.0.0
- */
+import java.util.ArrayList;
+
+/** This function calculates auto-correlation factor of a single input series. */
 public class UDTFACF implements UDTF {
 
-  private DoubleArrayList valueArrayList = new DoubleArrayList();
+  private ArrayList<Double> valueArrayList = new ArrayList<Double>();
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -56,7 +54,7 @@ public class UDTFACF implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    DoubleArrayList correlationArrayList =
+    ArrayList<Double> correlationArrayList =
         CrossCorrelation.calculateCrossCorrelation(valueArrayList, valueArrayList);
     for (int i = 0; i < correlationArrayList.size(); i++) {
       collector.putDouble(i, correlationArrayList.get(i));

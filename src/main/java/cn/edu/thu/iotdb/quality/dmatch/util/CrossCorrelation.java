@@ -15,16 +15,16 @@
  */
 package cn.edu.thu.iotdb.quality.dmatch.util;
 
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
+import java.util.ArrayList;
 
 /**
  * @ClassName CrossCorrelation @Description util for UDTFXCorr and UDTFACF @Author thulab @Version
  * 1.0.0
  */
 public class CrossCorrelation {
-  public static DoubleArrayList calculateCrossCorrelation(
-      DoubleArrayList valueArrayList1, DoubleArrayList valueArrayList2) {
-    DoubleArrayList correlationArrayList = new DoubleArrayList();
+  public static ArrayList<Double> calculateCrossCorrelation(
+      ArrayList<Double> valueArrayList1, ArrayList<Double> valueArrayList2) {
+    ArrayList<Double> correlationArrayList = new ArrayList<>();
     int length = valueArrayList1.size();
     for (int shift = 1; shift <= length; shift++) {
       double correlation = 0.0;

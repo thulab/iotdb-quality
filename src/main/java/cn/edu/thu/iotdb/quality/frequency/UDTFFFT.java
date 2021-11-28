@@ -20,7 +20,6 @@
  */
 package cn.edu.thu.iotdb.quality.frequency;
 
-import org.apache.commons.math3.complex.Complex;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -29,6 +28,8 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+
+import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
@@ -95,22 +96,30 @@ public class UDTFFFT implements UDTF {
   @Override
   public void terminate(PointCollector collector) throws Exception {
     FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
-    Complex[] result = fft.transform(list.stream().mapToDouble(Double::valueOf).toArray(), TransformType.FORWARD);
-    if (compressed) {// compress the result
+    Complex[] result =
+        fft.transform(list.stream().mapToDouble(Double::valueOf).toArray(), TransformType.FORWARD);
+    if (compressed) { // compress the result
       double sum = 0;
       for (Complex complex : result) {
-        sum += complex.getReal() * complex.getReal() + complex.getImaginary() * complex.getImaginary();
+        sum +=
+            complex.getReal() * complex.getReal() + complex.getImaginary() * complex.getImaginary();
       }
-      double temp = result[0].getReal() * result[0].getReal() + result[0].getImaginary() * result[0].getImaginary();
+      double temp =
+          result[0].getReal() * result[0].getReal()
+              + result[0].getImaginary() * result[0].getImaginary();
       collector.putDouble(0, transformToOutput(collector, result[0]));
       for (int i = 1; i < result.length; i++) {
         collector.putDouble(i, transformToOutput(collector, result[i]));
-        temp += (result[i].getReal() * result[i].getReal() + result[i].getImaginary() * result[i].getImaginary()) * 2;
+        temp +=
+            (result[i].getReal() * result[i].getReal()
+                    + result[i].getImaginary() * result[i].getImaginary())
+                * 2;
         if (temp > compressRate * sum) {
           System.out.println(i);
-          if (i < result.length - 1){
+          if (i < result.length - 1) {
             // put the last number to show series length
-            collector.putDouble(result.length-1, transformToOutput(collector, result[result.length - 1]));
+            collector.putDouble(
+                result.length - 1, transformToOutput(collector, result[result.length - 1]));
           }
           break;
         }

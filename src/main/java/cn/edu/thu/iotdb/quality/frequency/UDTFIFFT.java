@@ -20,7 +20,6 @@
  */
 package cn.edu.thu.iotdb.quality.frequency;
 
-import org.apache.commons.math3.complex.Complex;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -29,6 +28,8 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+
+import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.DftNormalization;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 import org.apache.commons.math3.transform.TransformType;
@@ -100,7 +101,7 @@ public class UDTFIFFT implements UDTF {
   public void terminate(PointCollector collector) throws Exception {
     int length = real.size();
     Complex[] input = new Complex[length];
-    for(int i=0; i<length; i++){
+    for (int i = 0; i < length; i++) {
       input[i] = new Complex(real.get(i), imag.get(i));
     }
     FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);

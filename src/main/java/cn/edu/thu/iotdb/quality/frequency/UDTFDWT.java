@@ -24,8 +24,8 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import cn.edu.thu.iotdb.quality.util.Util;
 import cn.edu.thu.iotdb.quality.frequency.util.DWTUtil;
+import cn.edu.thu.iotdb.quality.util.Util;
 
 import java.util.ArrayList;
 
@@ -40,22 +40,24 @@ public class UDTFDWT implements UDTF {
   private int layer;
 
   @Override
-  public void validate(UDFParameterValidator validator) throws Exception{
+  public void validate(UDFParameterValidator validator) throws Exception {
     validator
-            .validateInputSeriesDataType(
-                    0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
-            .validate(x ->
-                    ((String) x).equalsIgnoreCase("Haar")
-                            ||((String) x).equalsIgnoreCase("DB2")
-                            ||((String) x).equalsIgnoreCase("DB4")
-                            ||((String) x).equalsIgnoreCase("DB6")
-                            ||((String) x).equalsIgnoreCase("DB8")
-                            ||((String) x).equalsIgnoreCase(""),
+        .validateInputSeriesDataType(
+            0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
+        .validate(
+            x ->
+                ((String) x).equalsIgnoreCase("Haar")
+                    || ((String) x).equalsIgnoreCase("DB2")
+                    || ((String) x).equalsIgnoreCase("DB4")
+                    || ((String) x).equalsIgnoreCase("DB6")
+                    || ((String) x).equalsIgnoreCase("DB8")
+                    || ((String) x).equalsIgnoreCase(""),
             "Method not supported, please input coefficient and leave method blank.",
             validator.getParameters().getStringOrDefault("method", ""))
-            .validate(x -> (int) x > 0,
-                    "layer has to be a positive integer.",
-                    validator.getParameters().getIntOrDefault("layer", 1));
+        .validate(
+            x -> (int) x > 0,
+            "layer has to be a positive integer.",
+            validator.getParameters().getIntOrDefault("layer", 1));
   }
 
   @Override
@@ -79,7 +81,7 @@ public class UDTFDWT implements UDTF {
 
   @Override
   public void terminate(PointCollector pointCollector) throws Exception {
-    if (!s.equals("")||!method.equals("")){ // When user offers at least one parameter
+    if (!s.equals("") || !method.equals("")) { // When user offers at least one parameter
       DWTUtil transformer = new DWTUtil(method, s, layer, value);
       transformer.waveletTransform();
       double[] r = transformer.getData();

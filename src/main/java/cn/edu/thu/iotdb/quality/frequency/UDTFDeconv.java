@@ -30,6 +30,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.util.Util;
+
 import java.util.ArrayList;
 
 /** @author Wang Haoyu */

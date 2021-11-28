@@ -26,16 +26,14 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.dmatch.util.CrossCorrelation;
 import cn.edu.thu.iotdb.quality.util.Util;
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-/**
- * @ClassName UDTFXCorr @Description This function calculates DTW distance between two input
- * series. @Author thulab @Version 1.0.0
- */
+import java.util.ArrayList;
+
+/** This function calculates cross correlation between two input series. */
 public class UDTFXCorr implements UDTF {
 
-  private DoubleArrayList valueArrayList0 = new DoubleArrayList();
-  private DoubleArrayList valueArrayList1 = new DoubleArrayList();
+  private ArrayList<Double> valueArrayList0 = new ArrayList<>();
+  private ArrayList<Double> valueArrayList1 = new ArrayList<>();
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -60,7 +58,7 @@ public class UDTFXCorr implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    DoubleArrayList correlationArrayList =
+    ArrayList<Double> correlationArrayList =
         CrossCorrelation.calculateCrossCorrelation(valueArrayList0, valueArrayList1);
     for (int i = 0; i < correlationArrayList.size(); i++) {
       collector.putDouble(i, correlationArrayList.get(i));

@@ -20,10 +20,6 @@
  */
 package cn.edu.thu.iotdb.quality.frequency;
 
-import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.transform.DftNormalization;
-import org.apache.commons.math3.transform.FastFourierTransformer;
-import org.apache.commons.math3.transform.TransformType;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -33,7 +29,13 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.transform.DftNormalization;
+import org.apache.commons.math3.transform.FastFourierTransformer;
+import org.apache.commons.math3.transform.TransformType;
+
 import cn.edu.thu.iotdb.quality.util.Util;
+
 import java.util.ArrayList;
 
 /** @author Wang Haoyu */
@@ -79,10 +81,12 @@ public class UDTFHighPass implements UDTF {
   public void terminate(PointCollector collector) throws Exception {
     int n = valueList.size();
     FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
-    Complex[] trans = fft.transform(valueList.stream().mapToDouble(Double::valueOf).toArray(), TransformType.FORWARD);
+    Complex[] trans =
+        fft.transform(
+            valueList.stream().mapToDouble(Double::valueOf).toArray(), TransformType.FORWARD);
     // discard low-frequency component
     int m = (int) Math.floor(wpass * n / 2);
-    for (int i = 0; i <= m ; i++) {
+    for (int i = 0; i <= m; i++) {
       trans[i] = new Complex(0, 0);
     }
     for (int i = n - m; i < n; i++) {

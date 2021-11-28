@@ -27,15 +27,13 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.drepair.util.LsGreedy;
 import cn.edu.thu.iotdb.quality.drepair.util.Screen;
 import cn.edu.thu.iotdb.quality.drepair.util.ValueRepair;
-import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * @author Wang Haoyu
- */
+/** @author Wang Haoyu */
 // This function repairs anomaly points of input series.
 //
 public class UDTFValueRepair implements UDTF {
@@ -45,14 +43,16 @@ public class UDTFValueRepair implements UDTF {
   double center, sigma;
 
   @Override
-  public void validate(UDFParameterValidator validator) throws Exception{
-    validator.validateInputSeriesDataType(
-                    0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
-            .validate(x->
-                            ((String) x).equalsIgnoreCase("screen")||
-                                    ((String) x).equalsIgnoreCase("lsgreedy"),
-                    "Illegal method.",
-                    validator.getParameters().getStringOrDefault("method", "screen"));
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+        .validateInputSeriesDataType(
+            0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
+        .validate(
+            x ->
+                ((String) x).equalsIgnoreCase("screen")
+                    || ((String) x).equalsIgnoreCase("lsgreedy"),
+            "Illegal method.",
+            validator.getParameters().getStringOrDefault("method", "screen"));
   }
 
   @Override
@@ -119,8 +119,7 @@ public class UDTFValueRepair implements UDTF {
         throw new Exception();
     }
   }
-  @Override
-  public void terminate(PointCollector collector) throws Exception{
 
-  }
+  @Override
+  public void terminate(PointCollector collector) throws Exception {}
 }

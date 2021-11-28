@@ -22,33 +22,33 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import cn.edu.thu.iotdb.quality.drepair.util.*;
-import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.Locale;
 
-/**
- * @author Zhang Xiaojian
- */
+/** @author Zhang Xiaojian */
 // This function fills NaN of input series.
 public class UDTFValueFill implements UDTF {
 
   private String method;
 
   @Override
-  public void validate(UDFParameterValidator validator) throws Exception{
-    validator.validateInputSeriesDataType(
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+        .validateInputSeriesDataType(
             0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
-            .validate(x->
-                            ((String) x).equalsIgnoreCase("previous")||
-                                    ((String) x).equalsIgnoreCase("linear")||
-                                    ((String) x).equalsIgnoreCase("mean")||
-                                    ((String) x).equalsIgnoreCase("ar")||
-                                    ((String) x).equalsIgnoreCase("screen")||
-                                    ((String) x).equalsIgnoreCase("likelihood"),
-                    "Illegal method.",
-                    validator.getParameters().getStringOrDefault("method", "linear"));
+        .validate(
+            x ->
+                ((String) x).equalsIgnoreCase("previous")
+                    || ((String) x).equalsIgnoreCase("linear")
+                    || ((String) x).equalsIgnoreCase("mean")
+                    || ((String) x).equalsIgnoreCase("ar")
+                    || ((String) x).equalsIgnoreCase("screen")
+                    || ((String) x).equalsIgnoreCase("likelihood"),
+            "Illegal method.",
+            validator.getParameters().getStringOrDefault("method", "linear"));
   }
 
   @Override
@@ -63,7 +63,7 @@ public class UDTFValueFill implements UDTF {
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
     ValueFill vf = null;
     method = method.toLowerCase(Locale.ROOT);
-    switch (method){
+    switch (method) {
       case "previous":
         vf = new PreviousFill(rowWindow.getRowIterator());
         break;
@@ -114,7 +114,5 @@ public class UDTFValueFill implements UDTF {
   }
 
   @Override
-  public void terminate(PointCollector collector) throws Exception{
-
-  }
+  public void terminate(PointCollector collector) throws Exception {}
 }
