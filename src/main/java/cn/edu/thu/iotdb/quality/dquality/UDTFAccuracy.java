@@ -2,20 +2,18 @@ package cn.edu.thu.iotdb.quality.dquality;
 
 import cn.edu.thu.iotdb.quality.NoNumberException;
 import cn.edu.thu.iotdb.quality.Util;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.apache.iotdb.db.metadata.PartialPath;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
-import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingTimeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 用于计算时间序列的准确性性的UDTF
@@ -24,33 +22,26 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  */
 public class UDTFAccuracy implements UDTF {
 
-    private int colCnt = 0;
-    private String constraints = "$1 = $2";
+    private int colCnt;
+    private String constraints;
 
     @Override
-    public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-        colCnt = udfp.getPaths().size();
-        if (udfp.hasAttribute("constraints")) {
-            constraints = udfp.getString("constraints");
-        }
+    public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+        String sizeWindowStr = parameters.getStringOrDefault("sizewindow", String.valueOf(Long.MAX_VALUE));
+        long sizeWindow = Long.parseLong(sizeWindowStr);
 
-        boolean isTime = false;
-        long window = Integer.MAX_VALUE;
-        if (udfp.hasAttribute("window")) {
-            String s = udfp.getString("window");
-            window = Util.parseTime(s);
-            if (window > 0) {
-                isTime = true;
-            } else {
-                window = Long.parseLong(s);
-            }
+        String timeWindowStr = parameters.getStringOrDefault("timewindow", "default");
+        long timeWindow = Util.parseTime(timeWindowStr);
+
+        if (parameters.hasAttribute("sizewindow")) {
+            configurations.setAccessStrategy(new SlidingSizeWindowAccessStrategy((int) sizeWindow));
         }
-        if (isTime){
-            udtfc.setAccessStrategy(new SlidingTimeWindowAccessStrategy(window));
-        }else{
-            udtfc.setAccessStrategy(new SlidingSizeWindowAccessStrategy((int) window));
-        }       
-        udtfc.setOutputDataType(TSDataType.DOUBLE);
+        else {
+            configurations.setAccessStrategy(new SlidingTimeWindowAccessStrategy(timeWindow));
+        }
+        colCnt = parameters.getPaths().size();
+        constraints = parameters.getStringOrDefault("constraints", "$1 = $2");
+        configurations.setOutputDataType(TSDataType.DOUBLE);
     }
 
     @Override
