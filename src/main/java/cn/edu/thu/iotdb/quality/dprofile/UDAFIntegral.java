@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.dprofile;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
@@ -71,6 +72,7 @@ public class UDAFIntegral implements UDTF {
     switch (udfParameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S)) {
       case TIME_UNIT_MS:
         unitTime = 1L;
+        break;
       case TIME_UNIT_S:
         unitTime = 1000L;
         break;

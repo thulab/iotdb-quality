@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -24,13 +26,11 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import cn.edu.thu.iotdb.quality.util.Util;
-
 public class UDAFStddev implements UDTF {
 
   private long count = 0;
-  private double sum_x_2 = 0.0;
-  private double sum_x_1 = 0.0;
+  private double sumX2 = 0.0;
+  private double sumX1 = 0.0;
 
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
@@ -53,14 +53,14 @@ public class UDAFStddev implements UDTF {
     double value = Util.getValueAsDouble(row);
     if (Double.isFinite(value)) {
       this.count++;
-      this.sum_x_1 += value;
-      this.sum_x_2 += value * value;
+      this.sumX1 += value;
+      this.sumX2 += value * value;
     }
   }
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
     collector.putDouble(
-        0, Math.sqrt(this.sum_x_2 / this.count - Math.pow(this.sum_x_1 / this.count, 2)));
+        0, Math.sqrt(this.sumX2 / this.count - Math.pow(this.sumX1 / this.count, 2)));
   }
 }

@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -24,14 +26,12 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import cn.edu.thu.iotdb.quality.util.Util;
-
 public class UDAFSkew implements UDTF {
 
   private long count = 0;
-  private double sum_x_3 = 0.0;
-  private double sum_x_2 = 0.0;
-  private double sum_x_1 = 0.0;
+  private double sumX3 = 0.0;
+  private double sumX2 = 0.0;
+  private double sumX1 = 0.0;
 
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
@@ -54,9 +54,9 @@ public class UDAFSkew implements UDTF {
     double value = Util.getValueAsDouble(row);
     if (Double.isFinite(value)) {
       this.count++;
-      this.sum_x_1 += value;
-      this.sum_x_2 += value * value;
-      this.sum_x_3 += value * value * value;
+      this.sumX1 += value;
+      this.sumX2 += value * value;
+      this.sumX3 += value * value * value;
     }
   }
 
@@ -64,7 +64,7 @@ public class UDAFSkew implements UDTF {
   public void terminate(PointCollector collector) throws Exception {
     collector.putDouble(
         0,
-        (sum_x_3 / count - 3 * sum_x_1 / count * sum_x_2 / count + 2 * Math.pow(sum_x_1 / count, 3))
-            / Math.pow(sum_x_2 / count - sum_x_1 / count * sum_x_1 / count, 1.5));
+        (sumX3 / count - 3 * sumX1 / count * sumX2 / count + 2 * Math.pow(sumX1 / count, 3))
+            / Math.pow(sumX2 / count - sumX1 / count * sumX1 / count, 1.5));
   }
 }

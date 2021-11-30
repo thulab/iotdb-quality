@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.dprofile.util.ExactOrderStatistics;
+import cn.edu.thu.iotdb.quality.dprofile.util.GKArray;
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -23,10 +27,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import cn.edu.thu.iotdb.quality.dprofile.util.ExactOrderStatistics;
-import cn.edu.thu.iotdb.quality.dprofile.util.GKArray;
-import cn.edu.thu.iotdb.quality.util.Util;
 
 /**
  * calculate the exact or approximate median the function has an optional parameter: $error$ $error$

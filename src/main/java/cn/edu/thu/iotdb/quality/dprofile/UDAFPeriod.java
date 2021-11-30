@@ -40,8 +40,6 @@ import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 /** @author Wang Haoyu */
 public class UDAFPeriod implements UDTF {
 
-  private final double threshold = 0.5;
-
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
     validator
@@ -85,6 +83,7 @@ public class UDAFPeriod implements UDTF {
     int window = 100;
     IntArrayList peeks = new IntArrayList();
     peeks.add(0);
+    double threshold = 0.5;
     for (int i = 1; i < Math.min(x.length - 1, window); i++) {
       if (x[i] > x[i - 1] && x[i] > x[i + 1] && x[i] > threshold) {
         window = i;

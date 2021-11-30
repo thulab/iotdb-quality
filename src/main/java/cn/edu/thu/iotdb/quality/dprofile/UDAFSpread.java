@@ -18,8 +18,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.util.NoNumberException;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -28,8 +30,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import cn.edu.thu.iotdb.quality.util.NoNumberException;
 
 /** @author Wang Haoyu */
 public class UDAFSpread implements UDTF {
@@ -94,21 +94,21 @@ public class UDAFSpread implements UDTF {
 
   private void transformInt(Row row, PointCollector pc) throws Exception {
     int v = row.getInt(0);
-    intMin = intMin < v ? intMin : v;
-    intMax = intMax > v ? intMax : v;
+    intMin = Math.min(intMin, v);
+    intMax = Math.max(intMax, v);
   }
 
   private void transformLong(Row row, PointCollector pc) throws Exception {
     long v = row.getLong(0);
-    longMin = longMin < v ? longMin : v;
-    longMax = longMax > v ? longMax : v;
+    longMin = Math.min(longMin, v);
+    longMax = Math.max(longMax, v);
   }
 
   private void transformFloat(Row row, PointCollector pc) throws Exception {
     float v = row.getFloat(0);
     if (Float.isFinite(v)) {
-      floatMin = floatMin < v ? floatMin : v;
-      floatMax = floatMax > v ? floatMax : v;
+      floatMin = Math.min(floatMin, v);
+      floatMax = Math.max(floatMax, v);
     }
   }
 
