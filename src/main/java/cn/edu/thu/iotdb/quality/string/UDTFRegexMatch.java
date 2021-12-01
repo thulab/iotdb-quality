@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,28 +27,9 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @ClassName UDTFRegexMatch @Description This function matches substring according to given regex
- * from an input series. @Author thulab @Version 1.0.0
- */
 public class UDTFRegexMatch implements UDTF {
   private Pattern pattern;
   private int group;
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(0, TSDataType.TEXT)
-        .validate(
-            regex -> ((String) regex).length() > 0,
-            "regexp has to be a valid regular expression.",
-            validator.getParameters().getStringOrDefault("regex", ""))
-        .validate(
-            group -> (int) group >= 0,
-            "group index has to be a non-negative integer.",
-            validator.getParameters().getIntOrDefault("group", 0));
-  }
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -66,5 +47,20 @@ public class UDTFRegexMatch implements UDTF {
     if (matcher.find() && matcher.groupCount() >= group) {
       collector.putString(row.getTime(), matcher.group(group));
     }
+  }
+
+  @Override
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+        .validateInputSeriesNumber(1)
+        .validateInputSeriesDataType(0, TSDataType.TEXT)
+        .validate(
+            regex -> ((String) regex).length() > 0,
+            "regexp has to be a valid regular expression.",
+            validator.getParameters().getStringOrDefault("regex", ""))
+        .validate(
+            group -> (int) group >= 0,
+            "group index has to be a non-negative integer.",
+            validator.getParameters().getIntOrDefault("group", 0));
   }
 }

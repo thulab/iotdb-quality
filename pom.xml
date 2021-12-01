@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.apache.iotdb.dquality</groupId>
+    <groupId>cn.edu.thu.dquality</groupId>
     <artifactId>iotdb-quality</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <properties>
-        <version>2.0.0</version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -74,7 +73,7 @@
                 <version>4.1</version>
                 <configuration>
                     <properties>
-                        <owner>iotdb-quality developer group</owner>
+                        <owner>thulab</owner>
                         <email>iotdb-quality@protonmail.com</email>
                         <year>2021</year>
                     </properties>
@@ -142,8 +141,9 @@
                         <!-- no need to specify files, inferred automatically, but you can if you want -->
                         <!-- apply a specific flavor of google-java-format and reflow long strings -->
                         <googleJavaFormat>
-                            <version>1.7</version>                      <!-- optional -->
+                            <version>1.8</version>                      <!-- optional -->
                             <style>GOOGLE</style>                       <!-- or AOSP (optional) -->
+                            <reflowLongStrings>true</reflowLongStrings> <!-- optional (requires at least 1.8) -->
                             <!-- optional: custom group artifact (you probably don't need this) -->
                             <groupArtifact>com.google.googlejavaformat:google-java-format</groupArtifact>
                         </googleJavaFormat>

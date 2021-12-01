@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package cn.edu.thu.iotdb.quality.string;
+package cn.edu.thu.iotdb.quality.dmatch;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -24,37 +24,36 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * @ClassName UDTFRegexSplit @Description This function splits string from an input series according
- * to given regex. @Author thulab @Version 1.0.0
- */
-public class UDTFRegexSplit implements UDTF {
+import cn.edu.thu.iotdb.quality.util.Util;
+import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-  private String regex;
-  private int index;
+public class UDTFSelfCorrelation implements UDTF {
+
+  private DoubleArrayList valueArrayList = new DoubleArrayList();
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
       throws Exception {
-    regex = udfParameters.getString("regex");
-    index = udfParameters.getIntOrDefault("index", -1);
-    udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy());
-    if (index == -1) {
-      udtfConfigurations.setOutputDataType(TSDataType.INT32);
-    } else {
-      udtfConfigurations.setOutputDataType(TSDataType.TEXT);
-    }
+    udtfConfigurations
+        .setAccessStrategy(new RowByRowAccessStrategy())
+        .setOutputDataType(TSDataType.DOUBLE);
   }
 
   @Override
   public void transform(Row row, PointCollector collector) throws Exception {
-    String[] splitResult = row.getString(0).split(regex);
-    if (index == -1) {
-      collector.putInt(row.getTime(), splitResult.length);
+    if (row.isNull(0)) {
+      valueArrayList.add(Double.NaN);
     } else {
-      if (index < splitResult.length) {
-        collector.putString(row.getTime(), splitResult[index]);
-      }
+      valueArrayList.add(Util.getValueAsDouble(row, 0));
+    }
+  }
+
+  @Override
+  public void terminate(PointCollector collector) throws Exception {
+    DoubleArrayList correlationArrayList =
+        UDTFCrossCorrelation.calculateCrossCorrelation(valueArrayList, valueArrayList);
+    for (int i = 0; i < correlationArrayList.size(); i++) {
+      collector.putDouble(i, correlationArrayList.get(i));
     }
   }
 
@@ -62,14 +61,12 @@ public class UDTFRegexSplit implements UDTF {
   public void validate(UDFParameterValidator validator) throws Exception {
     validator
         .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(0, TSDataType.TEXT)
-        .validate(
-            regex -> ((String) regex).length() > 0,
-            "regexp has to be a valid regular expression.",
-            validator.getParameters().getStringOrDefault("regex", ""))
-        .validate(
-            index -> (int) index >= -1,
-            "index must a non-negative integer to fetch split results or -1 to get length.",
-            validator.getParameters().getIntOrDefault("index", -1));
+        .validateInputSeriesDataType(
+            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
+  }
+
+  @Override
+  public void beforeDestroy() {
+    valueArrayList.clear();
   }
 }

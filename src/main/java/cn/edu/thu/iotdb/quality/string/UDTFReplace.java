@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,37 +24,13 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * @ClassName UDTFStrReplace @Description This function does limited times of replacement of
- * substring from an input series. @Author thulab @Version 1.0.0
- */
-public class UDTFStrReplace implements UDTF {
+public class UDTFReplace implements UDTF {
 
   private String target;
   private String replace;
   private int limit;
   private int offset;
   private boolean reverse;
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(0, TSDataType.TEXT)
-        .validate(
-            target -> ((String) target).length() > 0,
-            "target should not be empty",
-            validator.getParameters().getString("target"))
-        .validate(
-            limit -> (int) limit >= -1,
-            "limit has to be -1 for replacing all matches or non-negative integers for limited"
-                + " times.",
-            validator.getParameters().getIntOrDefault("limit", -1))
-        .validate(
-            offset -> (int) offset >= 0,
-            "offset has to be non-negative to skip first several matches.",
-            validator.getParameters().getIntOrDefault("offset", 0));
-  }
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -148,5 +124,25 @@ public class UDTFStrReplace implements UDTF {
               .concat(suffix);
     }
     collector.putString(row.getTime(), result);
+  }
+
+  @Override
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+        .validateInputSeriesNumber(1)
+        .validateInputSeriesDataType(0, TSDataType.TEXT)
+        .validate(
+            target -> ((String) target).length() > 0,
+            "target should not be empty",
+            validator.getParameters().getString("target"))
+        .validate(
+            limit -> (int) limit >= -1,
+            "limit has to be -1 for replacing all matches or non-negative integers for limited"
+                + " times.",
+            validator.getParameters().getIntOrDefault("limit", -1))
+        .validate(
+            offset -> (int) offset >= 0,
+            "offset has to be non-negative to skip first several matches.",
+            validator.getParameters().getIntOrDefault("offset", 0));
   }
 }
