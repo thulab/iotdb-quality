@@ -18,19 +18,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cn.edu.thu.iotdb.quality.dquality;
 
-import org.apache.iotdb.db.query.udf.api.access.Row;
-import org.apache.iotdb.db.query.udf.api.access.RowIterator;
-
-import org.apache.commons.math3.stat.descriptive.rank.Median;
-
 import cn.edu.thu.iotdb.quality.util.Util;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.apache.commons.math3.stat.descriptive.rank.Median;
+import org.apache.iotdb.db.query.udf.api.access.Row;
+import org.apache.iotdb.db.query.udf.api.access.RowIterator;
 
 /**
  * 计算时序数据质量指标的类
@@ -38,8 +36,7 @@ import java.util.Scanner;
  * @author Wang Haoyu
  */
 public class TimeSeriesQuality {
-
-  public static final int WINDOWSIZE = 10;
+  public static final int windowSize = 10;
   private boolean downtime = true; // 是否考虑停机异常
   private int cnt = 0; // 数据点总数
   private int missCnt = 0; // 缺失点个数
@@ -50,10 +47,12 @@ public class TimeSeriesQuality {
   private int variationCnt = 0; // 违背取值变化约束的数据点个数
   private int speedCnt = 0; // 违背速度约束的数据点个数
   private int speedchangeCnt = 0; // 违背速度变化约束的数据点个数
-  private final double[] time, origin; // 除去特殊值的时间序列
+  private final double[] time; // 除去特殊值的时间序列
+  private final double[] origin; // 除去特殊值的时间序列
 
   public TimeSeriesQuality(RowIterator dataIterator) throws Exception {
-    ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
+    ArrayList<Double> timeList = new ArrayList<>();
+    ArrayList<Double> originList = new ArrayList<>();
     while (dataIterator.hasNextRow()) {
       Row row = dataIterator.next();
       cnt++;
@@ -75,7 +74,8 @@ public class TimeSeriesQuality {
 
   public TimeSeriesQuality(String filename) throws Exception {
     Scanner sc = new Scanner(new File(filename));
-    ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
+    ArrayList<Double> timeList = new ArrayList<>();
+    ArrayList<Double> originList = new ArrayList<>();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     sc.useDelimiter("\\s*(,|\\r|\\n)\\s*"); // 设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
     sc.nextLine();
@@ -100,7 +100,8 @@ public class TimeSeriesQuality {
   /** 对数据序列中的NaN进行处理，采用线性插值方法 */
   private void processNaN() throws Exception {
     int n = origin.length;
-    int index1 = 0, index2; // 线性插值的两个基准
+    int index1 = 0; // 线性插值的两个基准
+    int index2; // 线性插值的两个基准
     // 找到两个非NaN的基准
     while (index1 < n && Double.isNaN(origin[index1])) {
       index1++;
@@ -147,13 +148,13 @@ public class TimeSeriesQuality {
   /** 对时间序列的时间戳进行异常侦测，为计算完整性、一致性、时效性做准备 */
   public void timeDetect() {
     // 计算时间间隔特征
-    double interval[] = Util.variation(time);
+    double[] interval = Util.variation(time);
     Median median = new Median();
     double base = median.evaluate(interval);
     // 寻找时间戳异常
     ArrayList<Double> window = new ArrayList<>();
     int i;
-    for (i = 0; i < Math.min(time.length, WINDOWSIZE); i++) { // 填充初始数据
+    for (i = 0; i < Math.min(time.length, windowSize); i++) { // 填充初始数据
       window.add(time[i]);
     }
     while (window.size() > 1) {
@@ -182,7 +183,7 @@ public class TimeSeriesQuality {
         missCnt += (Math.round(times - 1) - temp);
       }
       window.remove(0); // 从窗口中移除已经处理的数据点
-      while (window.size() < WINDOWSIZE && i < time.length) {
+      while (window.size() < windowSize && i < time.length) {
         // 向窗口中填充数据点直到窗口被填满
         window.add(time[i]);
         i++;
@@ -210,7 +211,6 @@ public class TimeSeriesQuality {
    * 返回序列中偏离中位数超过k倍绝对中位差的点的个数
    *
    * @param value 序列
-   * @param k
    * @return 偏离中位数超过k倍绝对中位差的点的个数
    */
   private int findOutliers(double[] value, double k) {
@@ -218,8 +218,8 @@ public class TimeSeriesQuality {
     double mid = median.evaluate(value);
     double sigma = Util.mad(value);
     int num = 0;
-    for (int i = 0; i < value.length; i++) {
-      if (Math.abs(value[i] - mid) > k * sigma) {
+    for (double v : value) {
+      if (Math.abs(v - mid) > k * sigma) {
         num++;
       }
     }
@@ -272,12 +272,16 @@ public class TimeSeriesQuality {
     System.out.println(tsq.getValidity());
   }
 
-  /** @return the downtime */
+  /**
+   * @return the downtime
+   * */
   public boolean isDowntime() {
     return downtime;
   }
 
-  /** @param downtime the downtime to set */
+  /**
+   * @param downtime the downtime to set
+   * */
   public void setDowntime(boolean downtime) {
     this.downtime = downtime;
   }

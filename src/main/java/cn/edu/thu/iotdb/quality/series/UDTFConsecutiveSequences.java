@@ -18,8 +18,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cn.edu.thu.iotdb.quality.series;
 
+import cn.edu.thu.iotdb.quality.util.Util;
+import java.io.IOException;
+import java.util.ArrayList;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -29,24 +34,17 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import cn.edu.thu.iotdb.quality.util.Util;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
 /**
  * 该UDTF用于寻找序列中的所有局部最长的连续子序列
  *
  * @author Wang Haoyu
  */
 public class UDTFConsecutiveSequences implements UDTF {
-
-  private static final int MAXLEN = 128;
+  private static final int maxLen = 128;
   private long gap;
-  private final ArrayList<Pair<Long, Boolean>> window = new ArrayList<>(MAXLEN);
-  private long first, last;
+  private final ArrayList<Pair<Long, Boolean>> window = new ArrayList<>(maxLen);
+  private long first;
+  private long last;
   private int count;
 
   @Override
@@ -71,7 +69,7 @@ public class UDTFConsecutiveSequences implements UDTF {
   @Override
   public void transform(Row row, PointCollector collector) throws Exception {
     if (gap == 0) {
-      if (window.size() < MAXLEN) { // 窗口没有装满
+      if (window.size() < maxLen) { // 窗口没有装满
         window.add(Pair.of(row.getTime(), check(row)));
       } else {
         gap = calculateGap();
@@ -131,7 +129,7 @@ public class UDTFConsecutiveSequences implements UDTF {
    * @param time 时间戳
    * @param nullExist 数据行中是否存在空值（true代表存在空值）
    * @param collector 输出器
-   * @throws IOException
+   * @throws IOException 异常
    */
   void process(long time, boolean nullExist, PointCollector collector) throws IOException {
     if (nullExist) { // 数据行存在空值，连续序列结束

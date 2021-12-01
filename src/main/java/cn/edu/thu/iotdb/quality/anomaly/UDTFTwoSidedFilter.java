@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.anomaly;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
@@ -25,7 +26,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 public class UDTFTwoSidedFilter implements UDTF {
-  private TSDataType dataType;
   private double len;
   private double threshold;
 
@@ -33,8 +33,8 @@ public class UDTFTwoSidedFilter implements UDTF {
   public void validate(UDFParameterValidator validator) throws Exception {
     validator
         .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(
-            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
+        .validateInputSeriesDataType(0, TSDataType.INT32,
+                TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
   }
 
   @Override
@@ -44,7 +44,7 @@ public class UDTFTwoSidedFilter implements UDTF {
         .setOutputDataType(udfp.getDataType(0));
     this.len = udfp.getDoubleOrDefault("len", 5);
     this.threshold = udfp.getDoubleOrDefault("threshold", 0.4);
-    this.dataType = udfp.getDataType(0);
+    TSDataType dataType = udfp.getDataType(0);
   }
 
   @Override

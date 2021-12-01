@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.anomaly;
 
+import cn.edu.thu.iotdb.quality.util.Util;
+import java.util.ArrayList;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -24,124 +27,114 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import cn.edu.thu.iotdb.quality.util.Util;
-
-import java.util.ArrayList;
-
-public class UDTFADWIN implements UDTF { // extends Estimator {
-
-  private class List {
+//extends Estimator
+public class UDTFADWIN implements UDTF {
+  private static class List {
     protected int count;
     protected ListItem head;
     protected ListItem tail;
 
-    /*		public int measureByteSize() {
-    	int size = (int) SizeOf.sizeOf(this);
-    	size += count * head.measureByteSize();
-    	return size;
-    }*/
-
+    //post: initializes the list to be empty.
     public List() {
-      //			post: initializes the list to be empty.
       clear();
       addToHead();
     }
 
     /* Interface Store Methods */
+    //post: returns the number of elements in the list.
     public int size() {
-      //	post: returns the number of elements in the list.
       return this.count;
     }
 
+    //post: returns the number of elements in the list.
     public ListItem head() {
-      //	post: returns the number of elements in the list.
       return this.head;
     }
 
+    //post: returns the number of elements in the list.
     public ListItem tail() {
-      //	post: returns the number of elements in the list.
       return this.tail;
     }
 
+    //post: returns the true iff store is empty.
     public boolean isEmpty() {
-      //	 post: returns the true iff store is empty.
       return (this.size() == 0);
     }
 
+    //post: clears the list so that it contains no elements.
     public void clear() {
-      //	 post: clears the list so that it contains no elements.
       this.head = null;
       this.tail = null;
       this.count = 0;
     }
 
-    /* Interface List Methods */
+    /* Interface List Methods
+    * pre: anObject is non-null
+    * post: the object is added to the beginning of the list
+    */
     public void addToHead() {
-      //	 pre: anObject is non-null
-      //	 post: the object is added to the beginning of the list
       this.head = new ListItem(this.head, null);
-      if (this.tail == null) this.tail = this.head;
+      if (this.tail == null) {
+        this.tail = this.head;
+      }
       this.count++;
     }
 
+    //pre: list is not empty
+    //post: removes and returns first object from the list
     public void removeFromHead() {
-      //		 pre: list is not empty
-      //		 post: removes and returns first object from the list
-      //			ListItem temp;
-      //			temp = this.head;
       this.head = this.head.next();
-      if (this.head != null) this.head.setPrevious(null);
-      else this.tail = null;
+      if (this.head != null) {
+        this.head.setPrevious(null);
+      } else {
+        this.tail = null;
+      }
       this.count--;
-      // temp=null;
-      return;
     }
 
+    //pre: anObject is non-null
+    //post: the object is added at the end of the list
     public void addToTail() {
-      //			pre: anObject is non-null
-      //			post: the object is added at the end of the list
       this.tail = new ListItem(null, this.tail);
-      if (this.head == null) this.head = this.tail;
+      if (this.head == null) {
+        this.head = this.tail;
+      }
       this.count++;
     }
 
+    //pre: list is not empty
+    //post: the last object in the list is removed and returned
     public void removeFromTail() {
-      //			pre: list is not empty
-      //			post: the last object in the list is removed and returned
-      //			ListItem temp;
-      //			temp = this.tail;
       this.tail = this.tail.previous();
-      if (this.tail == null) this.head = null;
-      else this.tail.setNext(null);
+      if (this.tail == null) {
+        this.head = null;
+      } else {
+        this.tail.setNext(null);
+      }
       this.count--;
-      // temp=null;
-      return;
     }
   }
 
-  private class ListItem {
-    //		protected Object data;
+  //protected Object data;
+  private static class ListItem {
     protected ListItem next;
     protected ListItem previous;
     protected int bucketSizeRow = 0;
-    protected int MAXBUCKETS = UDTFADWIN.MAXBUCKETS;
-    protected double bucketTotal[] = new double[MAXBUCKETS + 1];
-    protected double bucketVariance[] = new double[MAXBUCKETS + 1];
+    protected int maxBuckets = UDTFADWIN.maxBuckets;
+    protected double[] bucketTotal = new double[maxBuckets + 1];
+    protected double[] bucketVariance = new double[maxBuckets + 1];
 
-    /*		public int measureByteSize() {
-    	int size = (int) SizeOf.sizeOf(this);
-    	return size;
-    }*/
-
+    //post: initializes the node to be a tail node
+    //containing the given value.
     public ListItem() {
-      //			post: initializes the node to be a tail node
-      //			containing the given value.
       this(null, null);
     }
 
     public void clear() {
       bucketSizeRow = 0;
-      for (int k = 0; k <= MAXBUCKETS; k++) clearBucket(k);
+      for (int k = 0; k <= maxBuckets; k++) {
+        clearBucket(k);
+      }
     }
 
     private void clearBucket(int k) {
@@ -149,131 +142,105 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
       setVariance(0, k);
     }
 
+    //post: initializes the node to contain the given
+    //object and link to the given next node.
     public ListItem(ListItem nextNode, ListItem previousNode) {
-      //			post: initializes the node to contain the given
-      //			object and link to the given next node.
-      // this.data = element;
       this.next = nextNode;
       this.previous = previousNode;
-      if (nextNode != null) nextNode.previous = this;
-      if (previousNode != null) previousNode.next = this;
+      if (nextNode != null) {
+        nextNode.previous = this;
+      }
+      if (previousNode != null) {
+        previousNode.next = this;
+      }
       clear();
     }
 
-    public void insertBucket(double Value, double Variance) {
-      //			insert a Bucket at the end
+    //insert a Bucket at the end
+    public void insertBucket(double value, double variance) {
       int k = bucketSizeRow;
       bucketSizeRow++;
-      // Insert new bucket
-      setTotal(Value, k);
-      setVariance(Variance, k);
+      //Insert new bucket
+      setTotal(value, k);
+      setVariance(variance, k);
     }
 
-    public void RemoveBucket() {
-      //			Removes the first Buvket
+    //Removes the first Bucket
+    public void removeBucket() {
       compressBucketsRow(1);
     }
 
-    public void compressBucketsRow(int NumberItemsDeleted) {
-      // Delete first elements
-      for (int k = NumberItemsDeleted; k <= MAXBUCKETS; k++) {
-        bucketTotal[k - NumberItemsDeleted] = bucketTotal[k];
-        bucketVariance[k - NumberItemsDeleted] = bucketVariance[k];
+    //Delete first elements
+    public void compressBucketsRow(int numberItemsDeleted) {
+      for (int k = numberItemsDeleted; k <= maxBuckets; k++) {
+        bucketTotal[k - numberItemsDeleted] = bucketTotal[k];
+        bucketVariance[k - numberItemsDeleted] = bucketVariance[k];
       }
-      for (int k = 1; k <= NumberItemsDeleted; k++) clearBucket(MAXBUCKETS - k + 1);
-      bucketSizeRow -= NumberItemsDeleted;
-      // BucketNumber-=NumberItemsDeleted;
+      for (int k = 1; k <= numberItemsDeleted; k++) {
+        clearBucket(maxBuckets - k + 1);
+      }
+      bucketSizeRow -= numberItemsDeleted;
     }
 
+    //post: returns the previous node.
     public ListItem previous() {
-      //			post: returns the previous node.
       return this.previous;
     }
 
+    //post: sets the previous node to be the given node
     public void setPrevious(ListItem previous) {
-      //			post: sets the previous node to be the given node
       this.previous = previous;
     }
 
+    //post: returns the next node.
     public ListItem next() {
-      //			post: returns the next node.
       return this.next;
     }
 
+    //post: sets the next node to be the given node
     public void setNext(ListItem next) {
-      //			post: sets the next node to be the given node
       this.next = next;
     }
 
-    public double Total(int k) {
-      //			post: returns the element in this node
+    //post: returns the element in this node
+    public double total(int k) {
       return bucketTotal[k];
     }
 
-    public double Variance(int k) {
-      //			post: returns the element in this node
+    //post: returns the element in this node
+    public double variance(int k) {
       return bucketVariance[k];
     }
 
+    //post: sets the element in this node to the given object.
     public void setTotal(double value, int k) {
-      //			post: sets the element in this node to the given
-      //			object.
       bucketTotal[k] = value;
     }
 
+    //post: sets the element in this node to the given object.
     public void setVariance(double value, int k) {
-      //			post: sets the element in this node to the given
-      //			object.
       bucketVariance[k] = value;
     }
-    /*
-    		public ListItem(Object element,
-    		ListItem nextNode){
-    //		post: initializes the node to contain the given
-    //		 object and link to the given next node.
-    		this.data = element;
-    		this.next = nextNode;
-    		}
-    		public ListItem(Object element) {
-    //		post: initializes the node to be a tail node
-    //		 containing the given value.
-    		this(element, null);
-    		}
-
-
-    		public Object value() {
-    //			 post: returns the element in this node
-    			return this.data;
-    			}
-    		public void setValue(Object anObject) {
-    //			 post: sets the element in this node to the given
-    //			 object.
-    			this.data = anObject;
-    			}
-    		 */
   }
 
-  // public static final double DELTA=.1; //.1;
   private static int mintMinimLongitudWindow = 10; // 10
-  private double mdbldelta; // .1;
+  private final double mdbldelta; // .1;
   private int number = 0;
   private int mintClock = 32;
   private double mdblWidth = 0; // Mean of Width = mdblWidth/Number of items
   // BUCKET
-  public static final int MAXBUCKETS = 5;
+  public static final int maxBuckets = 5;
   private int lastBucketRow = 0;
-  private double TOTAL = 0;
-  private double VARIANCE = 0;
-  private int WIDTH = 0;
-  private int BucketNumber = 0;
-
-  private int Detect = 0;
+  private double total = 0;
+  private double variance = 0;
+  private int width = 0;
+  private int bucketNumber = 0;
+  private int detect = 0;
   private int numberDetections = 0;
-  private int DetectTwice = 0;
+  private int detectTwice = 0;
   private boolean blnBucketDeleted = false;
-  private int BucketNumberMAX = 0;
+  private int bucketNumberMax = 0;
   private int mintMinWinLength = 5;
-
   private List listRowBuckets;
 
   public boolean getChange() {
@@ -285,11 +252,11 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
   }
 
   public int getBucketsUsed() {
-    return BucketNumberMAX;
+    return bucketNumberMax;
   }
 
   public int getWidth() {
-    return WIDTH;
+    return width;
   }
 
   public void setClock(int intClock) {
@@ -305,7 +272,7 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
   }
 
   public boolean getDetect() {
-    return (Detect == number);
+    return (detect == number);
   }
 
   public int getNumberDetections() {
@@ -313,89 +280,87 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
   }
 
   public double getTotal() {
-    return TOTAL;
+    return total;
   }
 
   public double getEstimation() {
-    return TOTAL / WIDTH;
+    return total / width;
   }
 
   public double getVariance() {
-    return VARIANCE / WIDTH;
+    return variance / width;
   }
 
   public double getWidthT() {
     return mdblWidth;
   }
 
-  /*
-  public int measureByteSize() {
-  	int size = (int) SizeOf.sizeOf(this);
-  	size += listRowBuckets.measureByteSize();
-  	return size;
-  }
-  */
-
+  //Init buckets
   private void initBuckets() {
-    // Init buckets
     listRowBuckets = new List();
     lastBucketRow = 0;
-    TOTAL = 0;
-    VARIANCE = 0;
-    WIDTH = 0;
-    BucketNumber = 0;
+    total = 0;
+    variance = 0;
+    width = 0;
+    bucketNumber = 0;
   }
 
-  private void insertElement(double Value) {
-    WIDTH++;
-    insertElementBucket(0, Value, listRowBuckets.head());
+  private void insertElement(double value) {
+    width++;
+    insertElementBucket(value, listRowBuckets.head());
     double incVariance = 0;
-    if (WIDTH > 1)
+    if (width > 1) {
       incVariance =
-          (WIDTH - 1) * (Value - TOTAL / (WIDTH - 1)) * (Value - TOTAL / (WIDTH - 1)) / WIDTH;
-    VARIANCE += incVariance;
-    TOTAL += Value;
+              (width - 1) * (value - total / (width - 1)) * (value - total / (width - 1)) / width;
+    }
+    variance += incVariance;
+    total += value;
     compressBuckets();
   }
 
-  private void insertElementBucket(double Variance, double Value, ListItem Node) {
+  private void insertElementBucket(double value, ListItem node) {
     // Insert new bucket
-    Node.insertBucket(Value, Variance);
-    BucketNumber++;
-    if (BucketNumber > BucketNumberMAX) BucketNumberMAX = BucketNumber;
+    node.insertBucket(value, 0);
+    bucketNumber++;
+    if (bucketNumber > bucketNumberMax) {
+      bucketNumberMax = bucketNumber;
+    }
   }
 
-  private int bucketSize(int Row) {
-    return (int) Math.pow(2, Row);
+  private int bucketSize(int row) {
+    return (int) Math.pow(2, row);
   }
 
+  // LIST
+  // Update statistics
   public int deleteElement() {
-    // LIST
-    // Update statistics
-    ListItem Node;
-    Node = listRowBuckets.tail();
+    ListItem node;
+    node = listRowBuckets.tail();
     int n1 = bucketSize(lastBucketRow);
-    WIDTH -= n1;
-    TOTAL -= Node.Total(0);
-    double u1 = Node.Total(0) / n1;
+    width -= n1;
+    total -= node.total(0);
+    double u1 = node.total(0) / n1;
     double incVariance =
-        Node.Variance(0) + n1 * WIDTH * (u1 - TOTAL / WIDTH) * (u1 - TOTAL / WIDTH) / (n1 + WIDTH);
-    VARIANCE -= incVariance;
+        node.variance(0) + n1 * width * (u1 - total / width) * (u1 - total / width) / (n1 + width);
+    variance -= incVariance;
 
     // Delete Bucket
-    Node.RemoveBucket();
-    BucketNumber--;
-    if (Node.bucketSizeRow == 0) {
+    node.removeBucket();
+    bucketNumber--;
+    if (node.bucketSizeRow == 0) {
       listRowBuckets.removeFromTail();
       lastBucketRow--;
     }
     return n1;
   }
 
+  // Traverse the list of buckets in increasing order
   public void compressBuckets() {
-    // Traverse the list of buckets in increasing order
-    int n1, n2;
-    double u2, u1, incVariance;
+    int n1;
+    int n2;
+    double u1;
+    double u2;
+    double incVariance;
     ListItem cursor;
     ListItem nextNode;
     cursor = listRowBuckets.head();
@@ -404,7 +369,7 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
       // Find the number of buckets in a row
       int k = cursor.bucketSizeRow;
       // If the row is full, merge buckets
-      if (k == MAXBUCKETS + 1) {
+      if (k == maxBuckets + 1) {
         nextNode = cursor.next();
         if (nextNode == null) {
           listRowBuckets.addToTail();
@@ -413,25 +378,28 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
         }
         n1 = bucketSize(i);
         n2 = bucketSize(i);
-        u1 = cursor.Total(0) / n1;
-        u2 = cursor.Total(1) / n2;
+        u1 = cursor.total(0) / n1;
+        u2 = cursor.total(1) / n2;
         incVariance = n1 * n2 * (u1 - u2) * (u1 - u2) / (n1 + n2);
 
         nextNode.insertBucket(
-            cursor.Total(0) + cursor.Total(1),
-            cursor.Variance(0) + cursor.Variance(1) + incVariance);
-        BucketNumber++;
+            cursor.total(0) + cursor.total(1),
+            cursor.variance(0) + cursor.variance(1) + incVariance);
+        bucketNumber++;
         cursor.compressBucketsRow(2);
-        if (nextNode.bucketSizeRow <= MAXBUCKETS) break;
-      } else break;
+        if (nextNode.bucketSizeRow <= maxBuckets) {
+          break;
+        }
+      } else {
+        break;
+      }
       cursor = cursor.next();
       i++;
     } while (cursor != null);
   }
 
-  // public boolean setInput(double intEntrada) { return setInput(intEntrada,mdbldelta) ; }
   public int setInput(double intEntrada, double delta) {
-    int ret_k = -1; // return value
+    int returnValue = -1; // return value
     boolean blnChange = false;
     boolean blnExit = false;
     ListItem cursor;
@@ -441,20 +409,17 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
     insertElement(intEntrada);
     blnBucketDeleted = false;
     // 3)Reduce  window
-    // if(number % mintClock==0 && getWidth() > mintMinimLongitudWindow ){
     if (getWidth() > mintMinimLongitudWindow) {
-      boolean blnReduceWidth = true; // Diference
-
-      while (blnReduceWidth) // Diference
-      {
-        blnReduceWidth = false; // Diference
+      boolean blnReduceWidth = true;
+      while (blnReduceWidth) {
+        blnReduceWidth = false;
         blnExit = false;
         int n0 = 0;
-        int n1 = WIDTH;
+        int n1 = width;
         double u0 = 0;
         double u1 = getTotal();
         double v0 = 0;
-        double v1 = VARIANCE;
+        double v1 = variance;
         double n2 = 0;
         double u2 = 0;
 
@@ -463,49 +428,40 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
         do {
           for (int k = 0; k <= (cursor.bucketSizeRow - 1); k++) {
             n2 = bucketSize(i);
-            u2 = cursor.Total(k);
-            if (n0 > 0)
-              v0 +=
-                  cursor.Variance(k)
+            u2 = cursor.total(k);
+            if (n0 > 0) {
+              v0 += cursor.variance(k)
                       + (double) n0 * n2 * (u0 / n0 - u2 / n2) * (u0 / n0 - u2 / n2) / (n0 + n2);
-            if (n1 > 0)
-              v1 -=
-                  cursor.Variance(k)
+            }
+            if (n1 > 0) {
+              v1 -= cursor.variance(k)
                       + (double) n1 * n2 * (u1 / n1 - u2 / n2) * (u1 / n1 - u2 / n2) / (n1 + n2);
-
+            }
             n0 += bucketSize(i);
             n1 -= bucketSize(i);
-            u0 += cursor.Total(k);
-            u1 -= cursor.Total(k);
+            u0 += cursor.total(k);
+            u1 -= cursor.total(k);
 
             if (i == 0 && k == cursor.bucketSizeRow - 1) {
               blnExit = true;
               break;
             }
             double absvalue = (double) (u0 / n0) - (u1 / n1); // n1<WIDTH-mintMinWinLength-1
-            if ((n1 > mintMinWinLength + 1 && n0 > mintMinWinLength + 1)
-                && // Diference NEGATIVE
-                // if(
-                blnCutexpression(n0, n1, u0, u1, v0, v1, absvalue, delta)) {
+            if ((n1 > mintMinWinLength + 1 && n0 > mintMinWinLength + 1) // Diference NEGATIVE
+                && blnCutexpression(n0, n1, u0, u1, v0, v1, absvalue, delta)) {
               blnBucketDeleted = true;
-              Detect = number;
-
-              if (Detect == 0) {
-                Detect = number;
-                // blnFirst=true;
-                // blnWarning=true;
-              } else if (DetectTwice == 0) {
-                DetectTwice = number;
-                // blnDetect=true;
+              detect = number;
+              if (detect == 0) {
+                detect = number;
+              } else if (detectTwice == 0) {
+                detectTwice = number;
               }
               blnReduceWidth = true; // Diference
               blnChange = true;
-              ret_k = n0;
+              returnValue = n0;
               if (getWidth() > 0) { // Reduce width of the window
-                // while (n0>0)  // Diference NEGATIVE
-                int remove_number = deleteElement();
-                n0 -= remove_number;
-
+                int removeNumber = deleteElement();
+                n0 -= removeNumber;
                 blnExit = true;
                 break;
               }
@@ -518,45 +474,47 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
     } // End if
 
     mdblWidth += getWidth();
-    if (blnChange) numberDetections++;
-    return blnChange ? WIDTH - ret_k : -1;
+    if (blnChange) {
+      numberDetections++;
+    }
+    return blnChange ? width - returnValue : -1;
   }
 
   private boolean blnCutexpression(
-      int n0, int n1, double u0, double u1, double v0, double v1, double absvalue, double delta) {
+          int n0, int n1, double u0, double u1,
+          double v0, double v1, double absvalue, double delta) {
     int n = getWidth();
     double dd = Math.log(2 * Math.log(n) / delta);
     // Formula Gener 2008
     double v = getVariance();
-    double m =
-        ((double) 1 / ((n0 - mintMinWinLength + 1))) + ((double) 1 / ((n1 - mintMinWinLength + 1)));
+    double m = ((double) 1 / ((n0 - mintMinWinLength + 1)))
+            + ((double) 1 / ((n1 - mintMinWinLength + 1)));
     double epsilon = Math.sqrt(2 * m * v * dd) + (double) 2 / 3 * dd * m;
-
     return (Math.abs(absvalue) > epsilon);
   }
 
   public UDTFADWIN() {
     mdbldelta = delta;
     initBuckets();
-    Detect = 0;
+    detect = 0;
     numberDetections = 0;
-    DetectTwice = 0;
+    detectTwice = 0;
   }
 
   public UDTFADWIN(double d) {
     mdbldelta = d;
     initBuckets();
-    Detect = 0;
+    detect = 0;
     numberDetections = 0;
-    DetectTwice = 0;
+    detectTwice = 0;
   }
 
   public UDTFADWIN(int cl) {
     mdbldelta = delta;
     initBuckets();
-    Detect = 0;
+    detect = 0;
     numberDetections = 0;
-    DetectTwice = 0;
+    detectTwice = 0;
     mintClock = cl;
   }
 
@@ -564,12 +522,10 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
     return "ADWIN;;";
   }
 
-  public void setW(int W0) {}
+  public void setW(int w) {}
 
   private double delta;
   private String output;
-  private int windowsize;
-  private int minmiumwindow;
   private int count = -1;
 
   @Override
@@ -586,8 +542,8 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
         .setOutputDataType(TSDataType.INT32);
     this.delta = udfParameters.getDoubleOrDefault("delta", 0.01);
     // this.output=udfParameters.getStringOrDefault("output","drift");
-    this.windowsize = udfParameters.getIntOrDefault("windowsize", 200);
-    this.minmiumwindow = udfParameters.getIntOrDefault("subwindow", 50);
+    int windowsize = udfParameters.getIntOrDefault("windowsize", 200);
+    int minmiumwindow = udfParameters.getIntOrDefault("subwindow", 50);
     mintMinimLongitudWindow = windowsize;
     mintMinWinLength = minmiumwindow - 2;
   }
@@ -603,12 +559,11 @@ public class UDTFADWIN implements UDTF { // extends Estimator {
     int k = setInput(Util.getValueAsDouble(row), delta);
     if (k > 0) {
       // collector.putInt(row.getTime(),1);
-      if (labellist.get(count - k) == 0) collector.putInt(timelist.get(count - k), 1);
+      if (labellist.get(count - k) == 0) {
+        collector.putInt(timelist.get(count - k), 1);
+      }
       labellist.set(count - k, 1);
     }
-    /*		else if(output.equalsIgnoreCase("all")){
-    	collector.putInt(row.getTime(),0);
-    }*/
   }
 
   @Override

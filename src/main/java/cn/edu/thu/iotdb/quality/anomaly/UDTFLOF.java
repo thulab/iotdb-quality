@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.anomaly;
 
+import cn.edu.thu.iotdb.quality.util.Util;
+import java.util.Arrays;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -24,42 +27,46 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import cn.edu.thu.iotdb.quality.util.Util;
-
-import java.util.Arrays;
-
 public class UDTFLOF implements UDTF {
   private double threshold;
-  private int k;
+  private int multipleK;
   private int dim;
   private String method = "default";
-  private int windowsize;
+  private int windowSize;
 
-  int Partition(Double[][] A, int left, int right) {
-    Double key = A[left][1];
-    Double key2 = A[left][0];
+  int partition(Double[][] a, int left, int right) {
+    Double key = a[left][1];
+    Double key2 = a[left][0];
     while (left < right) {
-      while (left < right && A[right][1] >= key) right--;
-      if (left < right) {
-        A[left][0] = A[right][0];
-        A[left][1] = A[right][1];
+      while (left < right && a[right][1] >= key) {
+        right--;
       }
-      while (left < right && A[left][1] <= key) left++;
       if (left < right) {
-        A[right][0] = A[left][0];
-        A[right][1] = A[left][1];
+        a[left][0] = a[right][0];
+        a[left][1] = a[right][1];
+      }
+      while (left < right && a[left][1] <= key) {
+        left++;
+      }
+      if (left < right) {
+        a[right][0] = a[left][0];
+        a[right][1] = a[left][1];
       }
     }
-    A[left][0] = key2;
-    A[left][1] = key;
+    a[left][0] = key2;
+    a[left][1] = key;
     return left;
   }
 
-  Double findKthNum(Double[][] A, int left, int right, int k) {
-    int index = Partition(A, left, right);
-    if (index + 1 == k) return A[index][0];
-    else if (index + 1 < k) return findKthNum(A, index + 1, right, k);
-    else return findKthNum(A, left, index - 1, k);
+  Double findKthNum(Double[][] a, int left, int right, int k) {
+    int index = partition(a, left, right);
+    if (index + 1 == k) {
+      return a[index][0];
+    } else if (index + 1 < k) {
+      return findKthNum(a, index + 1, right, k);
+    } else {
+      return findKthNum(a, left, index - 1, k);
+    }
   }
 
   public double getLOF(Double[][] knn, Double[] x, int length) {
@@ -68,7 +75,7 @@ public class UDTFLOF implements UDTF {
       Double[] o = knn[i];
       sum += getLocDens(knn, o, length) / getLocDens(knn, x, length);
     }
-    return sum / k;
+    return sum / multipleK;
   }
 
   public double getLocDens(Double[][] knn, Double[] x, int length) {
@@ -79,7 +86,7 @@ public class UDTFLOF implements UDTF {
       Double[] o = knn[i];
       sum += reachDist(o, x, nnk);
     }
-    return sum / k;
+    return sum / multipleK;
   }
 
   public Double[] findKthPoint(Double[][] knn, Double[] x, int length) {
@@ -90,7 +97,7 @@ public class UDTFLOF implements UDTF {
       d[i][0] = (double) i;
       d[i][1] = dist(knn[i], x);
     }
-    index = (int) (double) (findKthNum(d, 0, length - 1, k + 1));
+    index = (int) (double) (findKthNum(d, 0, length - 1, multipleK + 1));
     return knn[index];
   }
 
@@ -99,12 +106,10 @@ public class UDTFLOF implements UDTF {
   }
 
   private double dist(Double[] nnk, Double[] x) {
-
     double sum = 0;
     for (int i = 0; i < nnk.length; i++) {
       sum += (nnk[i] - x[i]) * (nnk[i] - x[i]);
     }
-
     return Math.sqrt(sum);
   }
 
@@ -121,11 +126,10 @@ public class UDTFLOF implements UDTF {
         .setAccessStrategy(
             new SlidingSizeWindowAccessStrategy(udfParameters.getIntOrDefault("window", 10000)))
         .setOutputDataType(TSDataType.DOUBLE);
-    this.k = udfParameters.getIntOrDefault("k", 3);
-    // this.threshold = udfParameters.getDoubleOrDefault("threshold",1);
+    this.multipleK = udfParameters.getIntOrDefault("k", 3);
     this.dim = udfParameters.getPaths().size();
     this.method = udfParameters.getStringOrDefault("method", "default");
-    this.windowsize = udfParameters.getIntOrDefault("windowsize", 5);
+    this.windowSize = udfParameters.getIntOrDefault("windowsize", 5);
   }
 
   @Override
@@ -150,7 +154,7 @@ public class UDTFLOF implements UDTF {
         i++;
         row++;
       }
-      if (size > k) {
+      if (size > multipleK) {
         double[] lof = new double[size];
         for (int m = 0; m < size; m++) {
           try {
@@ -159,16 +163,12 @@ public class UDTFLOF implements UDTF {
           } catch (Exception e) {
             throw new Exception(e.toString() + " " + Arrays.toString(e.getStackTrace()) + " " + m);
           }
-          /*if (lof[m] > threshold) {
-              collector.putDouble(timestamp[m], lof[m]);
-          }*/
-
         }
       }
     } else if (this.method.equals("series")) {
-      int size = rowWindow.windowSize() - windowsize + 1;
+      int size = rowWindow.windowSize() - windowSize + 1;
       if (size > 0) {
-        Double[][] knn = new Double[size][windowsize];
+        Double[][] knn = new Double[size][windowSize];
         long[] timestamp = new long[rowWindow.windowSize()];
         double temp;
         int i = 0;
@@ -177,7 +177,7 @@ public class UDTFLOF implements UDTF {
           timestamp[i] = rowWindow.getRow(row).getTime();
           if (!rowWindow.getRow(row).isNull(0)) {
             temp = Util.getValueAsDouble(rowWindow.getRow(row), 0);
-            for (int p = 0; p < windowsize; p++) {
+            for (int p = 0; p < windowSize; p++) {
               if (i - p < 0) {
                 break;
               }
@@ -192,7 +192,7 @@ public class UDTFLOF implements UDTF {
           i++;
           row++;
         }
-        if (size > k) {
+        if (size > multipleK) {
           double[] lof = new double[size];
           for (int m = 0; m < size; m++) {
             try {
@@ -202,10 +202,6 @@ public class UDTFLOF implements UDTF {
               throw new Exception(
                   e.toString() + " " + Arrays.toString(e.getStackTrace()) + " " + m);
             }
-            /*if (lof[m] > threshold) {
-                collector.putDouble(timestamp[m], lof[m]);
-            }*/
-
           }
         }
       }

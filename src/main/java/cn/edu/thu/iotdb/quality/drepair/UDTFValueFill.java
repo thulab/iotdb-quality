@@ -13,43 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.drepair;
 
+import cn.edu.thu.iotdb.quality.drepair.util.ARFill;
+import cn.edu.thu.iotdb.quality.drepair.util.LikelihoodFill;
+import cn.edu.thu.iotdb.quality.drepair.util.LinearFill;
+import cn.edu.thu.iotdb.quality.drepair.util.MeanFill;
+import cn.edu.thu.iotdb.quality.drepair.util.PreviousFill;
+import cn.edu.thu.iotdb.quality.drepair.util.ScreenFill;
+import cn.edu.thu.iotdb.quality.drepair.util.ValueFill;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
-import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
-import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import cn.edu.thu.iotdb.quality.drepair.util.*;
-
-import java.util.Locale;
-
-/** @author Zhang Xiaojian */
-// This function fills NaN of input series.
+/**
+ * 给所有的UDTF的填补函数设定统一的接口，方便调用。
+ *
+ * @author Zhang Xiaojian
+ */
 public class UDTFValueFill implements UDTF {
-
   private String method;
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesDataType(
-            0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
-        .validate(
-            x ->
-                ((String) x).equalsIgnoreCase("previous")
-                    || ((String) x).equalsIgnoreCase("linear")
-                    || ((String) x).equalsIgnoreCase("mean")
-                    || ((String) x).equalsIgnoreCase("ar")
-                    || ((String) x).equalsIgnoreCase("screen")
-                    || ((String) x).equalsIgnoreCase("likelihood"),
-            "Illegal method.",
-            validator.getParameters().getStringOrDefault("method", "linear"));
-  }
 
   @Override
   public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
@@ -61,29 +48,21 @@ public class UDTFValueFill implements UDTF {
 
   @Override
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
-    ValueFill vf = null;
-    method = method.toLowerCase(Locale.ROOT);
-    switch (method) {
-      case "previous":
-        vf = new PreviousFill(rowWindow.getRowIterator());
-        break;
-      case "linear":
-        vf = new LinearFill(rowWindow.getRowIterator());
-        break;
-      case "mean":
-        vf = new MeanFill(rowWindow.getRowIterator());
-        break;
-      case "ar":
-        vf = new ARFill(rowWindow.getRowIterator());
-        break;
-      case "screen":
-        vf = new ScreenFill(rowWindow.getRowIterator());
-        break;
-      case "likelihood":
-        vf = new LikelihoodFill(rowWindow.getRowIterator());
-        break;
-      default:
-        return;
+    ValueFill vf;
+    if ("previous".equalsIgnoreCase(method)) {
+      vf = new PreviousFill(rowWindow.getRowIterator());
+    } else if ("linear".equalsIgnoreCase(method)) {
+      vf = new LinearFill(rowWindow.getRowIterator());
+    } else if ("mean".equalsIgnoreCase(method)) {
+      vf = new MeanFill(rowWindow.getRowIterator());
+    } else if ("ar".equalsIgnoreCase(method)) {
+      vf = new ARFill(rowWindow.getRowIterator());
+    } else if ("screen".equalsIgnoreCase(method)) {
+      vf = new ScreenFill(rowWindow.getRowIterator());
+    } else if ("likelihood".equalsIgnoreCase(method)) {
+      vf = new LikelihoodFill(rowWindow.getRowIterator());
+    } else {
+      throw new Exception("Illegal method");
     }
     vf.fill();
     double[] repaired = vf.getFilled();
@@ -110,9 +89,7 @@ public class UDTFValueFill implements UDTF {
         }
         break;
       default:
+        throw new Exception();
     }
   }
-
-  @Override
-  public void terminate(PointCollector collector) throws Exception {}
 }

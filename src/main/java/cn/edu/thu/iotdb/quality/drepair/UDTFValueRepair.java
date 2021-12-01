@@ -18,42 +18,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.iotdb.quality.drepair;
 
-import org.apache.iotdb.db.query.udf.api.UDTF;
-import org.apache.iotdb.db.query.udf.api.access.RowWindow;
-import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
-import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
-import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
-import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
-import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
-import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+package cn.edu.thu.iotdb.quality.drepair;
 
 import cn.edu.thu.iotdb.quality.drepair.util.LsGreedy;
 import cn.edu.thu.iotdb.quality.drepair.util.Screen;
 import cn.edu.thu.iotdb.quality.drepair.util.ValueRepair;
+import org.apache.iotdb.db.query.udf.api.UDTF;
+import org.apache.iotdb.db.query.udf.api.access.RowWindow;
+import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
+import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
+import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 
-/** @author Wang Haoyu */
-// This function repairs anomaly points of input series.
-//
+/**
+ * 用于修复时间序列异常值的UDTF：目前已支持Screen和LsGreedy
+ *
+ * @author Wang Haoyu
+ */
 public class UDTFValueRepair implements UDTF {
-
   String method;
-  double minSpeed, maxSpeed;
-  double center, sigma;
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesDataType(
-            0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
-        .validate(
-            x ->
-                ((String) x).equalsIgnoreCase("screen")
-                    || ((String) x).equalsIgnoreCase("lsgreedy"),
-            "Illegal method.",
-            validator.getParameters().getStringOrDefault("method", "screen"));
-  }
+  double minSpeed;
+  double maxSpeed;
+  double center;
+  double sigma;
 
   @Override
   public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
@@ -69,8 +57,8 @@ public class UDTFValueRepair implements UDTF {
 
   @Override
   public void transform(RowWindow rowWindow, PointCollector collector) throws Exception {
-    // set repair method and parameters
-    ValueRepair vr = null;
+    // 设置修复方法及参数
+    ValueRepair vr;
     if ("screen".equalsIgnoreCase(method)) {
       Screen screen = new Screen(rowWindow.getRowIterator());
       if (!Double.isNaN(minSpeed)) {
@@ -119,7 +107,4 @@ public class UDTFValueRepair implements UDTF {
         throw new Exception();
     }
   }
-
-  @Override
-  public void terminate(PointCollector collector) throws Exception {}
 }

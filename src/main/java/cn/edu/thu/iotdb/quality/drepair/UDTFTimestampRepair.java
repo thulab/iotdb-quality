@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.drepair;
 
+import cn.edu.thu.iotdb.quality.drepair.util.TimestampRepair;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -24,12 +26,8 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import cn.edu.thu.iotdb.quality.drepair.util.TimestampRepair;
-
 public class UDTFTimestampRepair implements UDTF {
-
   String intervalMethod;
-  String startPointMethod;
   int interval;
   int intervalMode;
 

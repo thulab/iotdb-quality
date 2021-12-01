@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 iotdb-quality developer group (iotdb-quality@protonmail.com)
+ * Copyright © 2021 thulab (iotdb-quality@protonmail.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.anomaly;
 
+import cn.edu.thu.iotdb.quality.util.Util;
+import com.google.common.math.Quantiles;
+import java.util.ArrayList;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -22,11 +26,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import cn.edu.thu.iotdb.quality.util.Util;
-import com.google.common.math.Quantiles;
-
-import java.util.ArrayList;
 
 /*
    流式转换需用户提供Q1与Q3，全局转换则不需要
@@ -41,15 +40,15 @@ public class UDTFIQR implements UDTF {
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
-      throws Exception {
+          throws Exception {
     value.clear();
     timestamp.clear();
     q1 = 0.0d;
     q3 = 0.0d;
     iqr = 0.0d;
     udtfConfigurations
-        .setAccessStrategy(new RowByRowAccessStrategy())
-        .setOutputDataType(TSDataType.DOUBLE);
+            .setAccessStrategy(new RowByRowAccessStrategy())
+            .setOutputDataType(TSDataType.DOUBLE);
     method = udfParameters.getStringOrDefault("method", "batch");
     if (method.equalsIgnoreCase("stream")) {
       q1 = udfParameters.getDouble("q1");
