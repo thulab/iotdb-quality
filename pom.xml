@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.edu.thu.dquality</groupId>
     <artifactId>iotdb-quality</artifactId>
     <version>2.0.0-SNAPSHOT</version>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.javacsv</groupId>
@@ -68,108 +58,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>4.1</version>
-                <configuration>
-                    <properties>
-                        <owner>thulab</owner>
-                        <email>iotdb-quality@protonmail.com</email>
-                        <year>2021</year>
-                    </properties>
-                    <licenseSets>
-                        <licenseSet>
-                            <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-                            <excludes>
-                                <exclude>**/README</exclude>
-                                <exclude>src/test/resources/**</exclude>
-                                <exclude>src/main/resources/**</exclude>
-                                <exclude>docs/**</exclude>
-                                <exclude>download/**</exclude>
-                                <exclude>tools/**</exclude>
-                                <exclude>target/**</exclude>
-                                <exclude>**/*.md</exclude>
-                                <exclude>**/*.xml</exclude>
-                                <exclude>**/*.csv</exclude>
-                                <exclude>**/*.sh</exclude>
-                                <exclude>**/*.json</exclude>
-                            </excludes>
-                        </licenseSet>
-                    </licenseSets>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>license-check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                    <execution>
-                        <id>license-format</id>
-                        <goals>
-                            <goal>format</goal>
-                        </goals>
-                        <phase>clean</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.17.4</version>
-                <configuration>
-                    <formats>
-                        <!-- you can define as many formats as you want, each is independent -->
-                        <format>
-                            <!-- define the files to apply to -->
-                            <includes>
-                                <include>*.md</include>
-                                <include>.gitignore</include>
-                            </includes>
-                            <!-- define the steps to apply to those files -->
-                            <trimTrailingWhitespace/>
-                            <endWithNewline/>
-                            <indent>
-                                <tabs>true</tabs>
-                                <spacesPerTab>4</spacesPerTab>
-                            </indent>
-                        </format>
-                    </formats>
-                    <!-- define a language-specific format -->
-                    <java>
-                        <!-- no need to specify files, inferred automatically, but you can if you want -->
-                        <!-- apply a specific flavor of google-java-format and reflow long strings -->
-                        <googleJavaFormat>
-                            <version>1.8</version>                      <!-- optional -->
-                            <style>GOOGLE</style>                       <!-- or AOSP (optional) -->
-                            <reflowLongStrings>true</reflowLongStrings> <!-- optional (requires at least 1.8) -->
-                            <!-- optional: custom group artifact (you probably don't need this) -->
-                            <groupArtifact>com.google.googlejavaformat:google-java-format</groupArtifact>
-                        </googleJavaFormat>
-                        <importOrder>
-                            <order>org.apache.iotdb,org.apache.commons,,javax,java,\#</order>
-                        </importOrder>
-                    </java>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>spotless-check</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>spotless-apply</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>apply</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
@@ -207,8 +95,42 @@
                 <configuration>
                     <classpathScope>test</classpathScope>
                 </configuration>
+            </plugin>               
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.11</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <proguardVersion>5.3.3</proguardVersion>
+                    <injar>${project.build.finalName}-jar-with-dependencies-for-pg.jar</injar>
+                    <outjar>${project.build.finalName}-jar-with-dependencies.jar</outjar>
+                    <proguardInclude>${project.basedir}/conf/proguard.cfg</proguardInclude>
+                    <libs>
+                        <!-- Include main JAVA library required.-->
+                        <lib>${java.home}/lib/rt.jar</lib>
+                    </libs>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>6.2.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
-
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 </project>
