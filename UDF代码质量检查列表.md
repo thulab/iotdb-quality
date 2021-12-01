@@ -54,7 +54,7 @@ http://iotdb.apache.org/zh/UserGuide/Master/Advanced-Features/UDF-User-Defined-F
 
 ##### ii. `validate()`
 
-​	根据用户手册和设计文档，确保该函数验证数据类型合规。验证数值类型数据时，对非数值输入抛出`util.NoNumberException`。对不合法参数使用
+​	根据用户手册和设计文档，确保该函数验证数据类型合规。对不合法参数使用
 
 ```
 validator.validate(
@@ -81,15 +81,20 @@ validator.validate(
 
 #### 1.注释
 
-​	使用如下模板：
+​	将已有注释修改为英文。以annotation记号标注的注释可以暂时不修改。
+
+​	对各UDF，使用如下模板介绍功能：
 
 ```
-/**
-*@ClassName     ${NAME}
-*@Description   TODO
-*@Author
-*@Version
-*/
+/** This function ... */
+```
+
+​	该注释放置在所有import语句后。
+
+​	对于非UDF类，在相同位置使用如下模板介绍功能：
+
+```
+/** This class ... */
 ```
 
 #### 2.命名
@@ -109,3 +114,5 @@ validator.validate(
 #### 2.为UDF编写的依赖项
 
 ​	暂时统一移动至对应package下的util文件夹中。部分类可能需要规范接口。
+
+​	UDF函数内部只保留UDTF规定的5个方法和使用的变量。其它方法均移动到package下的util文件夹；跨package使用的方法，可以放到最外层的util文件夹下。
