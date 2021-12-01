@@ -108,3 +108,5 @@ validator.validate(
 #### 2.为UDF编写的依赖项
 
 ​	暂时统一移动至对应package下的util文件夹中。部分类可能需要规范接口。
+
+​	UDF函数内部只保留UDTF规定的5个方法和使用的变量。其它方法均移动到package下的util文件夹；跨package使用的方法，可以放到最外层的util文件夹下。
