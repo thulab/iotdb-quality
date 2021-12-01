@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.util;
+package cn.edu.thu.iotdb.quality;
 
 import java.util.Arrays;
 import java.util.HashMap;

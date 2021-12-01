@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.dprofile.util;
+package cn.edu.thu.iotdb.quality.dprofile;
 
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.FloatArrayList;

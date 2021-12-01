@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.util;
+package cn.edu.thu.iotdb.quality;
 
 import org.apache.commons.math3.analysis.function.Max;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;

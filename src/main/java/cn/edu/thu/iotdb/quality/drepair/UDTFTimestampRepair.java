@@ -1,6 +1,5 @@
 package cn.edu.thu.iotdb.quality.drepair;
 
-import cn.edu.thu.iotdb.quality.drepair.util.TimestampRepair;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -50,27 +49,25 @@ public class UDTFTimestampRepair implements UDTF {
         //设置修复方法及参数
         TimestampRepair ts = new TimestampRepair(rowWindow.getRowIterator(), intervalMode, 2);
         ts.dpRepair();
-        long[] timestamp=ts.getRepaired();
-        double[] value=ts.getRepairedValue();
         switch (rowWindow.getDataType(0)) {
             case DOUBLE:
-                for (int i = 0; i < timestamp.length; i++) {
-                    collector.putDouble(timestamp[i], value[i]);
+                for (int i = 0; i < ts.repaired.length; i++) {
+                    collector.putDouble(ts.repaired[i], ts.repairedValue[i]);
                 }
                 break;
             case FLOAT:
-                for (int i = 0; i < timestamp.length; i++) {
-                    collector.putFloat(timestamp[i], (float) value[i]);
+                for (int i = 0; i < ts.repaired.length; i++) {
+                    collector.putFloat(ts.repaired[i], (float) ts.repairedValue[i]);
                 }
                 break;
             case INT32:
-                for (int i = 0; i < timestamp.length; i++) {
-                    collector.putInt(timestamp[i], (int) value[i]);
+                for (int i = 0; i < ts.repaired.length; i++) {
+                    collector.putInt(ts.repaired[i], (int) ts.repairedValue[i]);
                 }
                 break;
             case INT64:
-                for (int i = 0; i < timestamp.length; i++) {
-                    collector.putLong(timestamp[i], (long) value[i]);
+                for (int i = 0; i < ts.repaired.length; i++) {
+                    collector.putLong(ts.repaired[i], (long) ts.repairedValue[i]);
                 }
                 break;
             default:

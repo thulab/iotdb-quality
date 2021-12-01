@@ -5,7 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.series;
 
-import cn.edu.thu.iotdb.quality.util.Util;
+import cn.edu.thu.iotdb.quality.Util;
 import java.io.IOException;
 import java.util.ArrayList;
 import org.apache.commons.lang3.tuple.Pair;

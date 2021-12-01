@@ -9,11 +9,12 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-import cn.edu.thu.iotdb.quality.util.LinearRegression;
-import cn.edu.thu.iotdb.quality.util.Util;
+import cn.edu.thu.iotdb.quality.LinearRegression;
+import cn.edu.thu.iotdb.quality.Util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 
 public class UDTFSegment implements UDTF {
 

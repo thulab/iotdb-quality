@@ -1,6 +1,6 @@
-package cn.edu.thu.iotdb.quality.drepair.util;
+package cn.edu.thu.iotdb.quality.drepair;
 
-import cn.edu.thu.iotdb.quality.util.Util;
+import cn.edu.thu.iotdb.quality.Util;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

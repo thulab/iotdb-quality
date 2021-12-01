@@ -1,6 +1,5 @@
 package cn.edu.thu.iotdb.quality.drepair;
 
-import cn.edu.thu.iotdb.quality.drepair.util.*;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;

@@ -1,4 +1,4 @@
-package cn.edu.thu.iotdb.quality.dprofile;
+package cn.edu.thu.iotdb.quality.anomaly;
 
 import cn.edu.thu.iotdb.quality.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
@@ -9,41 +9,53 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-public class UDAFStddev implements UDTF {
-
-    private long count = 0;
-    private double sum_x_2 = 0.0;
-    private double sum_x_1 = 0.0;
-
+public class UDTFHBOS implements UDTF {
+    private int[][] bucket;
+    private double[] score;
+    private double[] gap;
+    private int count;
+    private double[] start;
+    private double[] end;
+    private int dim;
     @Override
     public void validate(UDFParameterValidator validator) throws Exception {
-        validator.validateInputSeriesNumber(1)
-                .validateInputSeriesDataType(0,
-                        TSDataType.INT32,
-                        TSDataType.INT64,
-                        TSDataType.FLOAT,
-                        TSDataType.DOUBLE);
-    }
 
+    }
+    //改用window读取
     @Override
     public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations) throws Exception {
         udtfConfigurations.setAccessStrategy(new RowByRowAccessStrategy())
-                .setOutputDataType(TSDataType.DOUBLE);
+                .setOutputDataType(TSDataType.INT32);
+        dim=udfParameters.getPaths().size();
+        String[] start_s=udfParameters.getString("start").split(",");
+        String[] end_s=udfParameters.getString("end").split(",");
+        count = udfParameters.getIntOrDefault("count", 1);
+        start=new double[dim];
+        end=new double[dim];
+        for(int i=0;i<dim;i++){
+            start[i]=Double.parseDouble(start_s[i]);
+            end[i]=Double.parseDouble(end_s[i]);
+            gap[i]=(end[i]-start[i])/count;
+        }
+        bucket = new int[dim][count];
     }
 
     @Override
     public void transform(Row row, PointCollector collector) throws Exception {
+        for (int i=0;i<dim;i++){
+
+        }
         double value = Util.getValueAsDouble(row);
         if (Double.isFinite(value)) {
-            this.count++;
-            this.sum_x_1 += value;
-            this.sum_x_2 += value * value;
+            //int id = Math.min(Math.max((int) Math.floor((value - start) / gap), 0), count - 1);
+            //bucket[id]++;
         }
     }
 
     @Override
     public void terminate(PointCollector collector) throws Exception {
-        collector.putDouble(0, Math.sqrt(this.sum_x_2 / this.count - Math.pow(this.sum_x_1 / this.count, 2)));
+        for (int i = 0; i < count; i++) {
+            //collector.putInt(i, bucket[i]);
+        }
     }
 }

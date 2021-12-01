@@ -5,7 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.dprofile;
 
-import cn.edu.thu.iotdb.quality.util.NoNumberException;
+import cn.edu.thu.iotdb.quality.NoNumberException;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;

@@ -5,7 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.dquality;
 
-import cn.edu.thu.iotdb.quality.util.Util;
+import cn.edu.thu.iotdb.quality.Util;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

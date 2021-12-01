@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cn.edu.thu.iotdb.quality.drepair.util;
+package cn.edu.thu.iotdb.quality.drepair;
 
-import cn.edu.thu.iotdb.quality.util.Util;
+import cn.edu.thu.iotdb.quality.Util;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality.frequency;
 
-import cn.edu.thu.iotdb.quality.util.Util;
+import cn.edu.thu.iotdb.quality.Util;
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;

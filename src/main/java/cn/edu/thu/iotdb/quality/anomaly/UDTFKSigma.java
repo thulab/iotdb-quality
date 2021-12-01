@@ -1,7 +1,7 @@
 package cn.edu.thu.iotdb.quality.anomaly;
 
-import cn.edu.thu.iotdb.quality.util.Util;
-import cn.edu.thu.iotdb.quality.util.Queue;
+import cn.edu.thu.iotdb.quality.Util;
+import cn.edu.thu.iotdb.quality.Queue;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
