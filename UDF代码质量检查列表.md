@@ -86,10 +86,16 @@ validator.validate(
 ​	对各UDF，使用如下模板介绍功能：
 
 ```
-// This function ...
+/** This function ... */
 ```
 
-​	说明：spotless会更正`/*...*/`的格式。使用双斜杠可以避免格式被修改。
+​	该注释放置在所有import语句后。
+
+​	对于非UDF类，在相同位置使用如下模板介绍功能：
+
+```
+/** This class ... */
+```
 
 #### 2.命名
 
