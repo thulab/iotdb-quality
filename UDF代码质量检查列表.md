@@ -10,6 +10,8 @@ http://www.apache.org/legal/resolved.html#category-x
 
 #### 3.数学计算工具优先使用math3
 
+#### 4.移除内部依赖项util.Queue
+
 ## 二、函数设计检查
 
 #### 1.UDF设计规范
@@ -52,11 +54,7 @@ http://iotdb.apache.org/zh/UserGuide/Master/Advanced-Features/UDF-User-Defined-F
 
 ​	除获得用户参数外，初始化所有变量。UDF如遇错误退出，会保留此前的数据，再次调用时不会新建对象，因此需避免该情况下出现错误结果。
 
-##### iv.`transform()`
-
-​	取数需进行类型转换时，使用`util.Util`中封装的接口。
-
-##### v. `beforeDestroy()`
+##### iv. `beforeDestroy()`
 
 ​	如函数存在构造对象，应清除释放内存。
 
@@ -83,12 +81,6 @@ http://iotdb.apache.org/zh/UserGuide/Master/Advanced-Features/UDF-User-Defined-F
 
 ​	将统一使用spotless与sonarcloud修改和检查。
 
-## 四、结构规范检查
-
-#### 1.测试内容
+## 四、测试函数
 
 ​	将目前代码中已有的测试函数全部转移至test文件夹下对应的类。
-
-#### 2.为UDF编写的依赖项
-
-​	暂时统一移动至对应package下的util文件夹中。部分类可能需要规范接口。
