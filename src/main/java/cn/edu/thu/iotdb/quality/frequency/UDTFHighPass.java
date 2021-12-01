@@ -29,22 +29,17 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.transform.DftNormalization;
-import org.apache.commons.math3.transform.FastFourierTransformer;
-import org.apache.commons.math3.transform.TransformType;
-
 import cn.edu.thu.iotdb.quality.util.Util;
+import org.jtransforms.fft.DoubleFFT_1D;
+import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
+import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 
-import java.util.ArrayList;
-
-/** @author Wang Haoyu */
-// This function offers a high-pass filter.
+/** This function filters high frequency components. */
 public class UDTFHighPass implements UDTF {
 
   private double wpass;
-  private final ArrayList<Double> valueList = new ArrayList<>();
-  private final ArrayList<Long> timeList = new ArrayList<>();
+  private final DoubleArrayList valueList = new DoubleArrayList();
+  private final LongArrayList timeList = new LongArrayList();
 
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
@@ -80,22 +75,26 @@ public class UDTFHighPass implements UDTF {
   @Override
   public void terminate(PointCollector collector) throws Exception {
     int n = valueList.size();
-    FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
-    Complex[] trans =
-        fft.transform(
-            valueList.stream().mapToDouble(Double::valueOf).toArray(), TransformType.FORWARD);
-    // discard low-frequency component
-    int m = (int) Math.floor(wpass * n / 2);
-    for (int i = 0; i <= m; i++) {
-      trans[i] = new Complex(0, 0);
-    }
-    for (int i = n - m; i < n; i++) {
-      trans[i] = new Complex(0, 0);
-    }
-    Complex[] result = fft.transform(trans, TransformType.INVERSE);
-    // output
+    DoubleFFT_1D fft = new DoubleFFT_1D(n);
+    // 准备数据，每个数占用两个double
+    double[] a = new double[2 * n];
     for (int i = 0; i < n; i++) {
-      collector.putDouble(timeList.get(i), result[i].getReal());
+      a[2 * i] = valueList.get(i);
+      a[2 * i + 1] = 0;
+    }
+    fft.complexForward(a);
+    // 清除低频成分
+    int m = (int) Math.floor(wpass * n / 2);
+    for (int i = 0; i <= 2 * m + 1; i++) {
+      a[i] = 0;
+    }
+    for (int i = 2 * (n - m); i < 2 * n; i++) {
+      a[i] = 0;
+    }
+    fft.complexInverse(a, true);
+    // 输出
+    for (int i = 0; i < n; i++) {
+      collector.putDouble(timeList.get(i), a[i * 2]);
     }
   }
 }

@@ -29,23 +29,19 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.transform.DftNormalization;
-import org.apache.commons.math3.transform.FastFourierTransformer;
-import org.apache.commons.math3.transform.TransformType;
-
 import cn.edu.thu.iotdb.quality.util.Util;
+import org.jtransforms.fft.DoubleFFT_1D;
+import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
+import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 
-/** @author Wang Haoyu */
-// This function output inverse FFT for an input series.
+/** This function do Inverse Fast Fourier Transform for input series. */
 public class UDTFIFFT implements UDTF {
 
-  private final ArrayList<Double> real = new ArrayList<>();
-  private final ArrayList<Double> imag = new ArrayList<>();
-  private final ArrayList<Integer> time = new ArrayList<>();
+  private final DoubleArrayList real = new DoubleArrayList();
+  private final DoubleArrayList imag = new DoubleArrayList();
+  private final IntArrayList time = new IntArrayList();
   private long start;
   private long interval;
 
@@ -80,9 +76,6 @@ public class UDTFIFFT implements UDTF {
     if (parameters.hasAttribute("start")) {
       this.start = format.parse(parameters.getString("start")).getTime();
     }
-    real.clear();
-    imag.clear();
-    time.clear();
   }
 
   @Override
@@ -99,16 +92,23 @@ public class UDTFIFFT implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    int length = real.size();
-    Complex[] input = new Complex[length];
-    for (int i = 0; i < length; i++) {
-      input[i] = new Complex(real.get(i), imag.get(i));
-    }
-    FastFourierTransformer fft = new FastFourierTransformer(DftNormalization.STANDARD);
-    Complex[] result = fft.transform(input, TransformType.INVERSE);
     int n = time.get(time.size() - 1) + 1;
+    double a[] = new double[n * 2];
+    for (int i = 0; i < time.size(); i++) {
+      int k = time.get(i);
+      a[k * 2] = real.get(i);
+      a[k * 2 + 1] = imag.get(i);
+      // 共轭
+      if (k > 0) {
+        k = n - k;
+        a[k * 2] = real.get(i);
+        a[k * 2 + 1] = -imag.get(i);
+      }
+    }
+    DoubleFFT_1D fft = new DoubleFFT_1D(n);
+    fft.complexInverse(a, true);
     for (int i = 0; i < n; i++) {
-      collector.putDouble(start + i * interval, result[i].getReal());
+      collector.putDouble(start + i * interval, a[2 * i]);
     }
   }
 }
