@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.dmatch.util.CrossCorrelation;
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -23,18 +26,16 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import cn.edu.thu.iotdb.quality.dmatch.util.CrossCorrelation;
-import cn.edu.thu.iotdb.quality.util.Util;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
 /**
- * @ClassName UDTFACF @Description This function calculates auto-correlation factor of a single
- * input series. @Author thulab @Version 1.0.0
+ * @ClassName UDTFACF
+ * @Description This function calculates auto-correlation factor of a single input series.
+ * @Author thulab @Version 1.0.0
  */
 public class UDTFACF implements UDTF {
 
-  private DoubleArrayList valueArrayList = new DoubleArrayList();
+  private final DoubleArrayList valueArrayList = new DoubleArrayList();
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
