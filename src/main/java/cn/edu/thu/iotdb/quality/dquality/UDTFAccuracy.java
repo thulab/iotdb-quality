@@ -40,7 +40,7 @@ public class UDTFAccuracy implements UDTF {
             configurations.setAccessStrategy(new SlidingTimeWindowAccessStrategy(timeWindow));
         }
         colCnt = parameters.getPaths().size();
-        constraints = parameters.getStringOrDefault("constraints", "$1 = $2");
+        constraints = parameters.getStringOrDefault("constraints", "$1==$2");
         configurations.setOutputDataType(TSDataType.DOUBLE);
     }
 

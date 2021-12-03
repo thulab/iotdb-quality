@@ -11,12 +11,12 @@ with open('resample.csv') as f1:
             if flag == 0:
                 flag = 1
             else:
-                temp = int(row[1]) * 1.3
+                temp = int(int(row[1]) * 1.3, 1)
                 row.append(str(temp))
-                row.append(str(int(row[1]) + temp))
+                row.append(str(temp + int(row[1])))
                 writer.writerow(row)
                 cnt += 1
                 if cnt % 1000 == 0:
                     print(cnt)
-                if cnt == 15:
+                if cnt == 10000:
                     break

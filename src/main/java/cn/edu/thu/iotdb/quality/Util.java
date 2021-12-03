@@ -5,14 +5,14 @@
  */
 package cn.edu.thu.iotdb.quality;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import org.eclipse.collections.api.tuple.primitive.LongIntPair;
 import org.eclipse.collections.impl.map.mutable.primitive.LongIntHashMap;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -29,7 +29,7 @@ public class Util {
      * @throws NoNumberException Row中的指定位置的值是非数值类型
      */
     public static double getValueAsDouble(Row row, int index) throws NoNumberException {
-        double ans = 0;
+        double ans;
         switch (row.getDataType(index)) {
             case INT32:
                 ans = row.getInt(index);
@@ -63,7 +63,7 @@ public class Util {
     /**
      * 从Row中取出第一个值，并转化为Object类型
      *
-     * @param row
+     * @param row 数据行
      * @return Row中的第一个值
      */
     public static Object getValueAsObject(Row row) {
@@ -98,7 +98,7 @@ public class Util {
      * @param type 数据类型
      * @param t 时间戳
      * @param o Object类型的值
-     * @throws Exception
+     * @throws Exception 异常
      */
     public static void putValue(PointCollector pc, TSDataType type, long t, Object o) throws Exception {
         switch (type) {
@@ -132,7 +132,7 @@ public class Util {
      */
     public static double[] toDoubleArray(ArrayList<Double> list) {
         int len = list.size();
-        double ans[] = new double[len];
+        double[] ans = new double[len];
         for (int i = 0; i < len; i++) {
             ans[i] = list.get(i);
         }
@@ -149,7 +149,7 @@ public class Util {
      */
     public static long[] toLongArray(ArrayList<Long> list) {
         int len = list.size();
-        long ans[] = new long[len];
+        long[] ans = new long[len];
         for (int i = 0; i < len; i++) {
             ans[i] = list.get(i);
         }
@@ -167,7 +167,7 @@ public class Util {
     public static double mad(double[] value) {
         Median median = new Median();
         double mid = median.evaluate(value);
-        double d[] = new double[value.length];
+        double[] d = new double[value.length];
         for (int i = 0; i < value.length; i++) {
             d[i] = Math.abs(value[i] - mid);
         }
@@ -180,9 +180,9 @@ public class Util {
      * @param origin 原始序列
      * @return 取值变化序列
      */
-    public static double[] variation(double origin[]) {
+    public static double[] variation(double[] origin) {
         int n = origin.length;
-        double var[] = new double[n - 1];
+        double[] var = new double[n - 1];
         for (int i = 0; i < n - 1; i++) {
             var[i] = origin[i + 1] - origin[i];
         }
@@ -195,9 +195,9 @@ public class Util {
      * @param origin 原始序列
      * @return 取值变化序列
      */
-    public static double[] variation(long origin[]) {
+    public static double[] variation(long[] origin) {
         int n = origin.length;
-        double var[] = new double[n - 1];
+        double[] var = new double[n - 1];
         for (int i = 0; i < n - 1; i++) {
             var[i] = origin[i + 1] - origin[i];
         }
@@ -210,9 +210,9 @@ public class Util {
      * @param origin 原始序列
      * @return 取值变化序列
      */
-    public static int[] variation(int origin[]) {
+    public static int[] variation(int[] origin) {
         int n = origin.length;
-        int var[] = new int[n - 1];
+        int[] var = new int[n - 1];
         for (int i = 0; i < n - 1; i++) {
             var[i] = origin[i + 1] - origin[i];
         }
@@ -226,9 +226,9 @@ public class Util {
      * @param time 时间戳序列
      * @return 速度序列
      */
-    public static double[] speed(double origin[], double time[]) {
+    public static double[] speed(double[] origin, double[] time) {
         int n = origin.length;
-        double speed[] = new double[n - 1];
+        double[] speed = new double[n - 1];
         for (int i = 0; i < n - 1; i++) {
             speed[i] = (origin[i + 1] - origin[i]) / (time[i + 1] - time[i]);
         }
@@ -242,9 +242,9 @@ public class Util {
      * @param time 时间戳序列
      * @return 速度序列
      */
-    public static double[] speed(double origin[], long time[]) {
+    public static double[] speed(double[] origin, long[] time) {
         int n = origin.length;
-        double speed[] = new double[n - 1];
+        double[] speed = new double[n - 1];
         for (int i = 0; i < n - 1; i++) {
             speed[i] = (origin[i + 1] - origin[i]) / (time[i + 1] - time[i]);
         }
@@ -274,6 +274,9 @@ public class Util {
     }
 
     public static long parseTime(String s) {
+        if (s.equals("default")) {
+            return Integer.MAX_VALUE;
+        }
         long unit = 0;
         s = s.toLowerCase();
         s = s.replaceAll(" ", "");

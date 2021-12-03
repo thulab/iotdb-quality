@@ -13,12 +13,10 @@ public class MultipleTimeSeriesQuality {
     public static final int WINDOWSIZE = 10;
     private boolean downtime = true;//是否考虑停机异常
     private int cnt = 0;//数据点总数
+    private int finiteCnt = 0;
     private int inaccurateNum = 0;
 
     public MultipleTimeSeriesQuality(RowIterator dataIterator, int colCnt, String constraints) throws Exception {
-        // avoid warnings
-        System.setProperty("nashorn.args","--no-deprecation-warning");
-
         // script engine
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("js");
@@ -37,6 +35,7 @@ public class MultipleTimeSeriesQuality {
                     break;
                 }
             }
+            if (isFinite) finiteCnt++;
             if (!isFinite || !String.valueOf(scriptEngine.eval(temp_constraints)).equals("true")) {
                 inaccurateNum++;
             }
@@ -44,9 +43,6 @@ public class MultipleTimeSeriesQuality {
     }
 
     public MultipleTimeSeriesQuality(String filename, int colCnt, String constraints) throws Exception {
-        // avoid warnings
-        System.setProperty("nashorn.args","--no-deprecation-warning");
-
         // script engine
         ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("js");
@@ -62,19 +58,21 @@ public class MultipleTimeSeriesQuality {
             for (int i = 0; i < colCnt; i++) {
                 if (isFinite && sc.hasNextDouble()) {
                     double v = sc.nextDouble();
-                    System.out.println(v);
                     temp_constraints = temp_constraints.replace("$" + (i+1), String.valueOf(v));
                 } else {
                     isFinite = false;
                     sc.next();
                 }
             }
-
             if (!isFinite || !String.valueOf(scriptEngine.eval(temp_constraints)).equals("true")) {
                 inaccurateNum++;
             }
         }
     }
+
+    public int getInaccurateNum() { return inaccurateNum; }
+
+    public int getFiniteCnt() { return finiteCnt; }
 
     public double getAccuracy() {
         return 1 - inaccurateNum * 1.0 / cnt;
@@ -82,7 +80,7 @@ public class MultipleTimeSeriesQuality {
 
     public static void main(String[] args) throws Exception {
         long stime = System.currentTimeMillis();
-        MultipleTimeSeriesQuality tsq = new MultipleTimeSeriesQuality("temp_accuracy2.csv", 3, "$1 + $2 == $3 + -1 + 1");
+        MultipleTimeSeriesQuality tsq = new MultipleTimeSeriesQuality("temp_accuracy2.csv", 3, "$1+$2==$3");
         long etime = System.currentTimeMillis();
         // 计算执行时间
         System.out.printf("执行时长：%d 毫秒.\n", (etime - stime));
