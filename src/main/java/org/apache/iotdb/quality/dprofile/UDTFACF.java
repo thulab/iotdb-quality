@@ -38,6 +38,14 @@ public class UDTFACF implements UDTF {
   private final ArrayList<Double> valueArrayList = new ArrayList<>();
 
   @Override
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+            .validateInputSeriesNumber(1)
+            .validateInputSeriesDataType(
+                    0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
+  }
+
+  @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
       throws Exception {
     udtfConfigurations
@@ -62,14 +70,6 @@ public class UDTFACF implements UDTF {
     for (int i = 0; i < correlationArrayList.size(); i++) {
       collector.putDouble(i, correlationArrayList.get(i));
     }
-  }
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(
-            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
   }
 
   @Override

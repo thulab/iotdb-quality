@@ -19,6 +19,7 @@ import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.quality.util.Util;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 
 /*
    流式转换需用户提供Q1与Q3，全局转换则不需要
+   Stream swap require user to provide Q1 and Q3, while global swap does not.
 */
 public class UDTFIQR implements UDTF {
   ArrayList<Double> value = new ArrayList<>();
@@ -39,6 +41,13 @@ public class UDTFIQR implements UDTF {
   double q3 = 0.0d;
   double iqr = 0.0d;
 
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+            .validateInputSeriesNumber(1)
+            .validateInputSeriesDataType(
+                    0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
+  }
+
   @Override
   public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
           throws Exception {
@@ -47,14 +56,14 @@ public class UDTFIQR implements UDTF {
     q1 = 0.0d;
     q3 = 0.0d;
     iqr = 0.0d;
-   configurations
+    configurations
             .setAccessStrategy(new RowByRowAccessStrategy())
             .setOutputDataType(TSDataType.DOUBLE);
     compute = parameters.getStringOrDefault("compute", "batch");
     if (compute.equalsIgnoreCase("stream")) {
       q1 = parameters.getDouble("q1");
       q3 = parameters.getDouble("q3");
-    iqr = q3 - q1;
+      iqr = q3 - q1;
     }
   }
 

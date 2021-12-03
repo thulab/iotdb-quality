@@ -32,9 +32,17 @@ import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 // correlation calculation copied from SelfCorrelation
 public class UDTFQLB implements UDTF {
 
-  private DoubleArrayList valueArrayList = new DoubleArrayList();
+  private final DoubleArrayList valueArrayList = new DoubleArrayList();
   private int m = 0;
   private double qlb = 0.0f;
+
+  @Override
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+            .validateInputSeriesNumber(1)
+            .validateInputSeriesDataType(
+                    0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
+  }
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -75,14 +83,6 @@ public class UDTFQLB implements UDTF {
       double qlbprob = 1.0 - qlbdist.cumulativeProbability(qlb);
       collector.putDouble(shift, qlbprob);
     }
-  }
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(
-            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
   }
 
   @Override
