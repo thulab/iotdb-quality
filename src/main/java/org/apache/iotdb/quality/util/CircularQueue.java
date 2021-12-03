@@ -105,7 +105,7 @@ public class CircularQueue<E> {
    *
    * @return 数组已满时返回true，否则返回false
    */
-  private boolean isFull() {
+  public boolean isFull() {
     return size == data.length;
   }
 

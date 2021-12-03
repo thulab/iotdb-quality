@@ -14,58 +14,60 @@
  * limitations under the License.
  */
 
-package cn.edu.thu.iotdb.quality.dprofile;
+package org.apache.iotdb.quality.dprofile;
 
-import cn.edu.thu.iotdb.quality.util.Queue;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
+import org.apache.iotdb.quality.util.DoubleCircularQueue;
+import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-public class UDTFMovingAverage implements UDTF {
-  int n = -1;
+/** This function calculates moving average of given window length of input series. */
+public class UDTFMvAvg implements UDTF {
+  int windowSize;
   TSDataType dataType;
-  Queue v;
+  DoubleCircularQueue v;
+
+  @Override
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+        .validateInputSeriesNumber(1)
+        .validateInputSeriesDataType(
+            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE)
+        .validate(
+            x -> (int) x > 0,
+            "Window size should be larger than 0.",
+            validator.getParameters().getDoubleOrDefault("window", 10));
+  }
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
       throws Exception {
-
     udtfConfigurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
     dataType = udfParameters.getDataType(0);
-    n = udfParameters.getInt("n");
-    v = new Queue(n, dataType);
+    windowSize = udfParameters.getIntOrDefault("window", 10);
+    v = new DoubleCircularQueue(windowSize);
   }
 
   @Override
   public void transform(Row row, PointCollector collector) throws Exception {
     long t = row.getTime();
+    double windowSum = 0d;
     if (v.isFull()) {
-      v.pop();
+      windowSum -= v.pop();
     }
-    switch (dataType) {
-      case FLOAT:
-        v.push(t, row.getFloat(0));
-        break;
-      case DOUBLE:
-        v.push(t, row.getDouble(0));
-        break;
-      case INT32:
-        v.push(t, row.getInt(0));
-        break;
-      case INT64:
-        v.push(t, row.getLong(0));
-        break;
-      default:
-        break;
-    }
+    double value = Util.getValueAsDouble(row);
+    v.push(value);
+    windowSum += value;
     if (v.isFull()) {
-      collector.putDouble(t, v.getSum() / (double) n);
+      collector.putDouble(t, windowSum / (double) windowSize);
     }
   }
 

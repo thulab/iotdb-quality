@@ -33,7 +33,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  * parameter: $error$ $error$ is the desired relative error, e.g., an approxMAD with $error$=0.01
  * satisfies 0.99 * MAD <= approxMAD <= 1.01 * MAD @register
  *
- * <p>CREATE FUNCTION mad AS "cn.edu.thu.iotdb.quality.dprofile.UDAFMad"
+ * <p>CREATE FUNCTION mad AS "org.apache.iotdb.quality.dprofile.UDAFMad"
  *
  * @usage: select mad(s0, "error"="0.01") from root.test;
  */

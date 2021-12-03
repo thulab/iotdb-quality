@@ -30,7 +30,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  * calculate the integral or the area under the curve of input series $unit$ is the time scale for
  * the area calculation, chosen from 1s(second, default), 1m(minute), 1h(hour), 1d(day)
  *
- * @register: CREATE FUNCTION INTEGRAL AS "cn.edu.thu.iotdb.quality.dprofile.UDTFIntegral"
+ * @register: CREATE FUNCTION INTEGRAL AS "org.apache.iotdb.quality.dprofile.UDTFIntegral"
  * @usage: SELECT INTEGRAL(s0, "unit"="1s") FROM root.test
  */
 public class UDAFIntegral implements UDTF {

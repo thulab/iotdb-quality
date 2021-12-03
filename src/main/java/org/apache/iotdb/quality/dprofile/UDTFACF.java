@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package cn.edu.thu.iotdb.quality.dprofile;
+package org.apache.iotdb.quality.dprofile;
 
-import cn.edu.thu.iotdb.quality.dmatch.util.CrossCorrelation;
-import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -25,17 +23,19 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
+import org.apache.iotdb.quality.dmatch.util.CrossCorrelation;
+import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
+
+import java.util.ArrayList;
 
 /**
- * @ClassName UDTFACF
- * @Description This function calculates auto-correlation factor of a single input series.
- * @Author thulab @Version 1.0.0
+ * @ClassName UDTFACF @Description This function calculates auto-correlation factor of a single
+ * input series. @Author thulab @Version 1.0.0
  */
 public class UDTFACF implements UDTF {
 
-  private final DoubleArrayList valueArrayList = new DoubleArrayList();
+  private final ArrayList<Double> valueArrayList = new ArrayList<>();
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -57,7 +57,7 @@ public class UDTFACF implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    DoubleArrayList correlationArrayList =
+    ArrayList<Double> correlationArrayList =
         CrossCorrelation.calculateCrossCorrelation(valueArrayList, valueArrayList);
     for (int i = 0; i < correlationArrayList.size(); i++) {
       collector.putDouble(i, correlationArrayList.get(i));

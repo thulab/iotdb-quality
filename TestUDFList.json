@@ -1,7 +1,7 @@
 [
   {
     "UDFName": "DISTINCT",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFDistinct",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDTFDistinct",
     "TimeSeries": [
       "BOOLEAN|INT32|INT64|FLOAT|DOUBLE|TEXT"
     ],
@@ -9,7 +9,7 @@
   },
   {
     "UDFName": "HISTOGRAM",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFHistogram",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDTFHistogram",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -21,7 +21,7 @@
   },
   {
     "UDFName": "INTEGRAL",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFIntegral",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFIntegral",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -31,7 +31,7 @@
   },
   {
     "UDFName": "MAD",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMad",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFMad",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -41,7 +41,7 @@
   },
   {
     "UDFName": "MEDIAN",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMedian",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFMedian",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -51,7 +51,7 @@
   },
   {
     "UDFName": "MODE",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFMode",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFMode",
     "TimeSeries": [
       "BOOLEAN|INT32|INT64|FLOAT|DOUBLE|TEXT"
     ],
@@ -59,7 +59,7 @@
   },
   {
     "UDFName": "PERCENTILE",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFPercentile",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFPercentile",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -70,7 +70,7 @@
   },
   {
     "UDFName": "SAMPLE",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDTFSample",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDTFSample",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -81,7 +81,7 @@
   },
   {
     "UDFName": "SKEW",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFSkew",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFSkew",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -89,7 +89,7 @@
   },
   {
     "UDFName": "SPREAD",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFSpread",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFSpread",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -97,7 +97,7 @@
   },
   {
     "UDFName": "STDDEV",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dprofile.UDAFStddev",
+    "FullClassName": "org.apache.iotdb.quality.dprofile.UDAFStddev",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -106,7 +106,7 @@
 
   {
     "UDFName": "COMPLETENESS",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFCompleteness",
+    "FullClassName": "org.apache.iotdb.quality.dquality.UDTFCompleteness",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -116,7 +116,7 @@
   },
   {
     "UDFName": "CONSISTENCY",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFConsistency",
+    "FullClassName": "org.apache.iotdb.quality.dquality.UDTFConsistency",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -126,7 +126,7 @@
   },
   {
     "UDFName": "TIMELINESS",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFTimeliness",
+    "FullClassName": "org.apache.iotdb.quality.dquality.UDTFTimeliness",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],
@@ -136,7 +136,7 @@
   },
   {
     "UDFName": "VALIDITY",
-    "FullClassName": "cn.edu.thu.iotdb.quality.dquality.UDTFValidity",
+    "FullClassName": "org.apache.iotdb.quality.dquality.UDTFValidity",
     "TimeSeries": [
       "INT32|INT64|FLOAT|DOUBLE"
     ],

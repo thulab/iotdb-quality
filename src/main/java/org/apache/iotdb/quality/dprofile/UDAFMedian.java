@@ -33,7 +33,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  * is the rank error, e.g., a median with $error$=0.01 is the element whose rank is within
  * (0.49,0.51)
  *
- * @register: CREATE FUNCTION median AS "cn.edu.thu.iotdb.quality.dprofile.UDAFMedian"
+ * @register: CREATE FUNCTION median AS "org.apache.iotdb.quality.dprofile.UDAFMedian"
  * @usage: SELECT median(s0, "error"="0.01") FROM root.test;
  */
 public class UDAFMedian implements UDTF {

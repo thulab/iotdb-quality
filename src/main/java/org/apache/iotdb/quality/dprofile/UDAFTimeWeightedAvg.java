@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package cn.edu.thu.iotdb.quality.dprofile;
+package org.apache.iotdb.quality.dprofile;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -23,15 +23,14 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
+import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import static cn.edu.thu.iotdb.quality.util.Util.getValueAsDouble;
 
 /**
  * calculate the integral or the area under the curve of input series $unit$ is the time scale for
  * the area calculation, chosen from 1s(second, default), 1m(minute), 1h(hour), 1d(day)
  *
- * @register: CREATE FUNCTION INTEGRAL AS "cn.edu.thu.iotdb.quality.dprofile.UDTFIntegral"
+ * @register: CREATE FUNCTION INTEGRAL AS "org.apache.iotdb.quality.dprofile.UDTFIntegral"
  * @usage: SELECT INTEGRAL(s0, "unit"="1s") FROM root.test
  */
 public class UDAFTimeWeightedAvg implements UDTF {
@@ -57,7 +56,7 @@ public class UDAFTimeWeightedAvg implements UDTF {
   @Override
   public void transform(Row row, PointCollector collector) throws Exception {
     long nowTime = row.getTime();
-    double nowValue = getValueAsDouble(row);
+    double nowValue = Util.getValueAsDouble(row);
     if (startTime < 0) {
       startTime = nowTime;
     }

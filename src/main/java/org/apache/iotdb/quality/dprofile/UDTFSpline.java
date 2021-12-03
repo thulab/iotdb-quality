@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package cn.edu.thu.iotdb.quality.dprofile;
+package org.apache.iotdb.quality.dprofile;
 
-import cn.edu.thu.iotdb.quality.util.Util;
-import java.util.ArrayList;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
-import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
+import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.math3.analysis.interpolation.AkimaSplineInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+
+import java.util.ArrayList;
 
 public class UDTFSpline implements UDTF {
   AkimaSplineInterpolator asi;
@@ -70,9 +72,11 @@ public class UDTFSpline implements UDTF {
       psf = asi.interpolate(x, y);
       for (int i = 0; i < samplePoints; i++) {
         int approximation =
-            (int) Math.floor(
+            (int)
+                Math.floor(
                     (x[0] * (samplePoints - 1 - i) + x[yDouble.size() - 1] * (i))
-                            / (samplePoints - 1) + 0.5);
+                            / (samplePoints - 1)
+                        + 0.5);
         double yhead = psf.value(approximation);
         collector.putDouble(minimumTimestamp + (long) approximation, yhead);
       }
