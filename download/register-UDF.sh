@@ -21,7 +21,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function percentile as 'org.apache.iotdb.quality.dprofile.UDAFPercentile'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function period as 'org.apache.iotdb.quality.dprofile.UDAFPeriod'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function qlb as 'org.apache.iotdb.quality.dprofile.UDTFQLB'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function re_sample as 'org.apache.iotdb.quality.dprofile.UDTFResample'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function resample as 'org.apache.iotdb.quality.dprofile.UDTFResample'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function sample as 'org.apache.iotdb.quality.dprofile.UDTFSample'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function segment as 'org.apache.iotdb.quality.dprofile.UDTFSegment'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function skew as 'org.apache.iotdb.quality.dprofile.UDAFSkew'"
@@ -65,7 +65,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function iqr as 'org.apache.iotdb.quality.anomaly.UDTFIQR'"
 
 # Frequency Domain
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function FFT as 'org.apache.iotdb.quality.frequency.UDTFFFT'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function fft as 'org.apache.iotdb.quality.frequency.UDTFFFT'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function conv as 'org.apache.iotdb.quality.frequency.UDTFConv'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function deconv as 'org.apache.iotdb.quality.frequency.UDTFDeconv'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function lowpass as 'org.apache.iotdb.quality.frequency.UDTFLowPass'"

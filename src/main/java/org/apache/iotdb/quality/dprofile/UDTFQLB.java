@@ -29,12 +29,24 @@ import org.apache.commons.math3.distribution.ChiSquaredDistribution;
 
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-// correlation calculation copied from SelfCorrelation
+/** This function calculates acf, and then calculates p-value of corresponding Q_LB statistics. */
 public class UDTFQLB implements UDTF {
 
   private DoubleArrayList valueArrayList = new DoubleArrayList();
   private int m = 0;
   private double qlb = 0.0f;
+
+  @Override
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+        .validateInputSeriesNumber(1)
+        .validateInputSeriesDataType(
+            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE)
+        .validate(
+            x -> (int) x >= 0,
+            "Parameter $shift$ should be an positive integer, or '0' for default value.",
+            validator.getParameters().getIntOrDefault("shift", 0));
+  }
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -43,6 +55,7 @@ public class UDTFQLB implements UDTF {
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
     m = udfParameters.getIntOrDefault("shift", 0);
+    valueArrayList.clear();
   }
 
   @Override
@@ -75,14 +88,6 @@ public class UDTFQLB implements UDTF {
       double qlbprob = 1.0 - qlbdist.cumulativeProbability(qlb);
       collector.putDouble(shift, qlbprob);
     }
-  }
-
-  @Override
-  public void validate(UDFParameterValidator validator) throws Exception {
-    validator
-        .validateInputSeriesNumber(1)
-        .validateInputSeriesDataType(
-            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
   }
 
   @Override

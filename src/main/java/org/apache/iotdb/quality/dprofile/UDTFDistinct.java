@@ -13,14 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.apache.iotdb.quality.dprofile;
 
-import org.apache.iotdb.db.exception.query.QueryProcessException;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -41,10 +36,9 @@ import org.eclipse.collections.impl.set.mutable.primitive.FloatHashSet;
 import org.eclipse.collections.impl.set.mutable.primitive.IntHashSet;
 import org.eclipse.collections.impl.set.mutable.primitive.LongHashSet;
 
-import java.io.IOException;
 import java.util.HashSet;
 
-/** @author Wang Haoyu */
+/** This function counts number of distinct values of input series. */
 public class UDTFDistinct implements UDTF {
 
   private IntHashSet intSet;
@@ -89,122 +83,94 @@ public class UDTFDistinct implements UDTF {
   public void transform(Row row, PointCollector pc) throws Exception {
     switch (dataType) {
       case INT32:
-        transformInt(row, pc);
+        intSet.add(row.getInt(0));
         break;
       case INT64:
-        transformLong(row, pc);
+        longSet.add(row.getLong(0));
         break;
       case FLOAT:
-        transformFloat(row, pc);
+        floatSet.add(row.getFloat(0));
         break;
       case DOUBLE:
-        transformDouble(row, pc);
+        doubleSet.add(row.getDouble(0));
         break;
       case TEXT:
-        transformString(row, pc);
+        stringSet.add(row.getString(0));
         break;
       case BOOLEAN:
-        transformBoolean(row, pc);
+        booleanSet.add(row.getBoolean(0));
     }
   }
 
   @Override
   public void terminate(PointCollector pc) throws Exception {
+    int i = 0;
     switch (dataType) {
       case INT32:
-        terminateInt(pc);
+        MutableIntIterator intIterator = intSet.intIterator();
+        while (intIterator.hasNext()) {
+          pc.putInt(i, intIterator.next());
+          i++;
+        }
         break;
       case INT64:
-        terminateLong(pc);
+        MutableLongIterator longIterator = longSet.longIterator();
+        while (longIterator.hasNext()) {
+          pc.putLong(i, longIterator.next());
+          i++;
+        }
         break;
       case FLOAT:
-        terminateFloat(pc);
+        MutableFloatIterator floatIterator = floatSet.floatIterator();
+        while (floatIterator.hasNext()) {
+          pc.putFloat(i, floatIterator.next());
+          i++;
+        }
         break;
       case DOUBLE:
-        terminateDouble(pc);
+        MutableDoubleIterator doubleIterator = doubleSet.doubleIterator();
+        while (doubleIterator.hasNext()) {
+          pc.putDouble(i, doubleIterator.next());
+          i++;
+        }
         break;
       case TEXT:
-        terminateString(pc);
+        for (String s : stringSet) {
+          pc.putString(i, s);
+          i++;
+        }
         break;
       case BOOLEAN:
-        terminateBoolean(pc);
+        MutableBooleanIterator booleanIterator = booleanSet.booleanIterator();
+        while (booleanIterator.hasNext()) {
+          pc.putBoolean(i, booleanIterator.next());
+          i++;
+        }
     }
   }
 
-  private void transformInt(Row row, PointCollector pc) throws Exception {
-    intSet.add(row.getInt(0));
-  }
-
-  private void transformLong(Row row, PointCollector pc) throws Exception {
-    longSet.add(row.getLong(0));
-  }
-
-  private void transformFloat(Row row, PointCollector pc) throws Exception {
-    floatSet.add(row.getFloat(0));
-  }
-
-  private void transformDouble(Row row, PointCollector pc) throws Exception {
-    doubleSet.add(row.getDouble(0));
-  }
-
-  private void transformBoolean(Row row, PointCollector pc) throws Exception {
-    booleanSet.add(row.getBoolean(0));
-  }
-
-  private void transformString(Row row, PointCollector pc) throws Exception {
-    stringSet.add(row.getString(0));
-  }
-
-  private void terminateInt(PointCollector pc) throws IOException {
-    MutableIntIterator iterator = intSet.intIterator();
-    int i = 0;
-    while (iterator.hasNext()) {
-      pc.putInt(i, iterator.next());
-      i++;
+  @Override
+  public void beforeDestroy() {
+    /*
+    switch (dataType) {
+      case INT32:
+        intSet.clear();
+        break;
+      case INT64:
+        longSet.clear();
+        break;
+      case FLOAT:
+        floatSet.clear();
+        break;
+      case DOUBLE:
+        doubleSet.clear();
+        break;
+      case TEXT:
+        stringSet.clear();
+        break;
+      case BOOLEAN:
+        booleanSet.clear();
     }
-  }
-
-  private void terminateLong(PointCollector pc) throws IOException {
-    MutableLongIterator iterator = longSet.longIterator();
-    int i = 0;
-    while (iterator.hasNext()) {
-      pc.putLong(i, iterator.next());
-      i++;
-    }
-  }
-
-  private void terminateFloat(PointCollector pc) throws IOException {
-    MutableFloatIterator iterator = floatSet.floatIterator();
-    int i = 0;
-    while (iterator.hasNext()) {
-      pc.putFloat(i, iterator.next());
-      i++;
-    }
-  }
-
-  private void terminateDouble(PointCollector pc) throws IOException {
-    MutableDoubleIterator iterator = doubleSet.doubleIterator();
-    int i = 0;
-    while (iterator.hasNext()) {
-      pc.putDouble(i, iterator.next());
-      i++;
-    }
-  }
-
-  private void terminateString(PointCollector pc) throws QueryProcessException, IOException {
-    int i = 0;
-    for (String s : stringSet) {
-      pc.putString(i, s);
-      i++;
-    }
-  }
-
-  private void terminateBoolean(PointCollector pc) throws IOException {
-    MutableBooleanIterator iterator = booleanSet.booleanIterator();
-    int i = 0;
-    while (iterator.hasNext()) {
-      pc.putBoolean(i, iterator.next());
-      i++;
-    }
+    */
   }
 }

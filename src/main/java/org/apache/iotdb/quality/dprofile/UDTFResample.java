@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.apache.iotdb.quality.dprofile;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
@@ -27,12 +23,13 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
+import org.apache.iotdb.quality.dprofile.util.Resampler;
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.text.SimpleDateFormat;
 
-/** @author Wang Haoyu */
+/** @author Wang Haoyu This function does upsample or downsample of input series. */
 public class UDTFResample implements UDTF {
 
   private Resampler resampler;
@@ -96,7 +93,7 @@ public class UDTFResample implements UDTF {
   @Override
   public void transform(Row row, PointCollector pc) throws Exception {
     resampler.insert(row.getTime(), Util.getValueAsDouble(row));
-    while (resampler.hasNext()) { // 尽早输出，以减少输出缓冲的压力
+    while (resampler.hasNext()) { // output as early as possible
       pc.putDouble(resampler.getOutTime(), resampler.getOutValue());
       resampler.next();
     }
