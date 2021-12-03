@@ -28,10 +28,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-/**
- * @ClassName UDAFDtw @Description This function calculates DTW distance between two input
- * series. @Author thulab @Version 1.0.0
- */
+/** This function calculates DTW distance between two input series. */
 public class UDAFDtw implements UDTF {
 
   private double[][] dp;

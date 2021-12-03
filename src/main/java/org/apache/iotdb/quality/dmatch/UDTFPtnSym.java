@@ -28,10 +28,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-/**
- * @ClassName UDTFPtnSym @Description This function finds symmetric patterns in a series according
- * to DTW distance. @Author thulab @Version 1.0.0
- */
+/** This function finds symmetric patterns in a series according to DTW distance. */
 public class UDTFPtnSym implements UDTF {
 
   private int window;

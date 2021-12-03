@@ -25,10 +25,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * @ClassName UDAFCov @Description This function calculates Covariance between two input
- * series. @Author Wang Haoyu @Version 1.0.0
- */
+/** This function calculates Covariance between two input series. */
 public class UDAFCov implements UDTF {
 
   private long count = 0;

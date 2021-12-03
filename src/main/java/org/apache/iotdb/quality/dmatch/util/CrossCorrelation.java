@@ -17,10 +17,7 @@ package org.apache.iotdb.quality.dmatch.util;
 
 import java.util.ArrayList;
 
-/**
- * @ClassName CrossCorrelation @Description util for UDTFXCorr and UDTFACF @Author thulab @Version
- * 1.0.0
- */
+/** util for UDTFXCorr and UDTFACF */
 public class CrossCorrelation {
   public static ArrayList<Double> calculateCrossCorrelation(
       ArrayList<Double> valueArrayList1, ArrayList<Double> valueArrayList2) {
