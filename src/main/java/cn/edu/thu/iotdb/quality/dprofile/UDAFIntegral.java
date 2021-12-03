@@ -16,6 +16,8 @@
 
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import static cn.edu.thu.iotdb.quality.util.Util.getValueAsDouble;
+
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -24,8 +26,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import static cn.edu.thu.iotdb.quality.util.Util.getValueAsDouble;
 
 /**
  * calculate the integral or the area under the curve of input series $unit$ is the time scale for
@@ -64,12 +64,12 @@ public class UDAFIntegral implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations Configurations)
       throws Exception {
-    udtfConfigurations
+    Configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    switch (udfParameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S)) {
+    switch (parameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S)) {
       case TIME_UNIT_MS:
         unitTime = 1L;
         break;
@@ -88,7 +88,7 @@ public class UDAFIntegral implements UDTF {
       default:
         throw new Exception(
             "Unknown time unit input: "
-                + udfParameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S));
+                + parameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S));
     }
   }
 
@@ -109,6 +109,6 @@ public class UDAFIntegral implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    collector.putDouble(0, integralValue); // 所有UDAF函数的时间戳都默认为0
+    collector.putDouble(0, integralValue); // default: 0
   }
 }

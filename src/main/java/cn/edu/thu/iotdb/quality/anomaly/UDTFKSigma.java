@@ -45,14 +45,14 @@ public class UDTFKSigma implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
-        .setOutputDataType(udfParameters.getDataType(0));
-    this.multipleK = udfParameters.getDoubleOrDefault("k", 3);
-    this.dataType = udfParameters.getDataType(0);
-    this.queue = new Queue(udfParameters.getIntOrDefault("window", 10000), dataType);
+        .setOutputDataType(parameters.getDataType(0));
+    this.multipleK = parameters.getDoubleOrDefault("k", 3);
+    this.dataType = parameters.getDataType(0);
+    this.queue = new Queue(parameters.getIntOrDefault("window", 10000), dataType);
   }
 
   @Override

@@ -33,38 +33,38 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 public class UDTFIQR implements UDTF {
   ArrayList<Double> value = new ArrayList<>();
   ArrayList<Long> timestamp = new ArrayList<>();
-  String method = "batch";
+  String compute = "batch";
   double q1 = 0.0d;
   double q3 = 0.0d;
   double iqr = 0.0d;
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
           throws Exception {
     value.clear();
     timestamp.clear();
     q1 = 0.0d;
     q3 = 0.0d;
     iqr = 0.0d;
-    udtfConfigurations
+    configurations
             .setAccessStrategy(new RowByRowAccessStrategy())
             .setOutputDataType(TSDataType.DOUBLE);
-    method = udfParameters.getStringOrDefault("method", "batch");
-    if (method.equalsIgnoreCase("stream")) {
-      q1 = udfParameters.getDouble("q1");
-      q3 = udfParameters.getDouble("q3");
+    compute = parameters.getStringOrDefault("compute", "batch");
+    if (compute.equalsIgnoreCase("stream")) {
+      q1 = parameters.getDouble("q1");
+      q3 = parameters.getDouble("q3");
       iqr = q3 - q1;
     }
   }
 
   @Override
   public void transform(Row row, PointCollector collector) throws Exception {
-    if (method.equalsIgnoreCase("stream") && q3 > q1) {
+    if (compute.equalsIgnoreCase("stream") && q3 > q1) {
       double v = Util.getValueAsDouble(row);
       if (v < q1 - 1.5 * iqr || v > q3 + 1.5 * iqr) {
         collector.putDouble(row.getTime(), v);
       }
-    } else if (method.equalsIgnoreCase("batch")) {
+    } else if (compute.equalsIgnoreCase("batch")) {
       double v = Util.getValueAsDouble(row);
       value.add(v);
       timestamp.add(row.getTime());
@@ -73,7 +73,7 @@ public class UDTFIQR implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    if (method.equalsIgnoreCase("batch")) {
+    if (compute.equalsIgnoreCase("batch")) {
       q1 = Quantiles.quartiles().index(1).compute(value);
       q3 = Quantiles.quartiles().index(3).compute(value);
       iqr = q3 - q1;

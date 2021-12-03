@@ -27,7 +27,6 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 public class UDAFStddev implements UDTF {
-
   private long count = 0;
   private double sumX2 = 0.0;
   private double sumX1 = 0.0;
@@ -41,9 +40,9 @@ public class UDAFStddev implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
   }

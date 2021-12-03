@@ -38,13 +38,14 @@ public class UDTFTwoSidedFilter implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-    udtfc
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
+          throws Exception {
+    configurations
         .setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
-        .setOutputDataType(udfp.getDataType(0));
-    this.len = udfp.getDoubleOrDefault("len", 5);
-    this.threshold = udfp.getDoubleOrDefault("threshold", 0.4);
-    TSDataType dataType = udfp.getDataType(0);
+        .setOutputDataType(parameters.getDataType(0));
+    this.len = parameters.getDoubleOrDefault("len", 5);
+    this.threshold = parameters.getDoubleOrDefault("threshold", 0.4);
+    TSDataType dataType = parameters.getDataType(0);
   }
 
   @Override

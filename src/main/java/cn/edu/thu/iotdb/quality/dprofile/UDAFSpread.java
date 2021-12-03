@@ -49,9 +49,9 @@ public class UDAFSpread implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-    dataType = udfp.getDataType(0);
-    udtfc.setAccessStrategy(new RowByRowAccessStrategy()).setOutputDataType(dataType);
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+    dataType = parameters.getDataType(0);
+    configurations.setAccessStrategy(new RowByRowAccessStrategy()).setOutputDataType(dataType);
   }
 
   @Override

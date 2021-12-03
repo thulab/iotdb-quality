@@ -18,8 +18,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cn.edu.thu.iotdb.quality.dprofile;
 
+import cn.edu.thu.iotdb.quality.util.Util;
+import org.apache.commons.math3.util.Pair;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
@@ -30,16 +33,13 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValida
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import org.apache.commons.math3.util.Pair;
-
-import cn.edu.thu.iotdb.quality.util.Util;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
-/** @author Wang Haoyu */
+/**
+ * @author Wang Haoyu
+ */
 public class UDAFPeriod implements UDTF {
-
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
     validator
@@ -65,11 +65,11 @@ public class UDAFPeriod implements UDTF {
       double v = Util.getValueAsDouble(row);
       value.add(v);
     }
-    double corr[] = autoCorrelation(value.toArray());
-    int peeks[] = findPeeks(corr).toArray();
+    double[] corr = autoCorrelation(value.toArray());
+    int[] peeks = findPeeks(corr).toArray();
     int period = 0;
     if (peeks.length > 1) {
-      int gap[] = Util.variation(peeks);
+      int[] gap = Util.variation(peeks);
       period = (int) new IntArrayList(gap).median();
     }
     collector.putInt(0, period);
@@ -79,7 +79,7 @@ public class UDAFPeriod implements UDTF {
    * @param x 输入数据
    * @return 若干个峰的位置
    */
-  private IntArrayList findPeeks(double x[]) {
+  private IntArrayList findPeeks(double[] x) {
     int window = 100;
     IntArrayList peeks = new IntArrayList();
     peeks.add(0);
@@ -110,7 +110,7 @@ public class UDAFPeriod implements UDTF {
    * @param endIndex 结束位置的索引（不包含）
    * @return （最大值，索引）
    */
-  private Pair<Double, Integer> max(double x[], int startIndex, int endIndex) {
+  private Pair<Double, Integer> max(double[] x, int startIndex, int endIndex) {
     double maxValue = -Double.MAX_VALUE;
     int maxIndex = -1;
     for (int i = startIndex; i < endIndex; i++) {
@@ -128,7 +128,7 @@ public class UDAFPeriod implements UDTF {
    * @param x 输入序列
    * @return 自相关序列
    */
-  private double[] autoCorrelation(double x[]) {
+  private double[] autoCorrelation(double[] x) {
     double[] corr = new double[x.length];
     for (int i = 0; i < x.length; i++) {
       corr[i] = pearson(x, x.length - i);
@@ -143,9 +143,14 @@ public class UDAFPeriod implements UDTF {
    * @param subLength 子序列长度
    * @return Pearson相关系数
    */
-  private double pearson(double x[], int subLength) {
-    double sum_x = 0, sum_y = 0, sum_xx = 0, sum_yy = 0, sum_xy = 0;
-    int s1 = 0, s2 = x.length - subLength;
+  private double pearson(double[] x, int subLength) {
+    double sum_x = 0;
+    double sum_y = 0;
+    double sum_xx = 0;
+    double sum_yy = 0;
+    double sum_xy = 0;
+    int s1 = 0;
+    int s2 = x.length - subLength;
     for (int i = 0; i < subLength; i++) {
       sum_x += x[s1 + i];
       sum_y += x[s2 + i];

@@ -40,14 +40,14 @@ public class UDTFRange implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
-        .setOutputDataType(udfParameters.getDataType(0));
-    this.lowerBound = udfParameters.getDouble("lower_bound");
-    this.upperBound = udfParameters.getDouble("upper_bound");
-    this.dataType = udfParameters.getDataType(0);
+        .setOutputDataType(parameters.getDataType(0));
+    this.lowerBound = parameters.getDouble("lower_bound");
+    this.upperBound = parameters.getDouble("upper_bound");
+    this.dataType = parameters.getDataType(0);
   }
 
   @Override
@@ -84,7 +84,7 @@ public class UDTFRange implements UDTF {
         }
         break;
       default:
-        break;
+        throw new Exception();
     }
   }
 

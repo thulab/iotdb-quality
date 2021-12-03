@@ -32,7 +32,7 @@ public class UDTFLOF implements UDTF {
   private int multipleK;
   private int dim;
   private String method = "default";
-  private int windowSize;
+  private int window;
 
   int partition(Double[][] a, int left, int right) {
     Double key = a[left][1];
@@ -90,7 +90,7 @@ public class UDTFLOF implements UDTF {
   }
 
   public Double[] findKthPoint(Double[][] knn, Double[] x, int length) {
-    int index = 0;
+    int index;
     double minDist = dist(knn[0], x);
     Double[][] d = new Double[length][2];
     for (int i = 0; i < length; i++) {
@@ -120,16 +120,16 @@ public class UDTFLOF implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(
-            new SlidingSizeWindowAccessStrategy(udfParameters.getIntOrDefault("window", 10000)))
+            new SlidingSizeWindowAccessStrategy(parameters.getIntOrDefault("window", 10000)))
         .setOutputDataType(TSDataType.DOUBLE);
-    this.multipleK = udfParameters.getIntOrDefault("k", 3);
-    this.dim = udfParameters.getPaths().size();
-    this.method = udfParameters.getStringOrDefault("method", "default");
-    this.windowSize = udfParameters.getIntOrDefault("windowsize", 5);
+    this.multipleK = parameters.getIntOrDefault("k", 3);
+    this.dim = parameters.getPaths().size();
+    this.method = parameters.getStringOrDefault("method", "default");
+    this.window = parameters.getIntOrDefault("window", 5);
   }
 
   @Override
@@ -161,14 +161,14 @@ public class UDTFLOF implements UDTF {
             lof[m] = getLOF(knn, knn[m], size);
             collector.putDouble(timestamp[m], lof[m]);
           } catch (Exception e) {
-            throw new Exception(e.toString() + " " + Arrays.toString(e.getStackTrace()) + " " + m);
+            throw new Exception(e + " " + Arrays.toString(e.getStackTrace()) + " " + m);
           }
         }
       }
     } else if (this.method.equals("series")) {
-      int size = rowWindow.windowSize() - windowSize + 1;
+      int size = rowWindow.windowSize() - window + 1;
       if (size > 0) {
-        Double[][] knn = new Double[size][windowSize];
+        Double[][] knn = new Double[size][window];
         long[] timestamp = new long[rowWindow.windowSize()];
         double temp;
         int i = 0;
@@ -177,7 +177,7 @@ public class UDTFLOF implements UDTF {
           timestamp[i] = rowWindow.getRow(row).getTime();
           if (!rowWindow.getRow(row).isNull(0)) {
             temp = Util.getValueAsDouble(rowWindow.getRow(row), 0);
-            for (int p = 0; p < windowSize; p++) {
+            for (int p = 0; p < window; p++) {
               if (i - p < 0) {
                 break;
               }
@@ -200,7 +200,7 @@ public class UDTFLOF implements UDTF {
               collector.putDouble(timestamp[m], lof[m]);
             } catch (Exception e) {
               throw new Exception(
-                  e.toString() + " " + Arrays.toString(e.getStackTrace()) + " " + m);
+                  e + " " + Arrays.toString(e.getStackTrace()) + " " + m);
             }
           }
         }
