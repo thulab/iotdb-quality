@@ -32,7 +32,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function spline as 'org.apache.iotdb.quality.dprofile.UDTFSpline'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function mvavg as 'org.apache.iotdb.quality.dprofile.UDTFMvAvg'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function acf as 'org.apache.iotdb.quality.dprofile.UDTFACF'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'org.apache.iotdb.quality.dprofile.UDTFPartialAutoCorrelation'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'org.apache.iotdb.quality.dprofile.UDTFPACF'"
 
 
 # Data Quality

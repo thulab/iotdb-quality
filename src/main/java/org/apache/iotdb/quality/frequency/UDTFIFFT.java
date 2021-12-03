@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.apache.iotdb.quality.frequency;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
@@ -36,7 +32,7 @@ import org.jtransforms.fft.DoubleFFT_1D;
 
 import java.text.SimpleDateFormat;
 
-/** This function do Inverse Fast Fourier Transform for input series. */
+/** This function does Inverse Fast Fourier Transform for input series. */
 public class UDTFIFFT implements UDTF {
 
   private final DoubleArrayList real = new DoubleArrayList();
@@ -98,7 +94,7 @@ public class UDTFIFFT implements UDTF {
       int k = time.get(i);
       a[k * 2] = real.get(i);
       a[k * 2 + 1] = imag.get(i);
-      // 共轭
+      // conjugate
       if (k > 0) {
         k = n - k;
         a[k * 2] = real.get(i);

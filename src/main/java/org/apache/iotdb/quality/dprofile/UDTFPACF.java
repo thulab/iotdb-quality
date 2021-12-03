@@ -30,12 +30,12 @@ import org.apache.commons.math3.stat.StatUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/*
-   使用Yule-Walker法计算偏自相关函数
-   改编自python库statsmodels.tsa.stattools.pacf_yw
+/**
+  * This function solves Yule-Walker equation to calculate partial auto-correlation factor.
+  * reference: statsmodels.tsa.stattools.pacf_yw
 */
 
-public class UDTFPartialAutoCorrelation implements UDTF {
+public class UDTFPACF implements UDTF {
   ArrayList<Double> value = new ArrayList<>();
   ArrayList<Long> timestamp = new ArrayList<>();
   int lag;

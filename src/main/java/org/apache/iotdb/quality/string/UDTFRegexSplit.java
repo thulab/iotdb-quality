@@ -24,7 +24,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-// This function splits string from an input series according to given regex.
+/** This function splits string from an input series according to given regex. */
 public class UDTFRegexSplit implements UDTF {
 
   private String regex;

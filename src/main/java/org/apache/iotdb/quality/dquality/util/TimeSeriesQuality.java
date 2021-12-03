@@ -19,7 +19,7 @@
  * and open the template in the editor.
  */
 
-package org.apache.iotdb.quality.dquality;
+package org.apache.iotdb.quality.dquality.util;
 
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;

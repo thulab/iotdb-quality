@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.apache.iotdb.quality.frequency;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
@@ -76,14 +71,14 @@ public class UDTFHighPass implements UDTF {
   public void terminate(PointCollector collector) throws Exception {
     int n = valueList.size();
     DoubleFFT_1D fft = new DoubleFFT_1D(n);
-    // 准备数据，每个数占用两个double
+    // each data point count for 2 double values, same with UDTFFFT
     double[] a = new double[2 * n];
     for (int i = 0; i < n; i++) {
       a[2 * i] = valueList.get(i);
       a[2 * i + 1] = 0;
     }
     fft.complexForward(a);
-    // 清除低频成分
+    // remove low frequency components
     int m = (int) Math.floor(wpass * n / 2);
     for (int i = 0; i <= 2 * m + 1; i++) {
       a[i] = 0;
@@ -92,7 +87,7 @@ public class UDTFHighPass implements UDTF {
       a[i] = 0;
     }
     fft.complexInverse(a, true);
-    // 输出
+    // output
     for (int i = 0; i < n; i++) {
       collector.putDouble(timeList.get(i), a[i * 2]);
     }

@@ -29,7 +29,7 @@ import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-// This function replaces substring according to regex parameter from an input series.
+/** This function replaces substring according to regex parameter from an input series. */
 public class UDTFRegexReplace implements UDTF {
 
   private String regex;
