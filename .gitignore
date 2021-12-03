@@ -19,5 +19,5 @@ tools/auto-document/marktex/markast/__pycache__
 tools/auto-document/marktex/texparser/__pycache__
 .idea/
 *.iml
-src/main/java/cn/edu/thu/iotdb/quality/dprofile/SegmentTest.java
+src/main/java/org/apache/iotdb/quality/dprofile/SegmentTest.java
 .DS_Store
