@@ -5,6 +5,7 @@
  */
 package cn.edu.thu.iotdb.quality;
 
+import cn.edu.thu.iotdb.quality.util.NoNumberException;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -203,7 +204,7 @@ public class Util {
         }
         return var;
     }
-    
+
         /**
      * 计算序列的取值变化
      *

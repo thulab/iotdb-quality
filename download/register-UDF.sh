@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 # This file is used to create UDFs of IoTDB-Quality automatically.
 # Created by Data Quality Group, School of Software, Tsinghua University
 # 
@@ -31,6 +31,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function zscore as 'cn.edu.thu.iotdb.quality.dprofile.UDTFZScore'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function spline as 'cn.edu.thu.iotdb.quality.dprofile.UDTFSpline'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function movingaverage as 'cn.edu.thu.iotdb.quality.dprofile.UDTFMovingAverage'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function acf as 'cn.edu.thu.iotdb.quality.dprofile.UDTFACF'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pacf as 'cn.edu.thu.iotdb.quality.dprofile.UDTFPartialAutoCorrelation'"
 
 
@@ -49,11 +50,10 @@ pass=root
 
 # Data Matching
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function cov as 'cn.edu.thu.iotdb.quality.dmatch.UDAFCov'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function crosscorrelation as 'cn.edu.thu.iotdb.quality.dmatch.UDTFCrossCorrelation'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function xcorr as 'cn.edu.thu.iotdb.quality.dmatch.UDTFXCorr'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function dtw as 'cn.edu.thu.iotdb.quality.dmatch.UDAFDtw'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function patternsymmetric as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPatternSymmetric'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ptnsym as 'cn.edu.thu.iotdb.quality.dmatch.UDTFPtnSym'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function pearson as 'cn.edu.thu.iotdb.quality.dmatch.UDAFPearson'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function selfcorrelation as 'cn.edu.thu.iotdb.quality.dmatch.UDTFSelfCorrelation'"
 
 
 # Anomaly Detection
@@ -79,8 +79,8 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function consecutivewindows as 'cn.edu.thu.iotdb.quality.series.UDTFConsecutiveWindows'"
 
 # String Processing
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function split as 'cn.edu.thu.iotdb.quality.string.UDTFSplit'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexsplit as 'cn.edu.thu.iotdb.quality.string.UDTFRegexSplit'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexmatch as 'cn.edu.thu.iotdb.quality.string.UDTFRegexMatch'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function replace as 'cn.edu.thu.iotdb.quality.string.UDTFReplace'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function strreplace as 'cn.edu.thu.iotdb.quality.string.UDTFStrReplace'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function regexreplace as 'cn.edu.thu.iotdb.quality.string.UDTFRegexReplace'"
 
