@@ -17,6 +17,10 @@ package org.apache.iotdb.quality.util;
 
 import java.util.Arrays;
 
+/**
+ * This class offers function to do linear regression.
+ * Please use org.apache.commons.math3 for regular usage.
+ * */
 public class LinearRegression {
   double[] x, y, e, yhead;
   int n;

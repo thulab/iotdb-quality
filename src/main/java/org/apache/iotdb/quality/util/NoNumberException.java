@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.apache.iotdb.quality.util;
 
-/** @author Wang Haoyu */
+/** @author Wang Haoyu
+ *  throw when the value got is not numberic.
+ */
 public class NoNumberException extends Exception {
 
   @Override

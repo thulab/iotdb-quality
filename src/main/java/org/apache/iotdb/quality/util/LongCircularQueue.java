@@ -22,6 +22,7 @@ package org.apache.iotdb.quality.util;
 
 /**
  * 存放原始类型long的循环队列
+ * Circular queue for long
  *
  * @author Wang Haoyu
  */
@@ -44,8 +45,9 @@ public class LongCircularQueue {
 
   /**
    * 向循环队列的队尾加入元素
+   * push value into the back of queue
    *
-   * @param value 准备加入的元素
+   * @param value 准备加入的元素  value to push
    */
   public void push(long value) {
     // 先判断队列是否满了，满了要扩容
@@ -60,8 +62,9 @@ public class LongCircularQueue {
 
   /**
    * 弹出循环队列的队头
+   * pop value from the front of queue
    *
-   * @return 队头元素
+   * @return 队头元素 value in the front
    */
   public long pop() {
     if (isEmpty()) {
@@ -79,9 +82,11 @@ public class LongCircularQueue {
   }
 
   /**
-   * 返回循环队列的队头
+   * 判断循环队列是否为空
+   * judge if circular queue is empty
    *
-   * @return 队头元素
+   * @return 循环队列为空时返回true，否则返回false
+   *         if empty, return true; else return false
    */
   public long getHead() {
     if (isEmpty()) {
@@ -93,8 +98,10 @@ public class LongCircularQueue {
 
   /**
    * 判断循环队列是否为空
+   * judge if circular queue is empty
    *
    * @return 循环队列为空时返回true，否则返回false
+   *         if empty, return true; else return false
    */
   public boolean isEmpty() {
     return size == 0;
@@ -102,8 +109,10 @@ public class LongCircularQueue {
 
   /**
    * 判断循环队列中的data数组是否已满
+   * judge if circular queue is full
    *
    * @return 数组已满时返回true，否则返回false
+   *         if full, return true; else return false
    */
   private boolean isFull() {
     return size == data.length;
@@ -111,8 +120,9 @@ public class LongCircularQueue {
 
   /**
    * 改变循环队列中data数组的大小
+   * change size of queue
    *
-   * @param newLength 新的数组大小
+   * @param newLength 新的数组大小 new length of queue
    */
   private void resize(int newLength) {
     long[] newData = new long[newLength];
@@ -127,9 +137,10 @@ public class LongCircularQueue {
 
   /**
    * 返回循环队列中指定索引的元素
+   * get value of given index
    *
-   * @param index 索引
-   * @return 指定索引的元素
+   * @param index 索引 index
+   * @return 指定索引的元素 value to queue
    */
   public long get(int index) {
     if (index < 0 || index >= size) {
@@ -140,8 +151,9 @@ public class LongCircularQueue {
 
   /**
    * 返回循环队列中的元素个数
+   * get number of values in queue
    *
-   * @return 元素个数
+   * @return 元素个数 number of values
    */
   public int getSize() {
     return size;

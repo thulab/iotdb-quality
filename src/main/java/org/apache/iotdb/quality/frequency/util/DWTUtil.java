@@ -3,7 +3,7 @@ package org.apache.iotdb.quality.frequency.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// Util for UDTFDWT and UDTFIDWT
+/** Util for UDTFDWT and UDTFIDWT */
 public class DWTUtil {
   /** The number of coefficients. */
   private int ncof;
