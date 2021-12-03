@@ -16,7 +16,6 @@
 
 package org.apache.iotdb.quality.frequency;
 
-import com.sun.media.sound.FFT;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -24,9 +23,10 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
+import org.apache.iotdb.quality.frequency.util.FFTUtil;
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-import org.apache.iotdb.quality.frequency.util.FFTUtil;
+
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.jtransforms.fft.DoubleFFT_1D;
 

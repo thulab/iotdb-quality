@@ -30,8 +30,8 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
- * 该UDTF用于寻找序列中的指定长度的连续子序列
- * This function searches for consecutive subsequences of given length of input sereis.
+ * 该UDTF用于寻找序列中的指定长度的连续子序列 This function searches for consecutive subsequences of given length of
+ * input sereis.
  *
  * @author Wang Haoyu
  */
@@ -86,7 +86,9 @@ public class UDTFConsecutiveWindows implements UDTF {
       consUtil.calculateGap();
       consUtil.cleanWindow(collector);
     }
-    for (; consUtil.getFirst() + len <= consUtil.getLast(); consUtil.setFirst(consUtil.getFirst()+consUtil.getGap())) {
+    for (;
+        consUtil.getFirst() + len <= consUtil.getLast();
+        consUtil.setFirst(consUtil.getFirst() + consUtil.getGap())) {
       collector.putInt(consUtil.getFirst(), consUtil.getCount());
     }
   }

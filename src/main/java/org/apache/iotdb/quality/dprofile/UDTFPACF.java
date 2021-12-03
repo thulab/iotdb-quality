@@ -31,10 +31,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
-  * This function solves Yule-Walker equation to calculate partial auto-correlation factor.
-  * reference: statsmodels.tsa.stattools.pacf_yw
-*/
-
+ * This function solves Yule-Walker equation to calculate partial auto-correlation factor.
+ * reference: statsmodels.tsa.stattools.pacf_yw
+ */
 public class UDTFPACF implements UDTF {
   ArrayList<Double> value = new ArrayList<>();
   ArrayList<Long> timestamp = new ArrayList<>();

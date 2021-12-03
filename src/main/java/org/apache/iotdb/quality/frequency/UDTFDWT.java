@@ -28,10 +28,10 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.ArrayList;
 
-/** This function calculates discrete wavelet transform of an input series.
-  * Input series must be an integer exponent of 2.
-  * Input series is treated as sampled in equal distances.
-  */
+/**
+ * This function calculates discrete wavelet transform of an input series. Input series must be an
+ * integer exponent of 2. Input series is treated as sampled in equal distances.
+ */
 public class UDTFDWT implements UDTF {
   private ArrayList<Long> timestamp = new ArrayList<>();
   private ArrayList<Double> value = new ArrayList<>();

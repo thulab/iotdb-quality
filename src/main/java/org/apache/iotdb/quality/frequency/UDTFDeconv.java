@@ -28,9 +28,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.ArrayList;
 
-/** @author Wang Haoyu
- * This function calculates deconvolution of two input series.
- */
+/** @author Wang Haoyu This function calculates deconvolution of two input series. */
 public class UDTFDeconv implements UDTF {
 
   private final ArrayList<Double> list1 = new ArrayList<>();

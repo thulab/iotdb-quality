@@ -31,15 +31,15 @@ import org.eclipse.collections.impl.map.mutable.primitive.LongIntHashMap;
 
 import java.util.ArrayList;
 
-/** @author Wang Haoyu
- *  This class offers functions of getting and putting values from iotdb interface.
+/**
+ * @author Wang Haoyu This class offers functions of getting and putting values from iotdb
+ *     interface.
  */
 public class Util {
 
   /**
-   * 从Row中取出指定位置的值，并转化为double类型。注意，必须保证Row中不存在null。
-   * Get value from specific column from Row, and cast to double.
-   * Make sure never get null from Row.
+   * 从Row中取出指定位置的值，并转化为double类型。注意，必须保证Row中不存在null。 Get value from specific column from Row, and
+   * cast to double. Make sure never get null from Row.
    *
    * @param row 数据行 data row
    * @param index 指定位置的索引 the column index
@@ -68,9 +68,8 @@ public class Util {
   }
 
   /**
-   * 从Row中取出第0列的值，并转化为double类型。注意，必须保证Row中不存在null。
-   * Get value from 0th column from Row, and cast to double.
-   * Make sure never get null from Row.
+   * 从Row中取出第0列的值，并转化为double类型。注意，必须保证Row中不存在null。 Get value from 0th column from Row, and cast to
+   * double. Make sure never get null from Row.
    *
    * @param row 数据行 data row
    * @return Row中的第0列的值 value from 0th column from Row
@@ -81,8 +80,7 @@ public class Util {
   }
 
   /**
-   * 从Row中取出第一个值，并转化为Object类型
-   * Get value from 0th column from Row, and cast to Object.
+   * 从Row中取出第一个值，并转化为Object类型 Get value from 0th column from Row, and cast to Object.
    *
    * @param row
    * @return Row中的第一个值 value from 0th column from Row
@@ -113,8 +111,7 @@ public class Util {
   }
 
   /**
-   * 向PointCollector中加入新的数据点
-   * Add new data point to PointCollector
+   * 向PointCollector中加入新的数据点 Add new data point to PointCollector
    *
    * @param pc PointCollector
    * @param type 数据类型 datatype
@@ -169,9 +166,8 @@ public class Util {
    * 计算序列的绝对中位差MAD。为了达到渐进正态性，乘上比例因子1.4826。 <br>
    * 备注: 1.4826 = 1/qnorm(3/4)
    *
-   * calculate median absolute deviation of input series.
-   * 1.4826 is multiplied in order to achieve asymptotic normality.
-   * Note: 1.4826 = 1/qnorm(3/4)
+   * <p>calculate median absolute deviation of input series. 1.4826 is multiplied in order to
+   * achieve asymptotic normality. Note: 1.4826 = 1/qnorm(3/4)
    *
    * @param value 序列 input series
    * @return 绝对中位差MAD median absolute deviation MAD
@@ -187,8 +183,7 @@ public class Util {
   }
 
   /**
-   * 计算序列的取值变化
-   * calculate 1-order difference of input series
+   * 计算序列的取值变化 calculate 1-order difference of input series
    *
    * @param origin 原始序列 original series
    * @return 取值变化序列 1-order difference
@@ -203,8 +198,7 @@ public class Util {
   }
 
   /**
-   * 计算序列的取值变化
-   * calculate 1-order difference of input series
+   * 计算序列的取值变化 calculate 1-order difference of input series
    *
    * @param origin 原始序列 original series
    * @return 取值变化序列 1-order difference
@@ -219,8 +213,7 @@ public class Util {
   }
 
   /**
-   * 计算序列的取值变化
-   * calculate 1-order difference of input series
+   * 计算序列的取值变化 calculate 1-order difference of input series
    *
    * @param origin 原始序列 original series
    * @return 取值变化序列 1-order difference
@@ -235,8 +228,7 @@ public class Util {
   }
 
   /**
-   * 计算时间序列的速度
-   * calculate speed (1-order derivative with backward difference)
+   * 计算时间序列的速度 calculate speed (1-order derivative with backward difference)
    *
    * @param origin 值序列 value series
    * @param time 时间戳序列 timestamp series
@@ -252,8 +244,7 @@ public class Util {
   }
 
   /**
-   * 计算时间序列的速度
-   * calculate speed (1-order derivative with backward difference)
+   * 计算时间序列的速度 calculate speed (1-order derivative with backward difference)
    *
    * @param origin 值序列 value series
    * @param time 时间戳序列 timestamp series
@@ -269,8 +260,7 @@ public class Util {
   }
 
   /**
-   * 计算序列的众数
-   * computes mode
+   * 计算序列的众数 computes mode
    *
    * @param values 序列 input series
    * @return 众数 mode
@@ -293,6 +283,7 @@ public class Util {
 
   /**
    * cast String to timestamp
+   *
    * @param s input string
    * @return timestamp
    */

@@ -21,8 +21,7 @@
 package org.apache.iotdb.quality.util;
 
 /**
- * 存放原始类型long的循环队列
- * Circular queue for long
+ * 存放原始类型long的循环队列 Circular queue for long
  *
  * @author Wang Haoyu
  */
@@ -44,10 +43,9 @@ public class LongCircularQueue {
   }
 
   /**
-   * 向循环队列的队尾加入元素
-   * push value into the back of queue
+   * 向循环队列的队尾加入元素 push value into the back of queue
    *
-   * @param value 准备加入的元素  value to push
+   * @param value 准备加入的元素 value to push
    */
   public void push(long value) {
     // 先判断队列是否满了，满了要扩容
@@ -61,8 +59,7 @@ public class LongCircularQueue {
   }
 
   /**
-   * 弹出循环队列的队头
-   * pop value from the front of queue
+   * 弹出循环队列的队头 pop value from the front of queue
    *
    * @return 队头元素 value in the front
    */
@@ -82,11 +79,9 @@ public class LongCircularQueue {
   }
 
   /**
-   * 判断循环队列是否为空
-   * judge if circular queue is empty
+   * 判断循环队列是否为空 judge if circular queue is empty
    *
-   * @return 循环队列为空时返回true，否则返回false
-   *         if empty, return true; else return false
+   * @return 循环队列为空时返回true，否则返回false if empty, return true; else return false
    */
   public long getHead() {
     if (isEmpty()) {
@@ -97,30 +92,25 @@ public class LongCircularQueue {
   }
 
   /**
-   * 判断循环队列是否为空
-   * judge if circular queue is empty
+   * 判断循环队列是否为空 judge if circular queue is empty
    *
-   * @return 循环队列为空时返回true，否则返回false
-   *         if empty, return true; else return false
+   * @return 循环队列为空时返回true，否则返回false if empty, return true; else return false
    */
   public boolean isEmpty() {
     return size == 0;
   }
 
   /**
-   * 判断循环队列中的data数组是否已满
-   * judge if circular queue is full
+   * 判断循环队列中的data数组是否已满 judge if circular queue is full
    *
-   * @return 数组已满时返回true，否则返回false
-   *         if full, return true; else return false
+   * @return 数组已满时返回true，否则返回false if full, return true; else return false
    */
   private boolean isFull() {
     return size == data.length;
   }
 
   /**
-   * 改变循环队列中data数组的大小
-   * change size of queue
+   * 改变循环队列中data数组的大小 change size of queue
    *
    * @param newLength 新的数组大小 new length of queue
    */
@@ -136,8 +126,7 @@ public class LongCircularQueue {
   }
 
   /**
-   * 返回循环队列中指定索引的元素
-   * get value of given index
+   * 返回循环队列中指定索引的元素 get value of given index
    *
    * @param index 索引 index
    * @return 指定索引的元素 value to queue
@@ -150,8 +139,7 @@ public class LongCircularQueue {
   }
 
   /**
-   * 返回循环队列中的元素个数
-   * get number of values in queue
+   * 返回循环队列中的元素个数 get number of values in queue
    *
    * @return 元素个数 number of values
    */

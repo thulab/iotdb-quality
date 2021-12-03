@@ -16,9 +16,7 @@
 
 package org.apache.iotdb.quality.util;
 
-/** @author Wang Haoyu
- *  throw when the value got is not numberic.
- */
+/** @author Wang Haoyu throw when the value got is not numberic. */
 public class NoNumberException extends Exception {
 
   @Override

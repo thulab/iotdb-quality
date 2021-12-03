@@ -28,11 +28,11 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.ArrayList;
 
-/** This function calculates inverse discrete wavelet transform of an input series, which is composed
-  * of multiple layers.
-  * Input series must be an integer exponent of 2.
-  * Input series is treated as sampled in equal distances.
-  */
+/**
+ * This function calculates inverse discrete wavelet transform of an input series, which is composed
+ * of multiple layers. Input series must be an integer exponent of 2. Input series is treated as
+ * sampled in equal distances.
+ */
 public class UDTFIDWT implements UDTF {
   private ArrayList<Long> timestamp = new ArrayList<>();
   private ArrayList<Double> value = new ArrayList<>();
