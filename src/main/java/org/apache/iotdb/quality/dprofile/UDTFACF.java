@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.iotdb.quality.dprofile;
 
+package cn.edu.thu.iotdb.quality.dprofile;
+
+import cn.edu.thu.iotdb.quality.dmatch.util.CrossCorrelation;
+import cn.edu.thu.iotdb.quality.util.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
@@ -22,16 +25,17 @@ import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
-import org.apache.iotdb.quality.dmatch.util.CrossCorrelation;
-import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
+import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 
-import java.util.ArrayList;
-
-/** This function calculates auto-correlation factor of a single input series. */
+/**
+ * @ClassName UDTFACF
+ * @Description This function calculates auto-correlation factor of a single input series.
+ * @Author thulab @Version 1.0.0
+ */
 public class UDTFACF implements UDTF {
 
-  private ArrayList<Double> valueArrayList = new ArrayList<Double>();
+  private final DoubleArrayList valueArrayList = new DoubleArrayList();
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -53,7 +57,7 @@ public class UDTFACF implements UDTF {
 
   @Override
   public void terminate(PointCollector collector) throws Exception {
-    ArrayList<Double> correlationArrayList =
+    DoubleArrayList correlationArrayList =
         CrossCorrelation.calculateCrossCorrelation(valueArrayList, valueArrayList);
     for (int i = 0; i < correlationArrayList.size(); i++) {
       collector.putDouble(i, correlationArrayList.get(i));

@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.iotdb.quality.dprofile;
 
+package cn.edu.thu.iotdb.quality.dprofile;
+
+import cn.edu.thu.iotdb.quality.util.Util;
+import java.util.ArrayList;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
-import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
-
-import java.util.ArrayList;
 
 /*
    流式转换需用户提供最大值最小值，全局转换则不需要
@@ -35,7 +35,7 @@ public class UDTFMinMax implements UDTF {
   String method = "batch";
   double min = 0.0d;
   double max = 0.0d;
-  boolean f = true;
+  boolean flag = true;
 
   @Override
   public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
@@ -44,7 +44,7 @@ public class UDTFMinMax implements UDTF {
     timestamp.clear();
     min = 0.0d;
     max = 0.0d;
-    f = true;
+    flag = true;
     udtfConfigurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
@@ -63,10 +63,10 @@ public class UDTFMinMax implements UDTF {
       double v = Util.getValueAsDouble(row);
       value.add(v);
       timestamp.add(row.getTime());
-      if (f) {
+      if (flag) {
         min = v;
         max = v;
-        f = false;
+        flag = false;
       } else {
         if (v > max) {
           max = v;

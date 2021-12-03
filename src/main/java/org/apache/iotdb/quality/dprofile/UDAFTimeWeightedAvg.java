@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.iotdb.quality.dprofile;
+
+package cn.edu.thu.iotdb.quality.dprofile;
 
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
@@ -24,7 +25,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-import static org.apache.iotdb.quality.util.Util.getValueAsDouble;
+import static cn.edu.thu.iotdb.quality.util.Util.getValueAsDouble;
 
 /**
  * calculate the integral or the area under the curve of input series $unit$ is the time scale for
