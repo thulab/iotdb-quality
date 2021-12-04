@@ -1,6 +1,6 @@
 package cn.edu.thu.iotdb.quality.dquality;
 
-import cn.edu.thu.iotdb.quality.NoNumberException;
+import cn.edu.thu.iotdb.quality.util.NoNumberException;
 import cn.edu.thu.iotdb.quality.Util;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
@@ -15,11 +15,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * 用于计算时间序列的准确性性的UDTF
- *
- * @author Ma Wenxuan
- */
+/** This class calculates Accuracy of time series. */
 public class UDTFAccuracy implements UDTF {
 
     private int colCnt;

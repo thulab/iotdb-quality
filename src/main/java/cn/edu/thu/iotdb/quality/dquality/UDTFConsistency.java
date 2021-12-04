@@ -36,12 +36,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @ClassName UDTFConsistency
- * @Description This class calculates Consistency of time series.
- * @author Wang Haoyu, Ma Wenxuan
- * @Version 2.0.0
- */
+/** This class calculates Consistency of time series. */
 public class UDTFConsistency implements UDTF {
 
   @Override

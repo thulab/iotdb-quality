@@ -33,25 +33,26 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * @ClassName TimeSeriesQuality
- * @Description This class calculates Consistency of time series.
- * @author Wang Haoyu
- * @Version 2.0.0
- */
+ * This class calculates qualities of time series.
+ *    Completeness,
+ *    Consistency,
+ *    Timeliness,
+ *    Validity.
+ *    **/
 public class TimeSeriesQuality {
 
   public static final int WINDOWSIZE = 10;
-  private boolean downtime = true; // 是否考虑停机异常
-  private int cnt = 0; // 数据点总数
-  private int missCnt = 0; // 缺失点个数
-  private int specialCnt = 0; // 特殊值点个数
-  private int lateCnt = 0; // 延迟点个数
-  private int redundancyCnt = 0; // 过密点个数
-  private int valueCnt = 0; // 违背取值范围约束的数据点个数
-  private int variationCnt = 0; // 违背取值变化约束的数据点个数
-  private int speedCnt = 0; // 违背速度约束的数据点个数
-  private int speedchangeCnt = 0; // 违背速度变化约束的数据点个数
-  private final double[] time, origin; // 除去特殊值的时间序列
+  private boolean downtime = true;
+  private int cnt = 0;
+  private int missCnt = 0;
+  private int specialCnt = 0;
+  private int lateCnt = 0;
+  private int redundancyCnt = 0;
+  private int valueCnt = 0;
+  private int variationCnt = 0;
+  private int speedCnt = 0;
+  private int speedchangeCnt = 0;
+  private final double[] time, origin;
 
   public TimeSeriesQuality(RowIterator dataIterator) throws Exception {
     ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
@@ -63,7 +64,7 @@ public class TimeSeriesQuality {
       if (Double.isFinite(v)) {
         timeList.add(t);
         originList.add(v);
-      } else { // 对特殊值的处理，包括NAN，INF等
+      } else {
         specialCnt++;
         timeList.add(t);
         originList.add(Double.NaN);
@@ -78,7 +79,7 @@ public class TimeSeriesQuality {
     Scanner sc = new Scanner(new File(filename));
     ArrayList<Double> timeList = new ArrayList<>(), originList = new ArrayList<>();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    sc.useDelimiter("\\s*([,\\r\\n])\\s*"); // 设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
+    sc.useDelimiter("\\s*([,\\r\\n])\\s*");
     sc.nextLine();
     while (sc.hasNext()) {
       cnt++;
@@ -87,7 +88,7 @@ public class TimeSeriesQuality {
       if (Double.isFinite(v)) {
         timeList.add(t);
         originList.add(v);
-      } else { // 对特殊值的处理，包括NAN，INF等
+      } else {
         specialCnt++;
         timeList.add(t);
         originList.add(Double.NaN);
@@ -98,11 +99,10 @@ public class TimeSeriesQuality {
     processNaN();
   }
 
-  /** 对数据序列中的NaN进行处理，采用线性插值方法 */
+  /** process NaN in data sequence by linear interpolation method */
   private void processNaN() throws Exception {
     int n = origin.length;
-    int index1 = 0, index2; // 线性插值的两个基准
-    // 找到两个非NaN的基准
+    int index1 = 0, index2;
     while (index1 < n && Double.isNaN(origin[index1])) {
       index1++;
     }
@@ -113,7 +113,6 @@ public class TimeSeriesQuality {
     if (index2 >= n) {
       throw new Exception("At least two non-NaN values are needed");
     }
-    // 对序列开头的NaN进行插值
     for (int i = 0; i < index2; i++) {
       origin[i] =
           origin[index1]
@@ -121,7 +120,6 @@ public class TimeSeriesQuality {
                   * (time[i] - time[index1])
                   / (time[index2] - time[index1]);
     }
-    // 对序列中间的NaN进行插值
     for (int i = index2 + 1; i < n; i++) {
       if (!Double.isNaN(origin[i])) {
         index1 = index2;
@@ -135,7 +133,6 @@ public class TimeSeriesQuality {
         }
       }
     }
-    // 对序列末尾的NaN进行插值
     for (int i = index2 + 1; i < n; i++) {
       origin[i] =
           origin[index1]
@@ -145,75 +142,61 @@ public class TimeSeriesQuality {
     }
   }
 
-  /** 对时间序列的时间戳进行异常侦测，为计算完整性、一致性、时效性做准备 */
+  /** Anomaly detection is performed on the timestamp of time series to prepare for computational integrity, consistency and timeliness */
   public void timeDetect() {
-    // 计算时间间隔特征
     double[] interval = Util.variation(time);
     Median median = new Median();
     double base = median.evaluate(interval);
-    // 寻找时间戳异常
     ArrayList<Double> window = new ArrayList<>();
     int i;
-    for (i = 0; i < Math.min(time.length, WINDOWSIZE); i++) { // 填充初始数据
+    for (i = 0; i < Math.min(time.length, WINDOWSIZE); i++) {
       window.add(time[i]);
     }
     while (window.size() > 1) {
       double times = (window.get(1) - window.get(0)) / base;
-      if (times <= 0.5) { // 处理为过密点并删除
+      if (times <= 0.5) {
         window.remove(1);
         redundancyCnt++;
-      } else if (times >= 2.0 && (!downtime || times <= 9.0)) { // 排除停机
-        // 时间间隔过大，可能是数据缺失，也可能是延迟
-        int temp = 0; // 在后续窗口中找到的连续过密点个数
+      } else if (times >= 2.0 && (!downtime || times <= 9.0)) {
+        int temp = 0;
         for (int j = 2; j < window.size(); j++) {
           double times2 = (window.get(j) - window.get(j - 1)) / base;
-          if (times2 >= 2.0) { // 发现另一个缺失点，停止搜索
+          if (times2 >= 2.0) {
             break;
           }
-          if (times2 <= 0.5) { // 发现过密点，可能是延迟导致的
+          if (times2 <= 0.5) {
             temp++;
-            window.remove(j); // 将延迟点移回到前面
+            window.remove(j);
             j--;
             if (temp == (int) Math.round(times - 1)) {
-              break; // 找到了足够数量的延迟点来填补
+              break;
             }
           }
         }
         lateCnt += temp;
         missCnt += (Math.round(times - 1) - temp);
       }
-      window.remove(0); // 从窗口中移除已经处理的数据点
+      window.remove(0);
       while (window.size() < WINDOWSIZE && i < time.length) {
-        // 向窗口中填充数据点直到窗口被填满
         window.add(time[i]);
         i++;
       }
     }
   }
 
-  /** 对时间序列的值进行异常侦测，为计算有效性做准备 */
+  /** Anomaly detection is performed on the values of time series to prepare for the validity of calculation. */
   public void valueDetect() {
     int k = 3;
-    // 原始数据异常检测
     valueCnt = findOutliers(origin, k);
-    // 取值变化异常检测
     double[] variation = Util.variation(origin);
     variationCnt = findOutliers(variation, k);
-    // 取值变化速度异常检测
     double[] speed = Util.speed(origin, time);
     speedCnt = findOutliers(speed, k);
-    // 取值变化加速度异常检测
     double[] speedchange = Util.variation(speed);
     speedchangeCnt = findOutliers(speedchange, k);
   }
 
-  /**
-   * 返回序列中偏离中位数超过k倍绝对中位差的点的个数
-   *
-   * @param value 序列
-   * @param k 倍数
-   * @return 偏离中位数超过k倍绝对中位差的点的个数
-   */
+  /** Returns the number of points in the sequence that deviate from the median by more than k times the absolute median. **/
   private int findOutliers(double[] value, double k) {
     Median median = new Median();
     double mid = median.evaluate(value);
@@ -227,38 +210,22 @@ public class TimeSeriesQuality {
     return num;
   }
 
-  /**
-   * 返回时间序列的完整性
-   *
-   * @return 完整性
-   */
+  /** Returns the integrity of the time series. */
   public double getCompleteness() {
     return 1 - (missCnt + specialCnt) * 1.0 / (cnt + missCnt);
   }
 
-  /**
-   * 返回时间序列的一致性
-   *
-   * @return 一致性
-   */
+  /** Returns consistency of time series. */
   public double getConsistency() {
     return 1 - redundancyCnt * 1.0 / cnt;
   }
 
-  /**
-   * 返回时间序列的时效性
-   *
-   * @return 时效性
-   */
+  /** Returns the timeliness of the time series. */
   public double getTimeliness() {
     return 1 - lateCnt * 1.0 / cnt;
   }
 
-  /**
-   * 返回时间序列的有效性
-   *
-   * @return 有效性
-   */
+  /** Returns the validity of the time series. */
   public double getValidity() {
     return 1 - (valueCnt + variationCnt + speedCnt + speedchangeCnt) * 0.25 / cnt;
   }
@@ -273,12 +240,12 @@ public class TimeSeriesQuality {
     System.out.println(tsq.getValidity());
   }
 
-  /** @return the downtime */
+  /** return the downtime */
   public boolean isDowntime() {
     return downtime;
   }
 
-  /** @param downtime the downtime to set */
+  /** set downtime */
   public void setDowntime(boolean downtime) {
     this.downtime = downtime;
   }

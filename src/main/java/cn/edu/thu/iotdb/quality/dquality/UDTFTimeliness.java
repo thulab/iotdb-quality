@@ -36,12 +36,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @ClassName UDTFTimeliness
- * @Description This class calculates Timeliness of time series.
- * @author Wang Haoyu, Ma Wenxuan
- * @Version 2.0.0
- */
+/** This class calculates Timeliness of time series. */
 public class UDTFTimeliness implements UDTF {
 
   @Override

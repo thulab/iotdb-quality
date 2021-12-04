@@ -9,10 +9,14 @@ import javax.script.ScriptEngineManager;
 import java.io.File;
 import java.util.Scanner;
 
+/**
+ * This class calculates qualities of multiple time series.
+ *    Accuracy
+ *    **/
 public class MultipleTimeSeriesQuality {
     public static final int WINDOWSIZE = 10;
-    private boolean downtime = true;//是否考虑停机异常
-    private int cnt = 0;//数据点总数
+    private boolean downtime = true;
+    private int cnt = 0;
     private int finiteCnt = 0;
     private int inaccurateNum = 0;
 
@@ -48,7 +52,7 @@ public class MultipleTimeSeriesQuality {
         ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("js");
 
         Scanner sc = new Scanner(new File(filename));
-        sc.useDelimiter("\\s*([,\r\\n])\\s*");//设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
+        sc.useDelimiter("\\s*([,\r\\n])\\s*");
         sc.nextLine();
         while (sc.hasNext()) {
             cnt++;
@@ -79,24 +83,16 @@ public class MultipleTimeSeriesQuality {
     }
 
     public static void main(String[] args) throws Exception {
-        long stime = System.currentTimeMillis();
         MultipleTimeSeriesQuality tsq = new MultipleTimeSeriesQuality("temp_accuracy2.csv", 3, "$1+$2==$3");
-        long etime = System.currentTimeMillis();
-        // 计算执行时间
-        System.out.printf("执行时长：%d 毫秒.\n", (etime - stime));
         System.out.println(tsq.getAccuracy());
     }
 
-    /**
-     * @return the downtime
-     */
+    /** return the downtime */
     public boolean isDowntime() {
         return downtime;
     }
 
-    /**
-     * @param downtime the downtime to set
-     */
+    /** set downtime */
     public void setDowntime(boolean downtime) {
         this.downtime = downtime;
     }

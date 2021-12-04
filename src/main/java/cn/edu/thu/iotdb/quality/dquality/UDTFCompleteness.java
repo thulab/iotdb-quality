@@ -35,12 +35,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @ClassName UDTFCompleteness
- * @Description This class calculates Completeness of time series.
- * @author Wang Haoyu, Ma Wenxuan
- * @Version 2.0.0
- */
+/** This class calculates Completeness of time series. */
 public class UDTFCompleteness implements UDTF {
 
   private boolean downtime;
