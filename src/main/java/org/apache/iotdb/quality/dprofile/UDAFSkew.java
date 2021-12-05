@@ -26,6 +26,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+/** This function calculates skew of input series. */
 public class UDAFSkew implements UDTF {
   private long count = 0;
   private double sumX3 = 0.0;

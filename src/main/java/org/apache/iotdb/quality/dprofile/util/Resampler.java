@@ -13,12 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package org.apache.iotdb.quality.dprofile;
+
+package org.apache.iotdb.quality.dprofile.util;
 
 import org.apache.iotdb.quality.util.CircularQueue;
 import org.apache.iotdb.quality.util.DoubleCircularQueue;
@@ -35,24 +31,28 @@ import java.util.Date;
 import java.util.Scanner;
 
 /**
- * 用于时间序列重采样（上采样、下采样）的类
+ * 用于时间序列重采样（上采样、下采样）的类 util for resample
  *
  * @author Wang Haoyu
  */
 public class Resampler {
 
-  private final LongArrayList timeWindow = new LongArrayList(); // 存放当前窗口内的数据点的时间戳
-  private final DoubleArrayList valueWindow = new DoubleArrayList(); // 存放当前窗口内的数据点的值
-  private final LongCircularQueue waitList = new LongCircularQueue(); // 存放待插值的时间戳
-  private final CircularQueue<SourceDataPoint> source = new CircularQueue<>(); // 存放用于插值的源数据点
-  private final LongCircularQueue timeBuffer = new LongCircularQueue(); // 缓存输出数据点的时间戳
-  private final DoubleCircularQueue valueBuffer = new DoubleCircularQueue(); // 缓存输出数据点的值
-  private final long newPeriod; // 重采样的周期
-  private final String aggregator; // 用于聚合的算法名称
-  private final String interpolator; // 用于插值的算法名称
-  private long currentTime; // 当前窗口的起始时间，窗口左闭右开
-  private long startTime, endTime; // 重采样的开始时间（包含）和结束时间（不包含）
-  private boolean outer = true; // 是否使用外插法
+  private final LongArrayList timeWindow = new LongArrayList(); // timestamps in the window
+  private final DoubleArrayList valueWindow = new DoubleArrayList(); // values in the window
+  private final LongCircularQueue waitList = new LongCircularQueue(); // timestamp for interpolation
+  private final CircularQueue<SourceDataPoint> source =
+      new CircularQueue<>(); // value for interpolation
+  private final LongCircularQueue timeBuffer =
+      new LongCircularQueue(); // buffer for output timestamp gap
+  private final DoubleCircularQueue valueBuffer =
+      new DoubleCircularQueue(); // buffer for ouput value
+  private final long newPeriod; // resampling period
+  private final String aggregator; // method to aggregate
+  private final String interpolator; // method to interpolate
+  private long currentTime; // start time of the window, left close & right open
+  private long startTime,
+      endTime; // start time (contained) and end time (not contained) of resampling
+  private boolean outer = true; // if to use outer interpolate
 
   public Resampler(long newPeriod, String aggregator, String interpolator) {
     this(newPeriod, aggregator, interpolator, -1, -1);
@@ -68,12 +68,7 @@ public class Resampler {
     this.currentTime = this.startTime;
   }
 
-  /**
-   * 加入新的数据点
-   *
-   * @param time 时间戳
-   * @param value 值
-   */
+  /** 加入新的数据点 insert new datapoint */
   public void insert(long time, double value) {
     if (Double.isNaN(value)
         || (startTime > 0 && time < startTime)
@@ -93,26 +88,20 @@ public class Resampler {
     valueWindow.add(value);
   }
 
-  /**
-   * 从文件中批量加入数据点
-   *
-   * @param filename 文件名
-   * @throws FileNotFoundException
-   * @throws ParseException
-   */
+  /** 从文件中批量加入数据点 insert points from a file */
   public void insert(String filename) throws FileNotFoundException, ParseException {
     Scanner sc = new Scanner(new File(filename));
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    sc.useDelimiter("\\s*(,|\\r|\\n)\\s*"); // 设置分隔符，以逗号或回车分隔，前后可以有若干个空白符
+    sc.useDelimiter("\\s*(,|\\r|\\n)\\s*"); // delimited by ',' or '\n', may contains ' ' nearby.
     sc.nextLine();
     while (sc.hasNext()) {
       insert(format.parse(sc.next()).getTime(), sc.nextDouble());
     }
   }
 
-  /** 强制对所有缓存数据进行处理 */
+  /** 强制对所有缓存数据进行处理 process all data in buffer */
   public void flush() {
-    do { // 第一次执行，处理最后一个窗口内的数据
+    do { // process data in the last window in first cycle
       downSample();
       currentTime += newPeriod;
     } while (endTime >= currentTime);
@@ -122,19 +111,19 @@ public class Resampler {
 
   /** 上采样，利用插值算法处理值为空的点，并将处理完成的点输出 */
   private void upSample() {
-    if (source.getSize() > 2 || (outer && source.getSize() == 2)) { // 常态
+    if (source.getSize() > 2 || (outer && source.getSize() == 2)) {
       if (source.getSize() > 2) {
         source.pop();
       }
-      // 对waitList中的点进行插值
+      // interpolate data in waitlist
       while (!waitList.isEmpty()) {
         long t = waitList.getHead();
-        if (!outer && source.get(1).time < t) { // 内插法需要的后面的数据点不足，留待之后处理
+        if (!outer && source.get(1).time < t) { // no enough data for inner interpolate
           break;
         }
-        if (endTime < 0 || t < endTime) { // 超过endTime的不予输出
+        if (endTime < 0 || t < endTime) { // no output for timestamp larger than end time
           timeBuffer.push(t);
-          valueBuffer.push(interpolate(t)); // 进行插值填补
+          valueBuffer.push(interpolate(t)); // interpolate
         }
         waitList.pop();
       }
@@ -142,14 +131,17 @@ public class Resampler {
     }
   }
 
-  /** 下采样，将窗口内的数据点进行聚合，并为上采样做准备 */
+  /**
+   * 下采样，将窗口内的数据点进行聚合，并为上采样做准备 downsampling. aggregate data in the window, and prepare for
+   * upsampling.
+   */
   private void downSample() {
     if (timeWindow.size() >= 2) {
-      // 聚合，将结果和时间戳加入source
+      // aggregate，add result and timestamp to source
       double result = aggregate();
       source.push(new SourceDataPoint(currentTime, result));
     } else if (timeWindow.size() == 1) {
-      // 将唯一的数据点加入source
+      // add the mere data into source
       source.push(new SourceDataPoint(timeWindow.get(0), valueWindow.get(0)));
     }
     timeWindow.clear();
@@ -158,9 +150,7 @@ public class Resampler {
   }
 
   /**
-   * 聚合。根据聚合算法，将窗口内的数据点聚合为一个值
-   *
-   * @return 聚合结果
+   * 聚合。根据聚合算法，将窗口内的数据点聚合为一个值 aggregate data in the window to one value according to given method.
    */
   private double aggregate() {
     double ret = Double.NaN;
@@ -189,12 +179,7 @@ public class Resampler {
     return ret;
   }
 
-  /**
-   * 插值。根据插值算法，计算给定时间戳对应的值
-   *
-   * @param t 时间戳
-   * @return 对应的值
-   */
+  /** 插值。根据插值算法，计算给定时间戳对应的值 interpolate. transfer given timestamp to interpolated timestamp. */
   private double interpolate(long t) {
     if (t == source.get(1).time) {
       return source.get(1).value;
@@ -232,34 +217,22 @@ public class Resampler {
     return ret;
   }
 
-  /**
-   * 输出缓冲中是否存在下一个数据点
-   *
-   * @return 存在下一个数据点返回true，否则返回false
-   */
+  /** 输出缓冲中是否存在下一个数据点 judge if there is a next point in the buffer */
   public boolean hasNext() {
     return !timeBuffer.isEmpty();
   }
 
-  /**
-   * 返回输出缓冲中当前数据点的时间戳
-   *
-   * @return 时间戳
-   */
+  /** 返回输出缓冲中当前数据点的时间戳 return the timestamp of the current point in buffer */
   public long getOutTime() {
     return timeBuffer.getHead();
   }
 
-  /**
-   * 返回输出缓冲中当前数据点的值
-   *
-   * @return 值
-   */
+  /** 返回输出缓冲中当前数据点的值 return the value of the current point in buffer */
   public double getOutValue() {
     return valueBuffer.getHead();
   }
 
-  /** 在输出缓冲中移动到下一个数据点 */
+  /** 在输出缓冲中移动到下一个数据点 move to next data point in buffer */
   public void next() {
     timeBuffer.pop();
     valueBuffer.pop();
@@ -267,8 +240,8 @@ public class Resampler {
 
   private class SourceDataPoint {
 
-    long time; // 时间戳
-    double value; // 值
+    long time;
+    double value;
 
     public SourceDataPoint(long time, double value) {
       this.time = time;
