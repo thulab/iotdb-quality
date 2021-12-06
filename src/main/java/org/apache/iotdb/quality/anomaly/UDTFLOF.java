@@ -121,11 +121,11 @@ public class UDTFLOF implements UDTF {
 
   @Override
   public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
-          throws Exception {
+      throws Exception {
     configurations
-            .setAccessStrategy(
-                    new SlidingSizeWindowAccessStrategy(parameters.getIntOrDefault("window", 10000)))
-            .setOutputDataType(TSDataType.DOUBLE);
+        .setAccessStrategy(
+            new SlidingSizeWindowAccessStrategy(parameters.getIntOrDefault("window", 10000)))
+        .setOutputDataType(TSDataType.DOUBLE);
     this.multipleK = parameters.getIntOrDefault("k", 3);
     this.dim = parameters.getPaths().size();
     this.method = parameters.getStringOrDefault("method", "default");
@@ -199,8 +199,7 @@ public class UDTFLOF implements UDTF {
               lof[m] = getLOF(knn, knn[m], size);
               collector.putDouble(timestamp[m], lof[m]);
             } catch (Exception e) {
-              throw new Exception(
-                  e + " " + Arrays.toString(e.getStackTrace()) + " " + m);
+              throw new Exception(e + " " + Arrays.toString(e.getStackTrace()) + " " + m);
             }
           }
         }

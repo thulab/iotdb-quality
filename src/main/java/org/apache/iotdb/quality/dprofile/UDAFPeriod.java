@@ -21,7 +21,6 @@
 
 package org.apache.iotdb.quality.dprofile;
 
-import org.apache.commons.math3.util.Pair;
 import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.access.RowIterator;
@@ -34,12 +33,12 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+import org.apache.commons.math3.util.Pair;
+
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
-/**
- * @author Wang Haoyu
- */
+/** @author Wang Haoyu */
 public class UDAFPeriod implements UDTF {
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
