@@ -153,7 +153,7 @@ public class Resampler {
    * 聚合。根据聚合算法，将窗口内的数据点聚合为一个值 aggregate data in the window to one value according to given method.
    */
   private double aggregate() {
-    double ret = Double.NaN;
+    double ret;
     switch (aggregator) {
       case "min":
         ret = valueWindow.min();
@@ -252,8 +252,8 @@ public class Resampler {
   public static void main(String[] args) throws FileNotFoundException, ParseException {
     Resampler resampler = new Resampler(1000 * 60 * 60 * 24, "median", "linear");
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    resampler.currentTime = format.parse("2021-06-19T12:00:00").getTime();
-    resampler.endTime = format.parse("2021-06-19T15:00:00").getTime();
+    resampler.currentTime = format.parse("2021-06-19 12:00:00").getTime();
+    resampler.endTime = format.parse("2021-06-19 15:00:00").getTime();
     //        resampler.endTime = 20000;
     resampler.insert("resample.csv");
     //        for (int i=0; i< 10; i++){
