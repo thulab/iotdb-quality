@@ -31,12 +31,12 @@ import java.util.ArrayList;
 /** This function segment input series into linear parts. */
 public class UDTFSegment implements UDTF {
 
-  private int window_size;
-  private double max_error;
+  private int windowSize;
+  private double maxError;
   private String method;
   private String output;
-  private static ArrayList<Long> timestamp = new ArrayList<>();
-  private static ArrayList<Double> value = new ArrayList<>();
+  private static final ArrayList<Long> timestamp = new ArrayList<>();
+  private static final ArrayList<Double> value = new ArrayList<>();
 
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
@@ -63,18 +63,18 @@ public class UDTFSegment implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
     timestamp.clear();
     value.clear();
-    this.window_size = udfParameters.getIntOrDefault("window", 10);
-    this.max_error = udfParameters.getDoubleOrDefault("error", 0.1);
-    this.method = udfParameters.getStringOrDefault("method", "bottom-up");
+    this.windowSize = parameters.getIntOrDefault("window", 10);
+    this.maxError = parameters.getDoubleOrDefault("error", 0.1);
+    this.method = parameters.getStringOrDefault("method", "bottom-up");
     this.method = this.method.toLowerCase();
-    this.output = udfParameters.getStringOrDefault("output", "first");
+    this.output = parameters.getStringOrDefault("output", "first");
     this.output = this.output.toLowerCase();
   }
 
@@ -90,10 +90,10 @@ public class UDTFSegment implements UDTF {
     double[] v = value.stream().mapToDouble(Double::valueOf).toArray();
     ArrayList<double[]> seg = new ArrayList<>();
     if (method.equals("bottom-up")) {
-      ArrayList<double[]> temp = Segment.bottom_up(v, max_error);
+      ArrayList<double[]> temp = Segment.bottom_up(v, maxError);
       seg.addAll(temp);
     } else if (method.equals("swab")) { // haven't tested yet
-      seg = Segment.swab_alg(v, ts, max_error, window_size);
+      seg = Segment.swab_alg(v, ts, maxError, windowSize);
     }
     ArrayList<double[]> res = new ArrayList<>();
     for (double[] doubles : seg) {

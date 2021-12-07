@@ -46,13 +46,13 @@ public class UDTFMvAvg implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    dataType = udfParameters.getDataType(0);
-    windowSize = udfParameters.getIntOrDefault("window", 10);
+    dataType = parameters.getDataType(0);
+    windowSize = parameters.getIntOrDefault("window", 10);
     v = new DoubleCircularQueue(windowSize);
   }
 

@@ -25,11 +25,13 @@ import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.quality.drepair.util.LsGreedy;
 import org.apache.iotdb.quality.drepair.util.Screen;
 import org.apache.iotdb.quality.drepair.util.ValueRepair;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
  * 用于修复时间序列异常值的UDTF：目前已支持Screen和LsGreedy
@@ -44,15 +46,23 @@ public class UDTFValueRepair implements UDTF {
   double sigma;
 
   @Override
-  public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-    udtfc
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+            .validateInputSeriesNumber(1)
+            .validateInputSeriesDataType(
+                    0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
+  }
+
+  @Override
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+    configurations
         .setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
-        .setOutputDataType(udfp.getDataType(0));
-    method = udfp.getStringOrDefault("method", "screen");
-    minSpeed = udfp.getDoubleOrDefault("minSpeed", Double.NaN);
-    maxSpeed = udfp.getDoubleOrDefault("maxSpeed", Double.NaN);
-    center = udfp.getDoubleOrDefault("center", 0);
-    sigma = udfp.getDoubleOrDefault("sigma", Double.NaN);
+        .setOutputDataType(parameters.getDataType(0));
+    method = parameters.getStringOrDefault("method", "screen");
+    minSpeed = parameters.getDoubleOrDefault("minSpeed", Double.NaN);
+    maxSpeed = parameters.getDoubleOrDefault("maxSpeed", Double.NaN);
+    center = parameters.getDoubleOrDefault("center", 0);
+    sigma = parameters.getDoubleOrDefault("sigma", Double.NaN);
   }
 
   @Override

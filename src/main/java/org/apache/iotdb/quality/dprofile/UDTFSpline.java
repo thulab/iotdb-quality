@@ -20,6 +20,7 @@ import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.quality.util.Util;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 
 public class UDTFSpline implements UDTF {
   AkimaSplineInterpolator asi;
-  int samplePoints; // 插值后返回的采样值个数，由于时间戳必须是整数，因此采样时会选择就近的整数
+  int samplePoints; // convert to is closest integer
   ArrayList<Long> timestamp = new ArrayList<>();
   ArrayList<Double> yDouble = new ArrayList<>();
   ArrayList<Double> xDouble = new ArrayList<>();
@@ -41,12 +42,20 @@ public class UDTFSpline implements UDTF {
   PolynomialSplineFunction psf;
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+            .validateInputSeriesNumber(1)
+            .validateInputSeriesDataType(
+                    0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
+  }
+
+  @Override
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    samplePoints = udfParameters.getInt("points");
+    samplePoints = parameters.getInt("points");
     timestamp.clear();
     xDouble.clear();
     yDouble.clear();

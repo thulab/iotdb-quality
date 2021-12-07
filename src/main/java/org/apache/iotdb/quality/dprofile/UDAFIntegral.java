@@ -63,9 +63,9 @@ public class UDAFIntegral implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters parameters, UDTFConfigurations Configurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    Configurations.setAccessStrategy(new RowByRowAccessStrategy())
+    configurations.setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
     switch (parameters.getStringOrDefault(TIME_UNIT_KEY, TIME_UNIT_S)) {
       case TIME_UNIT_MS:

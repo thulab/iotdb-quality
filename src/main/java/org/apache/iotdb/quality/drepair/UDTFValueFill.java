@@ -20,6 +20,7 @@ import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.RowWindow;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAccessStrategy;
 import org.apache.iotdb.quality.drepair.util.ARFill;
@@ -29,6 +30,7 @@ import org.apache.iotdb.quality.drepair.util.MeanFill;
 import org.apache.iotdb.quality.drepair.util.PreviousFill;
 import org.apache.iotdb.quality.drepair.util.ScreenFill;
 import org.apache.iotdb.quality.drepair.util.ValueFill;
+import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /**
  * 给所有的UDTF的填补函数设定统一的接口，方便调用。
@@ -39,11 +41,19 @@ public class UDTFValueFill implements UDTF {
   private String method;
 
   @Override
-  public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-    udtfc
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+            .validateInputSeriesNumber(1)
+            .validateInputSeriesDataType(
+                    0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
+  }
+
+  @Override
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+    configurations
         .setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
-        .setOutputDataType(udfp.getDataType(0));
-    method = udfp.getStringOrDefault("method", "linear");
+        .setOutputDataType(parameters.getDataType(0));
+    method = parameters.getStringOrDefault("method", "linear");
   }
 
   @Override

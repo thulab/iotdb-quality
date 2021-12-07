@@ -50,14 +50,14 @@ public class UDTFHistogram implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.INT32);
-    start = udfParameters.getDoubleOrDefault("start", -Double.MAX_VALUE);
-    double end = udfParameters.getDoubleOrDefault("end", Double.MAX_VALUE);
-    count = udfParameters.getIntOrDefault("count", 1);
+    start = parameters.getDoubleOrDefault("start", -Double.MAX_VALUE);
+    double end = parameters.getDoubleOrDefault("end", Double.MAX_VALUE);
+    count = parameters.getIntOrDefault("count", 1);
     bucket = new int[count];
     gap = (end - start) / count;
   }

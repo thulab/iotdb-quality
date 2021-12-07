@@ -44,12 +44,12 @@ public class UDTFTimestampRepair implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-    udtfc
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+    configurations
         .setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
-        .setOutputDataType(udfp.getDataType(0));
-    intervalMethod = udfp.getStringOrDefault("method", "Median");
-    interval = udfp.getIntOrDefault("interval", 0);
+        .setOutputDataType(parameters.getDataType(0));
+    intervalMethod = parameters.getStringOrDefault("method", "Median");
+    interval = parameters.getIntOrDefault("interval", 0);
     if (interval > 0) {
       intervalMode = interval;
     } else if ("Median".equalsIgnoreCase(intervalMethod)) {

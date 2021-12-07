@@ -85,14 +85,14 @@ public class UDTFPACF implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
     value.clear();
     timestamp.clear();
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    lag = udfParameters.getIntOrDefault("lag", -1);
+    lag = parameters.getIntOrDefault("lag", -1);
   }
 
   @Override

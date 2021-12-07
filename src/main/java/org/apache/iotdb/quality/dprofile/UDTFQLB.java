@@ -49,12 +49,12 @@ public class UDTFQLB implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    m = udfParameters.getIntOrDefault("shift", 0);
+    m = parameters.getIntOrDefault("shift", 0);
     valueArrayList.clear();
   }
 

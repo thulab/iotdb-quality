@@ -58,9 +58,12 @@ public class UDTFDistinct implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-    udtfc.setAccessStrategy(new RowByRowAccessStrategy()).setOutputDataType(udfp.getDataType(0));
-    dataType = udfp.getDataType(0);
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
+          throws Exception {
+    configurations
+            .setAccessStrategy(new RowByRowAccessStrategy())
+            .setOutputDataType(parameters.getDataType(0));
+    dataType = parameters.getDataType(0);
     switch (dataType) {
       case INT32:
         intSet = new IntHashSet();

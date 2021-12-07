@@ -74,18 +74,20 @@ public class UDTFResample implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfp, UDTFConfigurations udtfc) throws Exception {
-    udtfc.setAccessStrategy(new RowByRowAccessStrategy()).setOutputDataType(TSDataType.DOUBLE);
-    long newPeriod = Util.parseTime(udfp.getString("every"));
-    String aggregator = udfp.getStringOrDefault("aggr", "mean").toLowerCase();
-    String interpolator = udfp.getStringOrDefault("interp", "nan").toLowerCase();
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+    configurations
+            .setAccessStrategy(new RowByRowAccessStrategy())
+            .setOutputDataType(TSDataType.DOUBLE);
+    long newPeriod = Util.parseTime(parameters.getString("every"));
+    String aggregator = parameters.getStringOrDefault("aggr", "mean").toLowerCase();
+    String interpolator = parameters.getStringOrDefault("interp", "nan").toLowerCase();
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     long startTime = -1, endTime = -1;
-    if (udfp.hasAttribute("start")) {
-      startTime = format.parse(udfp.getString("start")).getTime();
+    if (parameters.hasAttribute("start")) {
+      startTime = format.parse(parameters.getString("start")).getTime();
     }
-    if (udfp.hasAttribute("end")) {
-      endTime = format.parse(udfp.getString("end")).getTime();
+    if (parameters.hasAttribute("end")) {
+      endTime = format.parse(parameters.getString("end")).getTime();
     }
     resampler = new Resampler(newPeriod, aggregator, interpolator, startTime, endTime);
   }

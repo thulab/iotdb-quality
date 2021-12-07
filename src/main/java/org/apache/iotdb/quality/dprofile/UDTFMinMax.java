@@ -48,20 +48,20 @@ public class UDTFMinMax implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
     value.clear();
     timestamp.clear();
     min = 0.0d;
     max = 0.0d;
     flag = true;
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    method = udfParameters.getStringOrDefault("method", "batch");
+    method = parameters.getStringOrDefault("method", "batch");
     if (method.equalsIgnoreCase("stream")) {
-      min = udfParameters.getDouble("min");
-      max = udfParameters.getDouble("max");
+      min = parameters.getDouble("min");
+      max = parameters.getDouble("max");
     }
   }
 

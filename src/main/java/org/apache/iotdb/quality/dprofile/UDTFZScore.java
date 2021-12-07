@@ -20,6 +20,7 @@ import org.apache.iotdb.db.query.udf.api.UDTF;
 import org.apache.iotdb.db.query.udf.api.access.Row;
 import org.apache.iotdb.db.query.udf.api.collector.PointCollector;
 import org.apache.iotdb.db.query.udf.api.customizer.config.UDTFConfigurations;
+import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameterValidator;
 import org.apache.iotdb.db.query.udf.api.customizer.parameter.UDFParameters;
 import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrategy;
 import org.apache.iotdb.quality.util.Util;
@@ -28,6 +29,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 import java.util.ArrayList;
 
 /*
+   Stream swap require user to provide average and stddev, while global swap does not.
    流式转换需用户提供均值和标准差，全局转换则不需要
 */
 public class UDTFZScore implements UDTF {
@@ -40,19 +42,27 @@ public class UDTFZScore implements UDTF {
   double squareSum = 0.0d;
 
   @Override
-  public void beforeStart(UDFParameters udfParameters, UDTFConfigurations udtfConfigurations)
+  public void validate(UDFParameterValidator validator) throws Exception {
+    validator
+            .validateInputSeriesNumber(1)
+            .validateInputSeriesDataType(
+                    0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
+  }
+
+  @Override
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
       throws Exception {
     value.clear();
     timestamp.clear();
     sum = 0.0d;
     squareSum = 0.0d;
-    udtfConfigurations
+    configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    method = udfParameters.getStringOrDefault("method", "batch");
+    method = parameters.getStringOrDefault("method", "batch");
     if (method.equalsIgnoreCase("stream")) {
-      avg = udfParameters.getDouble("avg");
-      sd = udfParameters.getDouble("sd");
+      avg = parameters.getDouble("avg");
+      sd = parameters.getDouble("sd");
     }
   }
 
