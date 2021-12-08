@@ -31,7 +31,7 @@ import org.apache.iotdb.quality.anomaly.util.StreamMissDetector;
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/** @author Wang Haoyu */
+/** This function is used to detect missing anomalies. */
 public class UDTFMissDetect implements UDTF {
 
   private StreamMissDetector detector;

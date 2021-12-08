@@ -30,7 +30,7 @@ import com.google.common.math.Quantiles;
 import java.util.ArrayList;
 
 /*
-   流式转换需用户提供Q1与Q3，全局转换则不需要
+   This function is used to detect anomalies based on IQR.
    Stream swap require user to provide Q1 and Q3, while global swap does not.
 */
 public class UDTFIQR implements UDTF {

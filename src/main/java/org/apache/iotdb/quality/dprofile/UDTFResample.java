@@ -29,7 +29,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.text.SimpleDateFormat;
 
-/** @author Wang Haoyu This function does upsample or downsample of input series. */
+/** This function does upsample or downsample of input series. */
 public class UDTFResample implements UDTF {
 
   private Resampler resampler;

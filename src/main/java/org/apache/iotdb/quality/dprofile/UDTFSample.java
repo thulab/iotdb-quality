@@ -34,11 +34,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Arrays;
 import java.util.Random;
 
-/**
- * 使用蓄水池采样算法进行数据采样的UDTF This function samples data by pool sampling.
- *
- * @author Wang Haoyu
- */
+/** This function samples data by pool sampling. */
 public class UDTFSample implements UDTF {
 
   private int k; // sample numbers

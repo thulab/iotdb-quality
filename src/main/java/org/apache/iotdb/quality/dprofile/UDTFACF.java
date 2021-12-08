@@ -29,10 +29,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.ArrayList;
 
-/**
- * @ClassName UDTFACF @Description This function calculates auto-correlation factor of a single
- * input series. @Author thulab @Version 1.0.0
- */
+/** This function calculates auto-correlation factor of a single input series. */
 public class UDTFACF implements UDTF {
 
   private final ArrayList<Double> valueArrayList = new ArrayList<>();

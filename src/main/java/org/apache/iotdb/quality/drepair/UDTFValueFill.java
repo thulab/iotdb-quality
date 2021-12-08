@@ -32,11 +32,7 @@ import org.apache.iotdb.quality.drepair.util.ScreenFill;
 import org.apache.iotdb.quality.drepair.util.ValueFill;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * 给所有的UDTF的填补函数设定统一的接口，方便调用。
- *
- * @author Zhang Xiaojian
- */
+/** This function is used to impute time series. */
 public class UDTFValueFill implements UDTF {
   private String method;
 

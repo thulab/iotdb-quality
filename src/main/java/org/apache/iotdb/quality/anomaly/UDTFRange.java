@@ -25,6 +25,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+/** This function is used to detect range anomaly of time series. */
 public class UDTFRange implements UDTF {
   private TSDataType dataType;
   private double upperBound;

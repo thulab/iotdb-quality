@@ -26,6 +26,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.quality.drepair.util.TimestampRepair;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+/** This function is used for timestamp repair. */
 public class UDTFTimestampRepair implements UDTF {
   String intervalMethod;
   int interval;

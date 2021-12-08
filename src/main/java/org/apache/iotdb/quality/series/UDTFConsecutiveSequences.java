@@ -29,12 +29,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-/**
- * 该UDTF用于寻找序列中的所有局部最长的连续子序列 This function searches for all longest consecutive subsequences of
- * input sereis.
- *
- * @author Wang Haoyu
- */
+/** This function searches for all longest consecutive subsequences of input sereis. */
 public class UDTFConsecutiveSequences implements UDTF {
   private ConsecutiveUtil consUtil;
 

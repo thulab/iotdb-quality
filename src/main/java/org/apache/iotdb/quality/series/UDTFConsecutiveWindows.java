@@ -29,12 +29,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-/**
- * 该UDTF用于寻找序列中的指定长度的连续子序列 This function searches for consecutive subsequences of given length of
- * input sereis.
- *
- * @author Wang Haoyu
- */
+/** This function searches for consecutive subsequences of given length of input sereis. */
 public class UDTFConsecutiveWindows implements UDTF {
   private ConsecutiveUtil consUtil;
   private static final int maxLen = 128;

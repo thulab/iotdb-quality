@@ -25,6 +25,8 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+/** This function is used to calculate the distribution histogram of
+ * a single column of numerical data. */
 public class UDTFHistogram implements UDTF {
 
   private int[] bucket;

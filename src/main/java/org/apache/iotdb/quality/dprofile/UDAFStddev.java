@@ -26,6 +26,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
+/** This function is used to calculate the population standard deviation. */
 public class UDAFStddev implements UDTF {
   private long count = 0;
   private double sumX2 = 0.0;

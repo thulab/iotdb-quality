@@ -38,7 +38,7 @@ import org.apache.commons.math3.util.Pair;
 import org.eclipse.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 
-/** @author Wang Haoyu */
+/** The function is used to compute the period of a numeric time series. */
 public class UDAFPeriod implements UDTF {
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {

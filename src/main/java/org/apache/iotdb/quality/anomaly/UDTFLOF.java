@@ -27,6 +27,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.Arrays;
 
+/** This function is used to detect density anomaly of time series. */
 public class UDTFLOF implements UDTF {
   private double threshold;
   private int multipleK;

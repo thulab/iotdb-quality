@@ -33,11 +33,7 @@ import org.apache.iotdb.quality.drepair.util.Screen;
 import org.apache.iotdb.quality.drepair.util.ValueRepair;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/**
- * 用于修复时间序列异常值的UDTF：目前已支持Screen和LsGreedy
- *
- * @author Wang Haoyu
- */
+/** This function is used to repair the value of the time series. */
 public class UDTFValueRepair implements UDTF {
   String method;
   double minSpeed;

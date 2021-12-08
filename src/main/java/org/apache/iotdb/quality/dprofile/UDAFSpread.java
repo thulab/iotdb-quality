@@ -31,7 +31,8 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.RowByRowAccessStrat
 import org.apache.iotdb.quality.util.NoNumberException;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/** @author Wang Haoyu */
+/** This function is used to calculate the spread of time series,
+ * that is, the maximum value minus the minimum value. */
 public class UDAFSpread implements UDTF {
 
   int intMin = Integer.MAX_VALUE, intMax = Integer.MIN_VALUE;

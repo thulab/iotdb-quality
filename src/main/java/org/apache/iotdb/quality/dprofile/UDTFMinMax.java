@@ -28,9 +28,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.ArrayList;
 
-/*
-   流式转换需用户提供最大值最小值，全局转换则不需要
-*/
+/** This function is used to standardize the input series with min-max. */
 public class UDTFMinMax implements UDTF {
   ArrayList<Double> value = new ArrayList<>();
   ArrayList<Long> timestamp = new ArrayList<>();
