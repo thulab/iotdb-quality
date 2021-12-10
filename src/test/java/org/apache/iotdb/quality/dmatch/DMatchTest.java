@@ -13,24 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.iotdb.quality.util;
+package org.apache.iotdb.quality.dmatch;
 
-import org.apache.iotdb.session.Session;
-
-// IoTDB 0.12.0 session interface
-public class IoTDBSession_0_12_0 {
-    Session session;
-    public IoTDBSession_0_12_0(String host, int rpcPort){
-        session = new Session(host, rpcPort);
-    }
-
-    public IoTDBSession_0_12_0(String host, String rpcPort, String username, String password){
-        session = new Session(host, rpcPort, username, password);
-    }
-
-    public IoTDBSession_0_12_0(String host, int rpcPort, String username, String password){
-        session = new Session(host, rpcPort, username, password);
-    }
-
-
-}
+public class DMatchTest {}

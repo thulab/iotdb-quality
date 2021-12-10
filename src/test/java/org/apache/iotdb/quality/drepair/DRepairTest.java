@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.iotdb.quality.frequency;
+package org.apache.iotdb.quality.drepair;
 
-public class FrequencyTest {
-}
+public class DRepairTest {}
