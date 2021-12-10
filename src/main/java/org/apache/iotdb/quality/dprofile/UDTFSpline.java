@@ -44,9 +44,9 @@ public class UDTFSpline implements UDTF {
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
     validator
-            .validateInputSeriesNumber(1)
-            .validateInputSeriesDataType(
-                    0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
+        .validateInputSeriesNumber(1)
+        .validateInputSeriesDataType(
+            0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
   }
 
   @Override

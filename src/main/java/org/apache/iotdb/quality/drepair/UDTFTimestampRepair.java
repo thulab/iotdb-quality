@@ -45,7 +45,8 @@ public class UDTFTimestampRepair implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
+      throws Exception {
     configurations
         .setAccessStrategy(new SlidingSizeWindowAccessStrategy(Integer.MAX_VALUE))
         .setOutputDataType(parameters.getDataType(0));

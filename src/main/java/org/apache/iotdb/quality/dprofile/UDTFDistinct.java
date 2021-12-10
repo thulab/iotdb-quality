@@ -59,10 +59,10 @@ public class UDTFDistinct implements UDTF {
 
   @Override
   public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
-          throws Exception {
+      throws Exception {
     configurations
-            .setAccessStrategy(new RowByRowAccessStrategy())
-            .setOutputDataType(parameters.getDataType(0));
+        .setAccessStrategy(new RowByRowAccessStrategy())
+        .setOutputDataType(parameters.getDataType(0));
     dataType = parameters.getDataType(0);
     switch (dataType) {
       case INT32:

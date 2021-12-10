@@ -25,8 +25,10 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.quality.anomaly.util.WindowDetect;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
-/** The function is used to filter anomalies of a numeric time series
- * based on two-sided window detection. */
+/**
+ * The function is used to filter anomalies of a numeric time series based on two-sided window
+ * detection.
+ */
 public class UDTFTwoSidedFilter implements UDTF {
   private double len;
   private double threshold;

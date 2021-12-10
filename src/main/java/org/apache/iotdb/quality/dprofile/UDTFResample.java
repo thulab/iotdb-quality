@@ -74,10 +74,11 @@ public class UDTFResample implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
+      throws Exception {
     configurations
-            .setAccessStrategy(new RowByRowAccessStrategy())
-            .setOutputDataType(TSDataType.DOUBLE);
+        .setAccessStrategy(new RowByRowAccessStrategy())
+        .setOutputDataType(TSDataType.DOUBLE);
     long newPeriod = Util.parseTime(parameters.getString("every"));
     String aggregator = parameters.getStringOrDefault("aggr", "mean").toLowerCase();
     String interpolator = parameters.getStringOrDefault("interp", "nan").toLowerCase();

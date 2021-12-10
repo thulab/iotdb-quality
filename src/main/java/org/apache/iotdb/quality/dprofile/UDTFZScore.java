@@ -28,8 +28,10 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 import java.util.ArrayList;
 
-/** This function is used to standardize the input series with z-score.
- Stream swap require user to provide average and stddev, while global swap does not. */
+/**
+ * This function is used to standardize the input series with z-score. Stream swap require user to
+ * provide average and stddev, while global swap does not.
+ */
 public class UDTFZScore implements UDTF {
   ArrayList<Double> value = new ArrayList<>();
   ArrayList<Long> timestamp = new ArrayList<>();
@@ -42,9 +44,9 @@ public class UDTFZScore implements UDTF {
   @Override
   public void validate(UDFParameterValidator validator) throws Exception {
     validator
-            .validateInputSeriesNumber(1)
-            .validateInputSeriesDataType(
-                    0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
+        .validateInputSeriesNumber(1)
+        .validateInputSeriesDataType(
+            0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
   }
 
   @Override

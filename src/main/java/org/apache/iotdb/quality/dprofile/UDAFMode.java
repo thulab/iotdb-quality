@@ -55,10 +55,11 @@ public class UDAFMode implements UDTF {
   }
 
   @Override
-  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations) throws Exception {
+  public void beforeStart(UDFParameters parameters, UDTFConfigurations configurations)
+      throws Exception {
     configurations
-            .setAccessStrategy(new RowByRowAccessStrategy())
-            .setOutputDataType(parameters.getDataType(0));
+        .setAccessStrategy(new RowByRowAccessStrategy())
+        .setOutputDataType(parameters.getDataType(0));
     dataType = parameters.getDataType(0);
     switch (dataType) {
       case INT32:
