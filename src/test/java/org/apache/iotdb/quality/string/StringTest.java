@@ -15,5 +15,4 @@
  */
 package org.apache.iotdb.quality.string;
 
-public class StringTest {
-}
+public class StringTest {}

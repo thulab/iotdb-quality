@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.iotdb.quality.dmatch;
+package org.apache.iotdb.quality.dprofile;
 
-public class DMatchTest {
-}
+public class DProfileTest {}

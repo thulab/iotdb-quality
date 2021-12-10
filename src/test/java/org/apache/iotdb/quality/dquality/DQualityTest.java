@@ -15,5 +15,4 @@
  */
 package org.apache.iotdb.quality.dquality;
 
-public class DQualityTest {
-}
+public class DQualityTest {}

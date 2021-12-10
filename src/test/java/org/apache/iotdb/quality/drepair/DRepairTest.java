@@ -13,14 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.iotdb.quality.anomaly;
+package org.apache.iotdb.quality.drepair;
 
-import org.apache.iotdb.quality.util.IoTDBSession_0_12_0;
-public class AnomalyTest {
-
-
-    public static void main(String[] args) {
-        IoTDBSession_0_12_0 session = new IoTDBSession_0_12_0("127.0.0.1", "6667", "root", "root");
-        
-    }
-}
+public class DRepairTest {}

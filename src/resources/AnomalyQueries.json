@@ -1,0 +1,10 @@
+{
+  "UDTFIQR": ["Select UDTFIQR(s1, 'compute'='stream', 'q1'='-100', 'q3'='100') from root.test",
+    "Select UDTFIQR(s1, 'compute'='batch') from root.test"],
+  "UDTFKSigma": ["Select UDTFKsigma(s1, 'k'='3','window'='10000') from root.test"],
+  "UDTFLOF": ["Select UDTFLOF(s1, s2, 'method'='default','window'='10000') from root.test",
+    "Select UDTFLOF(s1, 'method'='series','k'='3','windowsize'='10') from root.test"],
+  "UDTFMissDetect": ["select UDTFmissdetect(s1,'minlen'='10') from root.test"],
+  "UDTFRange": ["select UDTFrange(s1,'lower_bound'='0.0','upper_bound'='10.0') from root.test"],
+  "UDTFTwoSidedFilter": ["select UDTFTwoSidedFilter(s0, 'len'='5', 'threshold'='0.3') from root.test"]
+}

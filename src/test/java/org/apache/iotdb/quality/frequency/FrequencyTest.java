@@ -15,5 +15,4 @@
  */
 package org.apache.iotdb.quality.frequency;
 
-public class FrequencyTest {
-}
+public class FrequencyTest {}
