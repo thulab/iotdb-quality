@@ -20,6 +20,7 @@ import org.apache.iotdb.session.Session;
 // IoTDB 0.12.0 session interface
 public class IoTDBSession_0_12_0 {
     Session session;
+
     public IoTDBSession_0_12_0(String host, int rpcPort){
         session = new Session(host, rpcPort);
     }
@@ -32,5 +33,8 @@ public class IoTDBSession_0_12_0 {
         session = new Session(host, rpcPort, username, password);
     }
 
+    public static void main(String[] args){
+        IoTDBSession_0_12_0 Session = new IoTDBSession_0_12_0("127.0.0.1", "6667", "root", "root");
 
+    }
 }
