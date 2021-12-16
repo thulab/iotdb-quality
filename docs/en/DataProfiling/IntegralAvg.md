@@ -1,13 +1,12 @@
-# TimeWeightedAvg
+# IntegralAvg
 
 ## Usage
 
-This function is used to calculate the time-weighted average of time series. 
-Time is weighted using the linearly interpolated integral of values, 
-and the output equals to the area divided by the time interval using the same time `unit`. 
+This function is used to calculate the function average of time series. 
+The output equals to the area divided by the time interval using the same time `unit`. 
 For more information of the area under the curve, please refer to `Integral` function.
 
-**Name:** TIMEWEIGHTEDAVG
+**Name:** INTEGRALAVG
 
 **Input Series:** Only support a single input numeric series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
@@ -43,16 +42,16 @@ Input series:
 SQL for query:
 
 ```sql
-select timeweightedavg(s1) from root.test.d1 where time <= 2020-01-01 00:00:10
+select integralavg(s1) from root.test.d1 where time <= 2020-01-01 00:00:10
 ```
 
 Output series:
 ```
-+-----------------------------+--------------------------------+
-|                         Time|timeweightedavg(root.test.d1.s1)|
-+-----------------------------+--------------------------------+
-|1970-01-01T08:00:00.000+08:00|                            5.75|
-+-----------------------------+--------------------------------+
++-----------------------------+----------------------------+
+|                         Time|integralavg(root.test.d1.s1)|
++-----------------------------+----------------------------+
+|1970-01-01T08:00:00.000+08:00|                        5.75|
++-----------------------------+----------------------------+
 ```
 
 Calculation expression: 

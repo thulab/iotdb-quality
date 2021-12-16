@@ -45,7 +45,16 @@ public class UDTFIQR implements UDTF {
     validator
         .validateInputSeriesNumber(1)
         .validateInputSeriesDataType(
-            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE);
+            0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE)
+        .validate(
+            x -> ((String) x).equalsIgnoreCase("batch") || ((String) x).equalsIgnoreCase("stream"),
+            "Parameter \"compute\" is illegal. Please use \"batch\" (for default) or \"stream\".",
+            validator.getParameters().getStringOrDefault("compute", ""))
+        .validate(
+            params -> (double) params[0] < (double) params[1],
+            "parameter $q1$ should be smaller than $q3$",
+            validator.getParameters().getDoubleOrDefault("q1", -1),
+            validator.getParameters().getDoubleOrDefault("q3", 1));
   }
 
   @Override

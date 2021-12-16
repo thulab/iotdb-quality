@@ -10,7 +10,7 @@ This function is used to calculate Ljung-Box statistics $Q_{LB}$ for time series
 
 **Parameters**: 
 
-`shift`: max lag to calculate. Legal input shall be integer from 1 to n-2, where n is the sample number. Default value is n-2.
+`lag`: max lag to calculate. Legal input shall be integer from 1 to n-2, where n is the sample number. Default value is n-2.
 
 **Output Series:** Output a single series. The type is DOUBLE. The output series is p value, and timestamp means lag.
 

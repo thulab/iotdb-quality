@@ -15,4 +15,106 @@
  */
 package org.apache.iotdb.quality.dprofile;
 
-public class DProfileTest {}
+import org.apache.iotdb.rpc.IoTDBConnectionException;
+import org.apache.iotdb.session.Session;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import io.jsonwebtoken.lang.Assert;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class DProfileTest {
+  @Test
+  public void test() throws IoTDBConnectionException, IOException, InterruptedException {
+    final String[] udfList = {
+      "UDAFIntegral",
+      "UDAFMad",
+      "UDAFMedian",
+      "UDAFMode",
+      "UDAFPercentile",
+      "UDAFPeriod",
+      "UDAFSkew",
+      "UDAFSpread",
+      "UDAFStddev",
+      "UDAFIntegralAvg",
+      "UDTFACF",
+      "UDTFDistinct",
+      "UDTFHistogram",
+      "UDTFMinMax",
+      "UDTFMvAvg",
+      "UDTFPACF",
+      "UDTFQLB",
+      "UDTFResample",
+      "UDTFSample",
+      "UDTFSegment",
+      "UDTFSpline",
+      "UDTFZScore"
+    };
+    Gson gson = new Gson();
+    Reader reader = Files.newBufferedReader(Paths.get("src/resources/DProfileQueries.json"));
+    HashMap<String, ArrayList<String>> udfQueries =
+        gson.fromJson(reader, new TypeToken<HashMap<String, ArrayList<String>>>() {}.getType());
+    reader.close();
+
+    Assert.isTrue(udfList.length == udfQueries.size());
+    Session session;
+    try {
+      session = new Session("127.0.0.1", "6667", "root", "root");
+      session.open();
+    } catch (Exception e) {
+      System.out.println(
+          "Failed to connect to session. Please start IoTDB and use default host, port, username and password.");
+      System.out.println(e.getMessage());
+      return;
+    }
+    for (String functionName : udfList) {
+      try { // register function
+        session.executeNonQueryStatement("drop function " + functionName);
+        session.executeNonQueryStatement(
+            "create function "
+                + functionName
+                + " as 'org.apache.iotdb.quality.dprofile."
+                + functionName
+                + "'");
+      } catch (Exception e) {
+        try {
+          session.executeNonQueryStatement(
+              "create function "
+                  + functionName
+                  + " as 'org.apache.iotdb.quality.dprofile."
+                  + functionName
+                  + "'");
+        } catch (Exception f) {
+          System.out.println("Cannot register function " + functionName + ".");
+          System.out.println(f.getMessage());
+          continue;
+        }
+      }
+
+      // run query
+      ArrayList<String> queries = udfQueries.get(functionName);
+      for (String query : queries) {
+        try {
+          session.executeQueryStatement(query);
+        } catch (Exception e) {
+          System.out.println("Query failed at function " + functionName);
+          System.out.println(e.getMessage());
+        }
+        Thread.sleep(1000);
+      }
+
+      try { // drop function
+        session.executeNonQueryStatement("drop function " + functionName);
+      } catch (Exception ignored) {
+      }
+    }
+    session.close();
+  }
+}

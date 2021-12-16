@@ -1,0 +1,8 @@
+{
+  "UDAFCov": ["Select UDAFCov(s1, s2) from root.test"],
+  "UDAFDtw": ["Select UDAFDtw(s1, s2) from root.test"],
+  "UDAFPearson": ["Select UDAFPearson(s1, s2) from root.test"],
+  "UDTFPtnSym": ["select UDTFPtnSym(s1,'window'='100') from root.test",
+  "select UDTFPtnSym(s1,'window'='100','threshold'='5') from root.test"],
+  "UDTFXcorr": ["select UDTFXcorr(s1,s2) from root.test"]
+}

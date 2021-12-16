@@ -44,8 +44,8 @@ public class UDTFQLB implements UDTF {
             0, TSDataType.INT32, TSDataType.INT64, TSDataType.FLOAT, TSDataType.DOUBLE)
         .validate(
             x -> (int) x >= 0,
-            "Parameter $shift$ should be an positive integer, or '0' for default value.",
-            validator.getParameters().getIntOrDefault("shift", 0));
+            "Parameter $lag$ should be an positive integer, or '0' for default value.",
+            validator.getParameters().getIntOrDefault("lag", 0));
   }
 
   @Override
@@ -54,7 +54,7 @@ public class UDTFQLB implements UDTF {
     configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.DOUBLE);
-    m = parameters.getIntOrDefault("shift", 0);
+    m = parameters.getIntOrDefault("lag", 0);
     valueArrayList.clear();
   }
 

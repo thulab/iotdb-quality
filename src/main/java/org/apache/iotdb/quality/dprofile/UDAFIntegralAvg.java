@@ -33,7 +33,7 @@ import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
  * @register: CREATE FUNCTION INTEGRAL AS "org.apache.iotdb.quality.dprofile.UDTFIntegral"
  * @usage: SELECT INTEGRAL(s0, "unit"="1s") FROM root.test
  */
-public class UDAFTimeWeightedAvg implements UDTF {
+public class UDAFIntegralAvg implements UDTF {
 
   long startTime = -1;
   long lastTime = -1;

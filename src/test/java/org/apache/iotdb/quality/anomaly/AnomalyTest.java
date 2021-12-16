@@ -16,7 +16,6 @@
 package org.apache.iotdb.quality.anomaly;
 
 import org.apache.iotdb.rpc.IoTDBConnectionException;
-import org.apache.iotdb.rpc.StatementExecutionException;
 import org.apache.iotdb.session.Session;
 
 import com.google.gson.Gson;
@@ -32,9 +31,7 @@ import java.util.HashMap;
 
 public class AnomalyTest {
   @Test
-  public void test()
-      throws IoTDBConnectionException, StatementExecutionException, IOException,
-          InterruptedException {
+  public void test() throws IoTDBConnectionException, IOException, InterruptedException {
     final String[] udfList = {
       "UDTFIQR", "UDTFKSigma", "UDTFLOF", "UDTFMissDetect", "UDTFRange", "UDTFTwoSidedFilter"
     };

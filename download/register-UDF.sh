@@ -14,7 +14,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function distinct as 'org.apache.iotdb.quality.dprofile.UDTFDistinct'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function histogram as 'org.apache.iotdb.quality.dprofile.UDTFHistogram'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function integral as 'org.apache.iotdb.quality.dprofile.UDAFIntegral'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function timeweightedavg as 'org.apache.iotdb.quality.dprofile.UDAFTimeWeightedAvg'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function integralavg as 'org.apache.iotdb.quality.dprofile.UDAFIntegralAvg'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function mad as 'org.apache.iotdb.quality.dprofile.UDAFMad'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function median as 'org.apache.iotdb.quality.dprofile.UDAFMedian'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function mode as 'org.apache.iotdb.quality.dprofile.UDAFMode'"

@@ -8,7 +8,7 @@ This function is used to standardize the input series with min-max. Minimum valu
 
 **Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-+ `method`: When set to "batch", anomaly test is conducted after importing all data points; when set to "stream", it is required to provide minimum and maximum values. The default method is "batch".
++ `compute`: When set to "batch", anomaly test is conducted after importing all data points; when set to "stream", it is required to provide minimum and maximum values. The default method is "batch".
 + `min`: The maximum value when method is set to "stream".
 + `max`: The minimum value when method is set to "stream".
 

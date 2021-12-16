@@ -8,7 +8,7 @@ This function is used to standardize the input series with z-score.
 
 **Input Series:** Only support a single input series. The type is INT32 / INT64 / FLOAT / DOUBLE.
 
-+ `method`: When set to "batch", anomaly test is conducted after importing all data points; when set to "stream", it is required to provide mean and standard deviation. The default method is "batch".
++ `compute`: When set to "batch", anomaly test is conducted after importing all data points; when set to "stream", it is required to provide mean and standard deviation. The default method is "batch".
 + `avg`: Mean value when method is set to "stream".
 + `sd`: Standard deviation when method is set to "stream".
 
