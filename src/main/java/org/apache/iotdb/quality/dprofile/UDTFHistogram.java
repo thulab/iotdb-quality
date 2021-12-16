@@ -49,8 +49,8 @@ public class UDTFHistogram implements UDTF {
         .validate(
             params -> (double) params[0] <= (double) params[1],
             "parameter $end$ should be larger than or equal to $start$",
-            validator.getParameters().getDoubleOrDefault("start", -Double.MAX_VALUE),
-            validator.getParameters().getDoubleOrDefault("end", Double.MAX_VALUE));
+            validator.getParameters().getDoubleOrDefault("min", -Double.MAX_VALUE),
+            validator.getParameters().getDoubleOrDefault("max", Double.MAX_VALUE));
   }
 
   @Override
@@ -59,8 +59,9 @@ public class UDTFHistogram implements UDTF {
     configurations
         .setAccessStrategy(new RowByRowAccessStrategy())
         .setOutputDataType(TSDataType.INT32);
-    start = parameters.getDoubleOrDefault("start", -Double.MAX_VALUE);
-    double end = parameters.getDoubleOrDefault("end", Double.MAX_VALUE);
+    // input param min is var start, param max is var end
+    start = parameters.getDoubleOrDefault("min", -Double.MAX_VALUE);
+    double end = parameters.getDoubleOrDefault("max", Double.MAX_VALUE);
     count = parameters.getIntOrDefault("count", 1);
     bucket = new int[count];
     gap = (end - start) / count;

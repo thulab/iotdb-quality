@@ -13,6 +13,7 @@ This function returns all unique values in time series.
 
 + The timestamp of the output series is meaningless. The output order is arbitrary.
 + Missing points and null points in the input series will be ignored, but `NaN` will not.
++ Case Sensitive.
 
 
 ## Examples

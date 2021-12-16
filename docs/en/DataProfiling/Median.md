@@ -2,7 +2,7 @@
 
 ## Usage
 
-The function is used to compute the exact or approximate median of a numeric time series.
+The function is used to compute the exact or approximate median of a numeric time series. Median is the value separating the higher half from the lower half of a data sample.
 
 **Name:** MEDIAN
 
