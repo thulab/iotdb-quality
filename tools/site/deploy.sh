@@ -1,19 +1,20 @@
 # Clean docs/
 rm -rf docs/*
 # Copy documents of master to docs/
+git checkout v2.0
 mkdir docs/en/
-mkdir docs/en/InProgress/
+mkdir docs/en/V2.0.x/
 mkdir docs/zh/
-mkdir docs/zh/InProgress/
-cp ../../README.md docs/en/InProgress/
-cp -r ../../docs/en/* docs/en/InProgress/
-mv docs/en/InProgress/Download.md docs/en/Download.md
-cp -r ../../docs/zh/* docs/zh/InProgress/
-mv docs/zh/InProgress/Download.md docs/zh/Download.md
+mkdir docs/zh/V2.0.x/
+cp ../../README.md docs/en/V2.0.x/
+cp -r ../../docs/en/* docs/en/V2.0.x/
+mv docs/en/V2.0.x/Download.md docs/en/Download.md
+cp -r ../../docs/zh/* docs/zh/V2.0.x/
+mv docs/zh/V2.0.x/Download.md docs/zh/Download.md
 # Copy documents of V1.0.x to docs/
 cd ..
 cd ..
-git checkout v1.0.x
+git checkout master
 mkdir ../tmp
 cp -r docs/* ../tmp
 cp README.md ../tmp/en
@@ -47,4 +48,4 @@ rm -rf en/
 # Commit and upload the cleaning
 git add -A
 git commit -m "Clean Environment"
-git push origin master
+git push origin v2.0
