@@ -9,7 +9,7 @@ mkdir docs/zh/V2.0.x/
 cp ../../README.md docs/en/V2.0.x/
 cp -r ../../docs/en/* docs/en/V2.0.x/
 mv docs/en/V2.0.x/Download.md docs/en/Download.md
-cp -r ../../docs/zh/* docs/zhV2.0.x/
+cp -r ../../docs/zh/* docs/zh/V2.0.x/
 mv docs/zh/V2.0.x/Download.md docs/zh/Download.md
 # Copy documents of V1.0.x to docs/
 
