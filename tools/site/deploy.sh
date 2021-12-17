@@ -25,6 +25,7 @@ cp -r ../tmp/en/* tools/site/docs/en/V1.0.x
 cp -r ../tmp/zh/* tools/site/docs/zh/V1.0.x
 rm -rf ../tmp
 cd tools/site
+git checkout v2.0
 # Copy the index web page
 cp index.txt docs/
 mv docs/index.txt docs/README.md
