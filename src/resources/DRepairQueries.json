@@ -1,0 +1,14 @@
+{
+  "UDTFTimestampRepair": ["select UDTFTimestampRepair(s1, 'interval'='1000') from root.test",
+    "select UDTFTimestampRepair(s1, 'method'='median') from root.test",
+    "select UDTFTimestampRepair(s1, 'method'='cluster') from root.test"],
+  "UDTFValueFill": ["select UDTFValueFill(s1, 'method'='linear') from root.test",
+    "select UDTFValueFill(s1, 'method'='mean') from root.test",
+    "select UDTFValueFill(s1, 'method'='previous') from root.test",
+    "select UDTFValueFill(s1, 'method'='likelihood') from root.test",
+    "select UDTFValueFill(s1, 'method'='ar') from root.test",
+    "select UDTFValueFill(s1, 'method'='ma') from root.test",
+    "select UDTFValueFill(s1, 'method'='screen') from root.test"],
+  "UDTFValueRepair": ["select UDTFValueRepair(s1, 'method'='screen') from root.test",
+    "select UDTFValueRepair(s1, 'method'='lsgreedy') from root.test"]
+}

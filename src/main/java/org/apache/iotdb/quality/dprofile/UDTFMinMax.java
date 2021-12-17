@@ -49,7 +49,7 @@ public class UDTFMinMax implements UDTF {
             validator.getParameters().getStringOrDefault("compute", ""))
         .validate(
             params -> (double) params[0] < (double) params[1],
-            "parameter $min$ should be smaller than $max$",
+            "parameter $min$ should be smaller than $max$.",
             validator.getParameters().getDoubleOrDefault("min", -Double.MAX_VALUE),
             validator.getParameters().getDoubleOrDefault("max", Double.MAX_VALUE));
   }

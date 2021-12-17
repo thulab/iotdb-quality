@@ -1,0 +1,11 @@
+{
+  "UDTFCompleteness": ["select UDTFCompleteness(s1, 'window'='100', 'downtime'='true') from root.test",
+    "select UDTFCompleteness(s1, 'window'='100', 'downtime'='false') from root.test",
+    "select UDTFCompleteness(s1, 'window'='1d', 'downtime'='true') from root.test"],
+  "UDTFConsistency": ["select UDTFConsistency(s1, 'window'='100') from root.test",
+  "select UDTFConsistency(s1, 'window'='1d') from root.test"],
+  "UDTFTimeliness": ["select UDTFTimeliness(s1, 'window'='100') from root.test",
+    "select UDTFTimeliness(s1, 'window'='1d') from root.test"],
+  "UDTFValidity": ["select UDTFValidity(s1, 'window'='100') from root.test",
+    "select UDTFValidity(s1, 'window'='1d') from root.test"]
+}

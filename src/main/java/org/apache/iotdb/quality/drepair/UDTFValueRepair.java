@@ -31,6 +31,7 @@ import org.apache.iotdb.db.query.udf.api.customizer.strategy.SlidingSizeWindowAc
 import org.apache.iotdb.quality.drepair.util.LsGreedy;
 import org.apache.iotdb.quality.drepair.util.Screen;
 import org.apache.iotdb.quality.drepair.util.ValueRepair;
+import org.apache.iotdb.quality.util.Util;
 import org.apache.iotdb.tsfile.file.metadata.enums.TSDataType;
 
 /** This function is used to repair the value of the time series. */
@@ -46,7 +47,15 @@ public class UDTFValueRepair implements UDTF {
     validator
         .validateInputSeriesNumber(1)
         .validateInputSeriesDataType(
-            0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64);
+            0, TSDataType.FLOAT, TSDataType.DOUBLE, TSDataType.INT32, TSDataType.INT64)
+            .validate(x -> (double) x > 0,
+                    "Parameter $sigma$ should be larger than 0.",
+                    validator.getParameters().getDoubleOrDefault("sigma",1.0))
+            .validate(
+                    params -> (double) params[0] < (double) params[1],
+                    "parameter $minSpeed$ should be smaller than $maxSpeed$.",
+                    validator.getParameters().getDoubleOrDefault("minSpeed", -1),
+                    validator.getParameters().getDoubleOrDefault("maxSpeed", 1));
   }
 
   @Override
