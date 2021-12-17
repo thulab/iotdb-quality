@@ -38,7 +38,7 @@ cp -r tools/site/docs/.vuepress/dist/* ./
 # Upload to GitHub
 git add -A
 git commit -m "Update GitHub Pages"
-git push origin master:GitHubPages
+git push origin v2.0:GitHubPages
 # Clean the root 
 rm *.html
 rm -rf assets/
