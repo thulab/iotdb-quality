@@ -42,17 +42,17 @@ module.exports = {
 					{
 						text: '文档',
 						items: [
-							{ text: 'In progress', link: '/zh/InProgress/' },
+							{ text: 'V2.0.x', link: '/zh/V2.0.x/' },
 							{ text: 'V1.0.x', link: '/zh/V1.0.x/' },
 						]
 					},
 					{ text: '下载', link: '/zh/Download.md' },
-					 { text: 'Demo', link: '/zh/InProgress/Demo.md' },
+					 { text: 'Demo', link: '/zh/V1.0.x/Demo.md' },
 				],
 				sidebar: {
-					'/zh/V1.0.x/': [
+					'/zh/V2.0.x/': [
 						{
-							title: '用户文档 (V1.0.x)',
+							title: '用户文档 (V2.0.x)',
 							collapsable: false,
 						},
 						{
@@ -64,19 +64,30 @@ module.exports = {
 							]
 						},
 						{
-							title: '数据画像 (11)',
+							title: '数据画像 (22)',
 							children: [
+								'DataProfiling/ACF.md',
 								'DataProfiling/Distinct.md',
 								'DataProfiling/Histogram.md',
 								'DataProfiling/Integral.md',
+								'DataProfiling/IntegralAvg.md',
 								'DataProfiling/Mad.md',
 								'DataProfiling/Median.md',
+                                'DataProfiling/MinMax.md',
 								'DataProfiling/Mode.md',
+                                'DataProfiling/MvAvg.md',
+                                'DataProfiling/PACF.md',
 								'DataProfiling/Percentile.md',
+								'DataProfiling/Period.md',
+								'DataProfiling/QLB.md',
+                                'DataProfiling/Resample.md',
 								'DataProfiling/Sample.md',
+								'DataProfiling/Segment.md',	
 								'DataProfiling/Skew.md',
+                                'DataProfiling/Spline.md',
 								'DataProfiling/Spread.md',
 								'DataProfiling/Stddev.md',
+                                'DataProfiling/ZScore.md',
 							],
 						},
 						{
@@ -88,10 +99,82 @@ module.exports = {
 								'DataQuality/Validity.md',
 							],
 						},
-					],
-					'/zh/InProgress/': [
 						{
-							title: '用户文档 (In progress)',
+							title: '数据修复 (3)',
+							children: [
+								'DataRepairing/ValueFill.md',
+								'DataRepairing/TimestampRepair.md',
+								'DataRepairing/ValueRepair.md',
+							],
+						},
+						{
+							title: '数据匹配 (8)',
+							children: [
+                                'DataMatching/Cov.md',
+								'DataMatching/DTW.md',
+                                'DataMatching/PtnSym.md',
+								'DataMatching/Pearson.md',
+								'DataMatching/SeriesAlign.md',
+								'DataMatching/SeriesSimilarity.md',
+								'DataMatching/ValueAlign.md',
+                                'DataMatching/XCorr.md',
+							],
+						},
+						{
+							title: '异常检测 (6)',
+							children: [
+                                'AnomalyDetection/IQR.md',
+								'AnomalyDetection/KSigma.md',
+								'AnomalyDetection/LOF.md',
+								'AnomalyDetection/MissDetect.md',
+								'AnomalyDetection/Range.md',
+                                'AnomalyDetection/TwoSidedFilter.md'
+							],
+						},
+						{
+							title: '频域相关 (7)',
+							children: [
+								'Frequency/Conv.md',
+								'Frequency/Deconv.md',
+								'Frequency/DWT.md',
+								'Frequency/FFT.md',
+								'Frequency/HighPass.md',
+								'Frequency/IFFT.md',
+                                'Frequency/LowPass.md',
+							],
+						},
+						{
+							title: '序列发现 (2)',
+							children: [
+								'SeriesDiscovery/ConsecutiveSequences.md',
+								'SeriesDiscovery/ConsecutiveWindows.md',
+							],
+						},
+						{
+							title: '字符串处理 (4)',
+							children: [
+								'StringProcessing/RegexMatch.md',
+								'StringProcessing/RegexReplace.md',
+								'StringProcessing/RegexSplit.md',
+								'StringProcessing/StrReplace.md',
+							],
+						},
+						{
+							title: '复杂事件处理 (7)',
+							children: [
+								'ComplexEventProcessing/AND.md',
+								'ComplexEventProcessing/EventMatching.md',
+								'ComplexEventProcessing/EventNameRepair.md',
+								'ComplexEventProcessing/EventTag.md',
+								'ComplexEventProcessing/EventTimeRepair.md',
+								'ComplexEventProcessing/MissingEventRecovery.md',
+								'ComplexEventProcessing/SEQ.md',
+							],
+						},
+					],
+					'/zh/V1.0.x/': [
+						{
+							title: '用户文档 (V1.0.x)',
 							collapsable: false,
 						},
 						{
@@ -231,17 +314,17 @@ module.exports = {
 					{
 						text: 'Document',
 						items: [
-							{ text: 'In progress', link: '/en/InProgress/' },
 							{ text: 'V1.0.x', link: '/en/V1.0.x/' },
+							{ text: 'V2.0.x', link: '/en/V2.0.x/' },
 						]
 					},
 					{ text: 'Download', link: '/en/Download.md' },
-					 { text: 'Demo', link: '/en/InProgress/Demo.md' },
+					 { text: 'Demo', link: '/en/V1.0.x/Demo.md' },
 				],
 				sidebar: {
-					'/en/V1.0.x/': [
+					'/en/V2.0.x/': [
 						{
-							title: 'User Guide (V1.0.x)',
+							title: 'User Guide (V2.0.x)',
 							collapsable: false,
 						},
 						{
@@ -253,19 +336,30 @@ module.exports = {
 							]
 						},
 						{
-							title: 'Data Profiling (11)',
+							title: 'Data Profiling (22)',
 							children: [
+								'DataProfiling/ACF.md',
 								'DataProfiling/Distinct.md',
 								'DataProfiling/Histogram.md',
 								'DataProfiling/Integral.md',
+								'DataProfiling/IntegralAvg.md',
 								'DataProfiling/Mad.md',
 								'DataProfiling/Median.md',
+                                'DataProfiling/MinMax.md',
 								'DataProfiling/Mode.md',
+                                'DataProfiling/MvAvg.md',
+                                'DataProfiling/PACF.md',
 								'DataProfiling/Percentile.md',
+								'DataProfiling/Period.md',
+								'DataProfiling/QLB.md',
+                                'DataProfiling/Resample.md',
 								'DataProfiling/Sample.md',
+								'DataProfiling/Segment.md',	
 								'DataProfiling/Skew.md',
+                                'DataProfiling/Spline.md',
 								'DataProfiling/Spread.md',
 								'DataProfiling/Stddev.md',
+                                'DataProfiling/ZScore.md',
 							],
 						},
 						{
@@ -277,10 +371,82 @@ module.exports = {
 								'DataQuality/Validity.md',
 							],
 						},
-					],
-					'/en/InProgress/': [
 						{
-							title: 'User Guide (In progress)',
+							title: 'Data Repairing (3)',
+							children: [
+								'DataRepairing/ValueFill.md',
+								'DataRepairing/TimestampRepair.md',
+								'DataRepairing/ValueRepair.md',
+							],
+						},
+						{
+							title: 'Data Matching (8)',
+							children: [
+                                'DataMatching/Cov.md',
+								'DataMatching/DTW.md',
+                                'DataMatching/PtnSym.md',
+								'DataMatching/Pearson.md',
+								'DataMatching/SeriesAlign.md',
+								'DataMatching/SeriesSimilarity.md',
+								'DataMatching/ValueAlign.md',
+                                'DataMatching/XCorr.md',
+							],
+						},
+						{
+							title: 'Anomaly Detection (6)',
+							children: [
+                                'AnomalyDetection/IQR.md',
+								'AnomalyDetection/KSigma.md',
+								'AnomalyDetection/LOF.md',
+								'AnomalyDetection/MissDetect.md',
+								'AnomalyDetection/Range.md',
+                                'AnomalyDetection/TwoSidedFilter.md'
+							],
+						},
+						{
+							title: 'Frequency Domain (7)',
+							children: [
+								'Frequency/Conv.md',
+								'Frequency/Deconv.md',
+								'Frequency/DWT.md',
+								'Frequency/FFT.md',
+								'Frequency/HighPass.md',
+								'Frequency/IFFT.md',
+                                'Frequency/LowPass.md',
+							],
+						},
+						{
+							title: 'Series Discovery (2)',
+							children: [
+								'SeriesDiscovery/ConsecutiveSequences.md',
+								'SeriesDiscovery/ConsecutiveWindows.md',
+							],
+						},
+						{
+							title: 'String Processing (4)',
+							children: [
+								'StringProcessing/RegexMatch.md',
+								'StringProcessing/RegexReplace.md',
+								'StringProcessing/RegexSplit.md',
+								'StringProcessing/StrReplace.md',
+							],
+						},
+						{
+							title: 'Complex Event Processing (7)',
+							children: [
+								'ComplexEventProcessing/AND.md',
+								'ComplexEventProcessing/EventMatching.md',
+								'ComplexEventProcessing/EventNameRepair.md',
+								'ComplexEventProcessing/EventTag.md',
+								'ComplexEventProcessing/EventTimeRepair.md',
+								'ComplexEventProcessing/MissingEventRecovery.md',
+								'ComplexEventProcessing/SEQ.md',
+							],
+						},
+					],
+					'/en/V1.0.x/': [
+						{
+							title: 'User Guide (V1.0.x)',
 							collapsable: false,
 						},
 						{
