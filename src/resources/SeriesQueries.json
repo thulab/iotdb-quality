@@ -1,0 +1,6 @@
+{
+  "UDTFConsecutiveSequence": ["select UDTFConsecutiveSequence(s1, s2) from root.test",
+    "select UDTFConsecutiveSequence(s1, s2, 'gap'='100ms') from root.test"],
+  "UDTFConsecutiveWindows": ["select UDTFConsecutiveWindows(s1, s2, 'length'='1d') from root.test",
+    "select UDTFConsecutiveWindows(s1, s2, 'gap'='100ms', 'length'='1h') from root.test"]
+}

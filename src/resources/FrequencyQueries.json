@@ -1,0 +1,14 @@
+{
+  "UDTFConv": ["select UDTFConv(s1, s2) from root.test"],
+  "UDTFDeconv": ["select UDTFDeconv(s1, s2, 'result'='quotient') from root.test",
+    "select UDTFDeconv(s1, s2, 'result'='remainder') from root.test"],
+  "UDTFDWT": [],
+  "UDTFFFT": ["select UDTFFFT(s1, 'method'='uniform', 'result'='real') from root.test",
+    "select UDTFFFT(s1, 'method'='uniform', 'result'='abs') from root.test"],
+  "UDTFHighPass": ["select UDTFHighPass(s1, 'wpass'='0.4') from root.test"],
+  "UDTFIDWT": [],
+  "UDTFIFFT": ["select UDTFIFFT(s1, s2) from root.test",
+    "select UDTFIFFT(s1, 'method'='lsgreedy') from root.test"],
+  "UDTFLowPass": ["select UDTFDWT(s1, 'wpass'='0.6') from root.test",
+    "select UDTFLowPass(s1, 'method'='lsgreedy') from root.test"]
+}
