@@ -30,8 +30,8 @@ import com.google.common.math.Quantiles;
 import java.util.ArrayList;
 
 /*
-   This function is used to detect anomalies based on IQR.
-   Stream swap require user to provide Q1 and Q3, while global swap does not.
+This function is used to detect anomalies based on IQR.
+Stream swap require user to provide Q1 and Q3, while global swap does not.
 */
 public class UDTFIQR implements UDTF {
   ArrayList<Double> value = new ArrayList<>();

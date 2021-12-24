@@ -159,23 +159,23 @@ public class UDTFDistinct implements UDTF {
   public void beforeDestroy() {
     /*
     switch (dataType) {
-      case INT32:
-        intSet.clear();
-        break;
-      case INT64:
-        longSet.clear();
-        break;
-      case FLOAT:
-        floatSet.clear();
-        break;
-      case DOUBLE:
-        doubleSet.clear();
-        break;
-      case TEXT:
-        stringSet.clear();
-        break;
-      case BOOLEAN:
-        booleanSet.clear();
+    case INT32:
+    	intSet.clear();
+    	break;
+    case INT64:
+    	longSet.clear();
+    	break;
+    case FLOAT:
+    	floatSet.clear();
+    	break;
+    case DOUBLE:
+    	doubleSet.clear();
+    	break;
+    case TEXT:
+    	stringSet.clear();
+    	break;
+    case BOOLEAN:
+    	booleanSet.clear();
     }
     */
   }
