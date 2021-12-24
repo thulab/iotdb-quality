@@ -15,12 +15,14 @@
  */
 package org.apache.iotdb.quality.anomaly;
 
+import org.apache.iotdb.quality.util.DataGeneration_0_12_0;
 import org.apache.iotdb.rpc.IoTDBConnectionException;
 import org.apache.iotdb.session.Session;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import io.jsonwebtoken.lang.Assert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -28,8 +30,19 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class AnomalyTest {
+  @BeforeAll
+  static void generateData() throws IOException, InterruptedException {
+    String systemName = System.getProperty("os.name");
+    if (systemName.toLowerCase(Locale.ROOT).contains("windows")) {
+      DataGeneration_0_12_0.generateData("cmd");
+    } else {
+      DataGeneration_0_12_0.generateData("bash");
+    }
+  }
+
   @Test
   public void test() throws IoTDBConnectionException, IOException, InterruptedException {
     final String[] udfList = {

@@ -18,18 +18,21 @@
 
 FROM openjdk:11-jre-slim
 
-ADD apache-iotdb-0.12.0-SNAPSHOT-all-bin.zip /
+ADD apache-iotdb-0.12.3-all-bin.zip /
+ADD iotdb-quality-v2.0.zip /
 
 # ADD jdk-8u221-linux-x64.tar.gz /usr/local/
 # add dependency here
-ADD download/iotdb-quality-0.1.0-jar-with-dependencies.jar /
-
+ADD download/iotdb-quality-2.0.0-SNAPSHOT-jar-with-dependencies.jar /
+ADD download/
 
 RUN apt update \
   && apt install lsof procps unzip -y \
   && unzip /apache-iotdb-*-bin.zip -d / \
   && rm /apache-iotdb-*-bin.zip \
   && mv /apache-iotdb-* /iotdb \
+  && unzip /iotdb-quality-v2.0.zip / \
+  && apt get maven \
   && apt remove unzip -y \
   && apt autoremove -y \
   && apt purge --auto-remove -y \
