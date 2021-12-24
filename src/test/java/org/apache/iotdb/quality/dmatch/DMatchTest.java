@@ -33,7 +33,7 @@ import java.util.HashMap;
 public class DMatchTest {
   @Test
   public void test() throws IoTDBConnectionException, IOException, InterruptedException {
-    final String[] udfList = {"UDAFCov", "UDAFDtw", "UDAFPearson", "UDTFPtnSym", "UDTFXcorr"};
+    final String[] udfList = {"UDAFCov", "UDAFDtw", "UDAFPearson", "UDTFPtnSym", "UDTFXCorr"};
     Gson gson = new Gson();
     Reader reader = Files.newBufferedReader(Paths.get("src/resources/DMatchQueries.json"));
     HashMap<String, ArrayList<String>> udfQueries =
