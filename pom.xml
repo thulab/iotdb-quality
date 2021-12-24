@@ -102,8 +102,7 @@
                             <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
                             <excludes>
                                 <exclude>**/README</exclude>
-                                <exclude>src/test/resources/**</exclude>
-                                <exclude>src/main/resources/**</exclude>
+                                <exclude>src/resources/iotdb-*/**</exclude>
                                 <exclude>docs/**</exclude>
                                 <exclude>download/**</exclude>
                                 <exclude>tools/**</exclude>
@@ -139,25 +138,13 @@
                 <artifactId>spotless-maven-plugin</artifactId>
                 <version>2.17.4</version>
                 <configuration>
-                    <formats>
-                        <!-- you can define as many formats as you want, each is independent -->
-                        <format>
-                            <!-- define the files to apply to -->
-                            <includes>
-                                <include>*.md</include>
-                                <include>.gitignore</include>
-                            </includes>
-                            <!-- define the steps to apply to those files -->
-                            <trimTrailingWhitespace/>
-                            <endWithNewline/>
-                            <indent>
-                                <tabs>true</tabs>
-                                <spacesPerTab>4</spacesPerTab>
-                            </indent>
-                        </format>
-                    </formats>
                     <!-- define a language-specific format -->
                     <java>
+                        <!-- These are the defaults, you can override if you want -->
+                        <includes>
+                            <include>src/main/java/**/*.java</include>
+                            <include>src/test/java/**/*.java</include>
+                        </includes>
                         <!-- no need to specify files, inferred automatically, but you can if you want -->
                         <!-- apply a specific flavor of google-java-format and reflow long strings -->
                         <googleJavaFormat>
@@ -169,6 +156,7 @@
                         <importOrder>
                             <order>org.apache.iotdb,org.apache.commons,,javax,java,\#</order>
                         </importOrder>
+                        <removeUnusedImports /> <!-- self-explanatory -->
                     </java>
                 </configuration>
                 <executions>
@@ -177,13 +165,6 @@
                         <phase>validate</phase>
                         <goals>
                             <goal>check</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>spotless-apply</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>apply</goal>
                         </goals>
                     </execution>
                 </executions>
