@@ -28,10 +28,10 @@ import java.util.*;
 public class TimestampRepair {
 
   protected int n;
-  protected long time[];
-  protected double original[];
-  protected long repaired[];
-  protected double repairedValue[];
+  protected long[] time;
+  protected double[] original;
+  protected long[] repaired;
+  protected double[] repairedValue;
   protected long deltaT;
   protected long start0;
 

@@ -2,7 +2,7 @@
 
 ## Usage
 
-This function is used to calculate partial autocorrelation of input series by solving Yule-Walker equation.
+This function is used to calculate partial autocorrelation of input series by solving Yule-Walker equation. For some cases, the equation may not be solved, and NaN will be output.
 
 **Name:** PACF
 

@@ -65,12 +65,16 @@ public class UDTFPACF implements UDTF {
     RealMatrix a = new Array2DRowRealMatrix(R, true);
     RealVector b = new ArrayRealVector(Arrays.copyOfRange(r, 1, r.length), true);
     DecompositionSolver solver = new LUDecomposition(a).getSolver();
-    RealVector rho = solver.solve(b);
-    /*
-    sigmasq = r[0] - (r[1:]*rho).sum()
-    sigma = np.sqrt(sigmasq) if not np.isnan(sigmasq) and sigmasq > 0 else np.nan
-    */
-    return rho.getEntry(rho.getDimension() - 1);
+    try {
+      RealVector rho = solver.solve(b);
+      /*
+      sigmasq = r[0] - (r[1:]*rho).sum()
+      sigma = np.sqrt(sigmasq) if not np.isnan(sigmasq) and sigmasq > 0 else np.nan
+      */
+      return rho.getEntry(rho.getDimension() - 1);
+    } catch (SingularMatrixException e) {
+      return Double.NaN;
+    }
   }
 
   @Override

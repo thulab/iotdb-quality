@@ -33,7 +33,7 @@ import java.util.HashMap;
 public class SeriesTest {
   @Test
   public void test() throws IoTDBConnectionException, IOException, InterruptedException {
-    final String[] udfList = {"UDTFConsecutiveSequence", "UDTFConsecutiveWindows"};
+    final String[] udfList = {"UDTFConsecutiveSequences", "UDTFConsecutiveWindows"};
     Gson gson = new Gson();
     Reader reader = Files.newBufferedReader(Paths.get("src/resources/SeriesQueries.json"));
     HashMap<String, ArrayList<String>> udfQueries =
