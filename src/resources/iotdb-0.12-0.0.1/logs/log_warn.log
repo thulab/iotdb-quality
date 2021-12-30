@@ -1,2 +1,0 @@
-2021-12-24 11:02:07,434 WARN  cn.edu.tsinghua.iotdb.benchmark.iotdb012.IoTDB:90 - No Data to Clean! 
-2021-12-24 11:02:08,542 WARN  org.apache.iotdb.tsfile.common.conf.TSFileDescriptor:85 - Failed to find config file iotdb-engine.properties at classpath, use default configuration 

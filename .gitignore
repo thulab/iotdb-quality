@@ -21,3 +21,6 @@ tools/auto-document/marktex/texparser/__pycache__
 *.iml
 src/main/java/org/apache/iotdb/quality/dprofile/SegmentTest.java
 .DS_Store
+/src/resources/iotdb-0.12-0.0.1/data/csvOutput/
+/src/resources/iotdb-0.12-0.0.1/data/test/
+/src/resources/iotdb-0.12-0.0.1/logs/

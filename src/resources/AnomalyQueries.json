@@ -1,5 +1,5 @@
 {
-"UDTFIQR": ["Select UDTFIQR(s_7, 'compute'='stream', 'q1'='-100', 'q3'='100') from root.test.g_0.d_0.g_0.d_0",
+"UDTFIQR": ["Select UDTFIQR(s_7, 'compute'='stream', 'q1'='-100', 'q3'='100') from root.test.g_0.d_0",
 	"Select UDTFIQR(s_7, 'compute'='batch') from root.test.g_0.d_0"],
 "UDTFKSigma": ["Select UDTFKsigma(s_7, 'k'='3','window'='10000') from root.test.g_0.d_0"],
 "UDTFLOF": ["Select UDTFLOF(s_7, s2, 'method'='default','window'='10000') from root.test.g_0.d_0",
