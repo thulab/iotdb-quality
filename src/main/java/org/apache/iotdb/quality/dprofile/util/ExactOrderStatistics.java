@@ -24,7 +24,6 @@ import org.eclipse.collections.impl.list.mutable.primitive.FloatArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.IntArrayList;
 import org.eclipse.collections.impl.list.mutable.primitive.LongArrayList;
 
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class ExactOrderStatistics {
@@ -139,7 +138,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (nums.size() >> 1) + 1, true);
+      nums.sortThis();
+      if (nums.size() % 2 == 0) {
+        return ((nums.get(nums.size() / 2) + nums.get(nums.size() / 2 - 1)) / 2.0);
+      } else {
+        return nums.get((nums.size() - 1) / 2);
+      }
     }
   }
 
@@ -147,12 +151,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      float[] arr = nums.toArray();
-      float median = kthSmallest(arr, (arr.length >> 1) + 1, true);
-      for (int i = 0; i < arr.length; ++i) {
-        arr[i] = Math.abs(arr[i] - median);
+      double median = getMedian(nums);
+      DoubleArrayList dal = new DoubleArrayList();
+      for (int i = 0; i < nums.size(); ++i) {
+        dal.set(i, Math.abs(nums.get(i) - median));
       }
-      return kthSmallest(arr, (arr.length >> 1) + 1, true);
+      return getMedian(dal);
     }
   }
 
@@ -160,7 +164,8 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (int) Math.ceil(nums.size() * phi), false);
+      nums.sortThis();
+      return nums.get((int) Math.ceil(nums.size() * phi));
     }
   }
 
@@ -168,7 +173,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (nums.size() >> 1) + 1, true);
+      nums.sortThis();
+      if (nums.size() % 2 == 0) {
+        return (nums.get(nums.size() / 2) + nums.get(nums.size() / 2 - 1)) / 2.0;
+      } else {
+        return nums.get((nums.size() - 1) / 2);
+      }
     }
   }
 
@@ -176,10 +186,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      double[] arr = nums.toArray();
-      final double median = kthSmallest(arr, (arr.length >> 1) + 1, true);
-      return kthSmallest(
-          Arrays.stream(arr).map(x -> Math.abs(x - median)).toArray(), (arr.length >> 1) + 1, true);
+      double median = getMedian(nums);
+      DoubleArrayList dal = new DoubleArrayList();
+      for (int i = 0; i < nums.size(); ++i) {
+        dal.set(i, Math.abs(nums.get(i) - median));
+      }
+      return getMedian(dal);
     }
   }
 
@@ -187,7 +199,8 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (int) Math.ceil(nums.size() * phi), false);
+      nums.sortThis();
+      return nums.get((int) Math.ceil(nums.size() * phi));
     }
   }
 
@@ -195,7 +208,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (nums.size() >> 1) + 1, true);
+      nums.sortThis();
+      if (nums.size() % 2 == 0) {
+        return (nums.get(nums.size() / 2) + nums.get(nums.size() / 2 - 1)) / 2.0;
+      } else {
+        return nums.get((nums.size() - 1) / 2);
+      }
     }
   }
 
@@ -203,12 +221,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      int[] arr = nums.toArray();
-      final double median = kthSmallest(arr, (arr.length >> 1) + 1, true);
-      return kthSmallest(
-          Arrays.stream(arr).mapToDouble(x -> Math.abs(x - median)).toArray(),
-          (arr.length >> 1) + 1,
-          true);
+      double median = getMedian(nums);
+      DoubleArrayList dal = new DoubleArrayList();
+      for (int i = 0; i < nums.size(); ++i) {
+        dal.set(i, Math.abs(nums.get(i) - median));
+      }
+      return getMedian(dal);
     }
   }
 
@@ -216,7 +234,8 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (int) Math.ceil(nums.size() * phi), false);
+      nums.sortThis();
+      return nums.get((int) Math.ceil(nums.size() * phi));
     }
   }
 
@@ -224,7 +243,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (nums.size() >> 1) + 1, true);
+      nums.sortThis();
+      if (nums.size() % 2 == 0) {
+        return (nums.get(nums.size() / 2) + nums.get(nums.size() / 2 - 1)) / 2.0;
+      } else {
+        return nums.get((nums.size() - 1) / 2);
+      }
     }
   }
 
@@ -232,12 +256,12 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      long[] arr = nums.toArray();
-      final double median = kthSmallest(arr, (arr.length >> 1) + 1, true);
-      return kthSmallest(
-          Arrays.stream(arr).mapToDouble(x -> Math.abs(x - median)).toArray(),
-          (arr.length >> 1) + 1,
-          true);
+      double median = getMedian(nums);
+      DoubleArrayList dal = new DoubleArrayList();
+      for (int i = 0; i < nums.size(); ++i) {
+        dal.set(i, Math.abs(nums.get(i) - median));
+      }
+      return getMedian(dal);
     }
   }
 
@@ -245,175 +269,8 @@ public class ExactOrderStatistics {
     if (nums.isEmpty()) {
       throw new NoSuchElementException();
     } else {
-      return kthSmallest(nums.toArray(), (int) Math.ceil(nums.size() * phi), false);
+      nums.sortThis();
+      return nums.get((int) Math.ceil(nums.size() * phi));
     }
-  }
-
-  private static double kthSmallest(double[] num, int k, boolean even) {
-    int partition = kthSmallest(num, 0, num.length - 1, k);
-    double median = num[partition];
-    if (even && (num.length & 1) == 0) {
-      partition = kthSmallest(num, 0, partition - 1, k - 1);
-      median = (median + num[partition]) / 2;
-    }
-    return median;
-  }
-
-  private static int kthSmallest(double[] num, int low, int high, int k) {
-    int partition = partition(num, low, high);
-
-    while (partition != k - 1) {
-      if (partition < k - 1) {
-        low = partition + 1;
-      } else {
-        high = partition - 1;
-      }
-      partition = partition(num, low, high);
-    }
-
-    return partition;
-  }
-
-  private static int partition(double[] num, int low, int high) {
-    double pivot = num[high];
-    int pivotloc = low;
-    for (int i = low; i <= high; i++) {
-      if (num[i] < pivot) {
-        double temp = num[i];
-        num[i] = num[pivotloc];
-        num[pivotloc] = temp;
-        pivotloc++;
-      }
-    }
-    double temp = num[high];
-    num[high] = num[pivotloc];
-    num[pivotloc] = temp;
-    return pivotloc;
-  }
-
-  private static float kthSmallest(float[] num, int k, boolean even) {
-    int partition = kthSmallest(num, 0, num.length - 1, k);
-    float median = num[partition];
-    if (even && (num.length & 1) == 0) {
-      partition = kthSmallest(num, 0, partition - 1, k - 1);
-      median = (median + num[partition]) / 2;
-    }
-    return median;
-  }
-
-  private static int kthSmallest(float[] num, int low, int high, int k) {
-    int partition = partition(num, low, high);
-
-    while (partition != k - 1) {
-      if (partition < k - 1) {
-        low = partition + 1;
-      } else {
-        high = partition - 1;
-      }
-      partition = partition(num, low, high);
-    }
-
-    return partition;
-  }
-
-  private static int partition(float[] num, int low, int high) {
-    float pivot = num[high];
-    int pivotloc = low;
-    for (int i = low; i <= high; i++) {
-      if (num[i] < pivot) {
-        float temp = num[i];
-        num[i] = num[pivotloc];
-        num[pivotloc] = temp;
-        pivotloc++;
-      }
-    }
-    float temp = num[high];
-    num[high] = num[pivotloc];
-    num[pivotloc] = temp;
-    return pivotloc;
-  }
-
-  private static double kthSmallest(int[] num, int k, boolean even) {
-    int partition = kthSmallest(num, 0, num.length - 1, k);
-    double median = num[partition];
-    if (even && (num.length & 1) == 0) {
-      partition = kthSmallest(num, 0, partition - 1, k - 1);
-      median = (median + num[partition]) / 2;
-    }
-    return median;
-  }
-
-  private static int kthSmallest(int[] num, int low, int high, int k) {
-    int partition = partition(num, low, high);
-
-    while (partition != k - 1) {
-      if (partition < k - 1) {
-        low = partition + 1;
-      } else {
-        high = partition - 1;
-      }
-      partition = partition(num, low, high);
-    }
-
-    return partition;
-  }
-
-  private static int partition(int[] num, int low, int high) {
-    int pivot = num[high];
-    int pivotloc = low;
-    for (int i = low; i <= high; i++) {
-      if (num[i] < pivot) {
-        int temp = num[i];
-        num[i] = num[pivotloc];
-        num[pivotloc] = temp;
-        pivotloc++;
-      }
-    }
-    int temp = num[high];
-    num[high] = num[pivotloc];
-    num[pivotloc] = temp;
-    return pivotloc;
-  }
-
-  private static double kthSmallest(long[] num, int k, boolean even) {
-    int partition = kthSmallest(num, 0, num.length - 1, k);
-    double median = num[partition];
-    if (even && (num.length & 1) == 0) {
-      partition = kthSmallest(num, 0, partition - 1, k - 1);
-      median = (median + num[partition]) / 2;
-    }
-    return median;
-  }
-
-  private static int kthSmallest(long[] num, int low, int high, int k) {
-    int partition = partition(num, low, high);
-
-    while (partition != k - 1) {
-      if (partition < k - 1) {
-        low = partition + 1;
-      } else {
-        high = partition - 1;
-      }
-      partition = partition(num, low, high);
-    }
-
-    return partition;
-  }
-
-  private static int partition(long[] num, int low, int high) {
-    long pivot = num[high];
-    int pivotloc = low;
-    for (int i = low; i <= high; i++) {
-      if (num[i] < pivot) {
-        long temp = num[i];
-        num[i] = num[pivotloc];
-        num[pivotloc] = temp;
-        pivotloc++;
-      }
-    }
-    long temp = num[high];
-    num[high] = num[pivotloc];
-    num[pivotloc] = temp;
-    return pivotloc;
   }
 }
