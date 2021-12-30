@@ -13,6 +13,8 @@ Method to use for imputation in series. "mean": use global mean value to fill ho
 
 **Output Series:** Output a single series. The type is the same as the input. This series is the input after repairing.
 
+**Note:** AR method use AR(1) model. Input value should be auto-correlated, or the function would output a single point (0, 0.0).
+
 ## Examples
 
 ### Fill with linear

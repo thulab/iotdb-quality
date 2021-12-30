@@ -97,11 +97,9 @@ public class TimestampInterval {
     arrInterval.sort(Comparator.naturalOrder());
     int m = n - 1;
     if (m % 2 == 0) {
-      // 修正成秒级别
-      return (arrInterval.get(m / 2 - 1) + arrInterval.get(m / 2)) / 2000 * 1000;
+      return (arrInterval.get(m / 2 - 1) + arrInterval.get(m / 2)) / 2;
     }
-    long median = arrInterval.get(m / 2);
-    return Math.round(median / 1000) * 1000;
+    return arrInterval.get(m / 2);
   }
 
   // 众数
@@ -122,12 +120,7 @@ public class TimestampInterval {
         maxTimesKey = (long) key;
       }
     }
-    // 修正成秒级别
-    // 四舍五入
-    if (maxTimesKey - maxTimesKey / 1000 * 1000 >= 500) {
-      return (1 + maxTimesKey / 1000) * 1000;
-    }
-    return maxTimesKey / 1000 * 1000;
+    return maxTimesKey;
   }
 
   // 聚类
@@ -140,11 +133,10 @@ public class TimestampInterval {
     for (int i = 0; i < n - 1; i++) {
       intervals[i] = time[i + 1] - time[i];
       if (intervals[i] > maxInterval) {
-        // 取秒作为最小粒度
-        maxInterval = intervals[i] / 1000 * 1000;
+        maxInterval = intervals[i];
       }
       if (intervals[i] < minInterval) {
-        minInterval = intervals[i] / 1000 * 1000;
+        minInterval = intervals[i];
       }
     }
     // 找到一个合适的k
@@ -152,7 +144,7 @@ public class TimestampInterval {
     int k = 3;
     long[] means = new long[k];
     for (int i = 0; i < k; i++) {
-      means[i] = minInterval + i * 1000;
+      means[i] = minInterval + (i + 1) * (maxInterval - minInterval) / (k + 1);
     }
     long[][] distance = new long[n - 1][k];
     int[] results = new int[n - 1];
@@ -202,13 +194,7 @@ public class TimestampInterval {
       }
     }
     // 取聚类中心
-    long meansCenter = means[maxClusterId];
-    // 修正成秒级别
-    // 四舍五入
-    if (meansCenter - meansCenter / 1000 * 1000 >= 500) {
-      return (1 + meansCenter / 1000) * 1000;
-    }
-    return meansCenter / 1000 * 1000;
+    return means[maxClusterId];
   }
 
   // 获得标准起始点

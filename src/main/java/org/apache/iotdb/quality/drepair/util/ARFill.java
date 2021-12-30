@@ -60,7 +60,14 @@ public class ARFill extends ValueFill {
     }
     //        acf /= acf_cnt;
     this.theta = acf / factor;
-    assert this.theta < 1;
+    try {
+      assert this.theta < 1;
+    } catch (AssertionError e) {
+      System.out.println("Cannot fit AR(1) model. Please try another method.");
+      this.time = new long[] {0};
+      this.repaired = new double[] {0D};
+      return;
+    }
     double mean_epsilon = 0;
     double var_epsilon = 0;
     double cnt_epsilon = 0;
