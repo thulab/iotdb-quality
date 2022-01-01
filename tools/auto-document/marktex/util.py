@@ -223,6 +223,6 @@ class Cache:
 
 
 config = Config.get_instance()
-chchar = re.compile("([^\x00-\xff]+)")
+chchar = re.compile(r"([^\x00-\xff]+)")
 
 cache = Cache()

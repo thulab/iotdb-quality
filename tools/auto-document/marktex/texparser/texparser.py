@@ -115,7 +115,7 @@ def de_formula(s: env.Formula):
 
     data = []
     for line in code:
-        line = re.sub(chchar, lambda x: r"\text{{{}}}".format(x.group(1)), line)
+        line = re.sub(re.compile("([^\x00-\xff]+)"), lambda x: r"\text{{{}}}".format(x.group(1)), line)
         data.append(NoEscape("{}\\\\".format(line)))
 
     m = Math(data=data)

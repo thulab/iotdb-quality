@@ -141,5 +141,5 @@ def in_code(s):
 
 
 def in_formula(s):
-    s = re.sub(chchar, lambda x: r"\text{{{}}}".format(x.group(1)), s)
+    s = re.sub(re.compile("([^\x00-\xff]+)"), lambda x: r"\text{{{}}}".format(x.group(1)), s)
     return NoEscape(" ${s}$ ".format(s=s))
