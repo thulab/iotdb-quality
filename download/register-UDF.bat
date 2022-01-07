@@ -32,7 +32,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function spline as 'org.apache.iotdb.quality.dprofile.UDTFSpline'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function mvavg as 'org.apache.iotdb.quality.dprofile.UDTFMvAvg'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function acf as 'org.apache.iotdb.quality.dprofile.UDTFACF'"
-call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function pacf as 'org.apache.iotdb.quality.dprofile.UDTFPartialAutoCorrelation'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function pacf as 'org.apache.iotdb.quality.dprofile.UDTFPACF'"
 
 
 @REM Data Quality
