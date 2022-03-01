@@ -12,7 +12,7 @@ This function is used to calculate the fast Fourier transform (FFT) of a numeric
 + `method`: The type of FFT, which is 'uniform' (by default) or 'nonuniform'. If the value is 'uniform', the timestamps will be ignored and all data points will be regarded as equidistant. Thus, the equidistant fast Fourier transform algorithm will be applied. If the value is 'nonuniform' (TODO), the non-equidistant fast Fourier transform algorithm will be applied based on timestamps.
 + `result`: The result of FFT, which is 'real', 'imag', 'abs' or 'angle', corresponding to the real part, imaginary part, magnitude and phase angle. By default, the magnitude will be output. 
 + `compress`: The parameter of compression, which is within (0,1]. It is the reserved energy ratio of lossy compression. By default, there is no compression. 
-
++ `nfft`: The number of points for FFT. By default, all points are used for transformation.
 
 **Output:** Output a single series. The type is DOUBLE. The length is the same as the input. The timestamps starting from 0 only indicate the order.
 
