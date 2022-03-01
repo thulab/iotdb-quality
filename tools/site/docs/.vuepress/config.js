@@ -141,6 +141,7 @@ module.exports = {
 								'Frequency/HighPass.md',
 								'Frequency/IFFT.md',
                                 'Frequency/LowPass.md',
+								'Frequency/STFT.md',
 							],
 						},
 						{

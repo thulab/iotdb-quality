@@ -35,6 +35,7 @@ public class UDTFFFT implements UDTF {
 
   private boolean compressed;
   private FFTUtil fftutil;
+  private int nfft;
   private final DoubleArrayList list = new DoubleArrayList();
 
   @Override
@@ -43,6 +44,10 @@ public class UDTFFFT implements UDTF {
         .validateInputSeriesNumber(1)
         .validateInputSeriesDataType(
             0, TSDataType.DOUBLE, TSDataType.FLOAT, TSDataType.INT32, TSDataType.INT64)
+        .validate(
+            x -> (int) x > 0,
+            "Nfft should be a positive integer.",
+            validator.getParameters().getIntOrDefault("nfft", Integer.MAX_VALUE))
         .validate(
             x ->
                 ((String) x).equalsIgnoreCase("uniform")
@@ -73,12 +78,13 @@ public class UDTFFFT implements UDTF {
     this.compressed = parameters.hasAttribute("compress");
     double compressRate = parameters.getDoubleOrDefault("compress", 1);
     this.fftutil = new FFTUtil(result, compressRate);
+    this.nfft = parameters.getIntOrDefault("nfft", Integer.MAX_VALUE);
   }
 
   @Override
   public void transform(Row row, PointCollector collector) throws Exception {
     double v = Util.getValueAsDouble(row);
-    if (Double.isFinite(v)) {
+    if (Double.isFinite(v) && list.size() < nfft) {
       list.add(v);
     }
   }

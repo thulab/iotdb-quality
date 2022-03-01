@@ -21,7 +21,7 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function percentile as 'org.apache.iotdb.quality.dprofile.UDAFPercentile'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function period as 'org.apache.iotdb.quality.dprofile.UDAFPeriod'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function qlb as 'org.apache.iotdb.quality.dprofile.UDTFQLB'"
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function resample as 'org.apache.iotdb.quality.dprofile.UDTFResample'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function re_sample as 'org.apache.iotdb.quality.dprofile.UDTFResample'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function sample as 'org.apache.iotdb.quality.dprofile.UDTFSample'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function segment as 'org.apache.iotdb.quality.dprofile.UDTFSegment'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function skew as 'org.apache.iotdb.quality.dprofile.UDAFSkew'"
@@ -57,7 +57,6 @@ pass=root
 
 
 # Anomaly Detection
-./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ADWIN as 'org.apache.iotdb.quality.anomaly.UDTFADWIN'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function ksigma as 'org.apache.iotdb.quality.anomaly.UDTFKSigma'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function LOF as 'org.apache.iotdb.quality.anomaly.UDTFLOF'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function range as 'org.apache.iotdb.quality.anomaly.UDTFRange'"
@@ -66,6 +65,7 @@ pass=root
 
 # Frequency Domain
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function fft as 'org.apache.iotdb.quality.frequency.UDTFFFT'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function stft as 'org.apache.iotdb.quality.frequency.UDTFSTFT'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function conv as 'org.apache.iotdb.quality.frequency.UDTFConv'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function deconv as 'org.apache.iotdb.quality.frequency.UDTFDeconv'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function lowpass as 'org.apache.iotdb.quality.frequency.UDTFLowPass'"
