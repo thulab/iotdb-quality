@@ -62,6 +62,7 @@ call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create f
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function range as 'org.apache.iotdb.quality.anomaly.UDTFRange'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function iqr as 'org.apache.iotdb.quality.anomaly.UDTFIQR'"
 call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function twosidedfilter as 'org.apache.iotdb.quality.anomaly.UDTFTwoSidedFilter'"
+call sbin/start-cli.bat -h %host% -p %rpcPort% -u %user% -pw %pass% -e "create function missdetect as 'org.apache.iotdb.quality.anomaly.UDTFMissDetect'"
 
 
 @REM Frequency Domain
