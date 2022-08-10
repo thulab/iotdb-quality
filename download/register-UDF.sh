@@ -62,6 +62,8 @@ pass=root
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function range as 'org.apache.iotdb.quality.anomaly.UDTFRange'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function twosidedfilter as 'org.apache.iotdb.quality.anomaly.UDTFTwoSidedFilter'"
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function iqr as 'org.apache.iotdb.quality.anomaly.UDTFIQR'"
+./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function missdetect as 'org.apache.iotdb.quality.anomaly.UDTFMissDetect'"
+
 
 # Frequency Domain
 ./sbin/start-cli.sh -h $host -p $rpcPort -u $user -pw $pass -e "create function fft as 'org.apache.iotdb.quality.frequency.UDTFFFT'"
